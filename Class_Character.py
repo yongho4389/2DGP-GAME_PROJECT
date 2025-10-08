@@ -86,7 +86,7 @@ class Character:
         self.start_frame = 3
         self.end_frame = 3
         self.motion = 0
-        self.delay = 0.5
+        self.delay = 0.0
 
     # 캐릭터 그리기
     def draw_character(self):
