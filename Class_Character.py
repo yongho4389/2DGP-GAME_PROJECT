@@ -8,6 +8,7 @@ class Character:
         self.start_frame = 3 # 프레임 시작 인덱스
         self.end_frame = 3 # 프레임 종료 인덱스
         self.motion = 0  # 기본 서있기
+        self.delay = 0.1 # 애니메이션별 프레임 딜레이
         # 위치
         self.x = 400
         self.y = 300
@@ -26,59 +27,67 @@ class Character:
     # 달리기 모션
     def draw_running(self):
         self.frame = 0
-        self.motion = 4
         self.start_frame = 0
         self.end_frame = 7
+        self.motion = 4
+        self.delay = 0.1
 
     # 점프 및 착지
     def draw_jump_and_down(self):
         self.frame = 0
-        self.motion = 3
         self.start_frame = 0
         self.end_frame = 3
+        self.motion = 3
+        self.delay = 0.3
 
     # 피격
     def draw_attacked(self):
         self.frame = 0
-        self.motion = 3
         self.start_frame = 4
         self.end_frame = 5
+        self.motion = 3
+        self.delay = 0.5
 
     # 기본 공격
     def draw_basic_attack(self):
         self.frame = 0
-        self.motion = 2
         self.start_frame = 0
         self.end_frame = 5
+        self.motion = 2
+        self.delay = 0.1
 
     # 스킬1 공격
     def draw_skill1_attack(self):
         self.frame = 0
-        self.motion = 1
         self.start_frame = 0
         self.end_frame = 6
+        self.motion = 1
+        self.delay = 0.2
 
     # 대쉬
     def draw_dash(self):
         self.frame = 0
-        self.motion = 0
         self.start_frame = 0
         self.end_frame = 0
+        self.motion = 0
+        self.delay = 0.0
 
     # 스킬2 공격
     def draw_skill2_attack(self):
         self.frame = 0
-        self.motion = 0
         self.start_frame = 1
         self.end_frame = 2
+        self.motion = 0
+        self.delay = 0.5
 
     # 서있기
     def draw_stand(self):
         self.frame = 0
-        self.motion = 0
         self.start_frame = 3
         self.end_frame = 3
-    
+        self.motion = 0
+        self.delay = 0.5
+
     # 캐릭터 그리기
     def draw_character(self):
         frame_index = self.start_frame + self.frame # start_frame과 frame을 활용하여 실제 시트에서 사용될 프레임 인덱스를 계산
@@ -86,3 +95,4 @@ class Character:
                              self.sheet_width // 8, self.sheet_height // 5, # 시트상 크기
                              self.x, self.y, # 월드 위치
                              self.width, self.height)
+        delay(self.delay)
