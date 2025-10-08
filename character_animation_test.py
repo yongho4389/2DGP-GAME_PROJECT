@@ -8,8 +8,8 @@ frame = 0
 motion = 4
 while True:
     clear_canvas()
-    # 1288 x 930
-    character.clip_draw(frame * (1288 // 8), (motion * 930 // 5), 1288 // 8, 930 // 5, 400, 300)
+    # 2856 x 1910
+    character.clip_draw(frame * (2856 // 8), (motion * 1910 // 5), 2856 // 8, 1910 // 5, 400, 300, 400, 400)
     frame = (frame + 1) % 8
     update_canvas()
     delay(0.2)
