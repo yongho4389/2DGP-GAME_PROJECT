@@ -4,7 +4,7 @@ from Class_Character import Character
 open_canvas()
 
 character = Character()
-Character.draw_running(character)
+Character.draw_jump_and_down(character)
 while True:
     clear_canvas()
     Character.draw_character(character)
