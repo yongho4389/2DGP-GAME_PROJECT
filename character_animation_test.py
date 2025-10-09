@@ -4,11 +4,11 @@ from Class_Character import Character
 open_canvas()
 
 character = Character()
-Character.draw_basic_attack(character)
+Character.draw_running(character)
 while True:
     clear_canvas()
     Character.draw_character(character)
-    Character.frame_update(character)
+    Character.frame_change(character, 0.1)
     update_canvas()
-
+    delay(0.1)
 close_canvas()

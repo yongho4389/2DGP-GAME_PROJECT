@@ -9,6 +9,7 @@ class Character:
         self.end_frame = 3 # 프레임 종료 인덱스
         self.motion = 0  # 기본 서있기
         self.delay = 0.1 # 애니메이션별 프레임 딜레이
+        self.time_count = 0.0 # 누적 시간 (이를 통해 각 동작별 프레임 전환 타이밍을 달리 할 수 있음) (동작에 따라 게임의 전체 딜레이가 바뀌는 것을 방지)
         # 위치
         self.x = 400
         self.y = 300
@@ -23,6 +24,13 @@ class Character:
     def frame_update(self):
         frame_count = self.end_frame - self.start_frame + 1 # 얼마의 프레임으로 구성되는지 계산
         self.frame = (self.frame + 1) % frame_count # 해당 프레임 개수를 기반으로 프레임 업데이트
+
+    # 프레임 전환 타이밍 계산
+    def frame_change(self, delta_time):
+        self.time_count += delta_time # 인자로 전달된 delta_time을 time_count에 누적
+        if self.time_count >= self.delay: # time_count가 각 동작에게 부여된 delay와 같거나 더 크면 frame_update를 호출하여 frame을 전환. 이후 다시 time_count를 0으로 초기화하여 다음 프레임 전환까지 대기
+            self.frame_update()
+            self.time_count = 0.0
 
     # 달리기 모션
     def draw_running(self):
@@ -95,4 +103,6 @@ class Character:
                              self.sheet_width // 8, self.sheet_height // 5, # 시트상 크기
                              self.x, self.y, # 월드 위치
                              self.width, self.height)
-        delay(self.delay)
+        # 동작이 끝났을 때 서있기 모션으로 전환 (단, 달리기 모션은 제외)
+        if self.frame >= self.end_frame and self.motion != 4:
+            self.draw_stand()
