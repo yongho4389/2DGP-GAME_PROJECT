@@ -19,7 +19,7 @@ def Character_events():
         elif event.type == SDL_KEYUP and (event.key == SDLK_a or event.key == SDLK_d):
             character.draw_stand()
         # 점프 및 착지
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_k:
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_k and character.Jumping == False:
             character.draw_jump_and_down()
         # 피격
         # 기본 공격
@@ -38,3 +38,5 @@ def Character_events():
 def Character_update():
     if character.Running:
         character.character_move()
+    if character.Jumping:
+        character.character_jump()

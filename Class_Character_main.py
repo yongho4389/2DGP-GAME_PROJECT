@@ -13,6 +13,7 @@ class Character:
         self.end_motion = False # 동작 종료 여부
 
         self.Running = False # 달리기 상태 여부
+        self.Jumping = False # 점프 상태 여부
 
         # 위치
         self.x = 400
@@ -53,6 +54,7 @@ class Character:
         self.motion = 3
         self.delay = 0.2
         self.end_motion = False
+        self.Jumping = True
     # 피격 모션
     def draw_attacked(self):
         self.frame = 0
@@ -102,6 +104,7 @@ class Character:
         self.delay = 0.0
         self.end_motion = False
         self.Running = False
+        self.Jumping = False
     # 방향 전환
     def change_direction_left(self):
         self.dir = -1 # 좌측
@@ -111,6 +114,12 @@ class Character:
     # 이동
     def character_move(self):
         self.x += self.dir * 10
+    # 점프
+    def character_jump(self):
+        if self.frame < 3:
+            self.y += 5
+        else:
+            self.y -= 30
 
     # 캐릭터 그리기
     def draw_character(self):
