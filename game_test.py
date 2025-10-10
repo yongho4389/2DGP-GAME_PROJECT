@@ -1,5 +1,6 @@
 from pico2d import *
-from Class_Character import Character
+from Class_Character import *
+from Class_character_controls import *
 
 open_canvas()
 

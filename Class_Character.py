@@ -20,6 +20,8 @@ class Character:
         # animation sheet 크기
         self.sheet_width = 2856
         self.sheet_height = 1910
+        # 좌우 방향 (초기값은 오른쪽)
+        self.dir = 1
 
     # 프레임 증가 함수
     def frame_update(self):
@@ -100,10 +102,19 @@ class Character:
     # 캐릭터 그리기
     def draw_character(self):
         frame_index = self.start_frame + self.frame # start_frame과 frame을 활용하여 실제 시트에서 사용될 프레임 인덱스를 계산
-        self.image.clip_draw(frame_index * (self.sheet_width // 8), (self.motion * self.sheet_height // 5), # 시트상 위치
-                             self.sheet_width // 8, self.sheet_height // 5, # 시트상 크기
-                             self.x, self.y, # 월드 위치
-                             self.width, self.height)
+        # 우측 방향
+        if self.dir == 1:
+            self.image.clip_draw(frame_index * (self.sheet_width // 8), (self.motion * self.sheet_height // 5), # 시트상 위치
+                                 self.sheet_width // 8, self.sheet_height // 5, # 시트상 크기
+                                 self.x, self.y, # 월드 위치
+                                 self.width, self.height)
+        # 좌측 방향
+        else:
+            self.image.clip_composite_draw(frame_index * (self.sheet_width // 8), (self.motion * self.sheet_height // 5), # 시트상 위치
+                                 self.sheet_width // 8, self.sheet_height // 5, # 시트상 크기
+                                 0, 'h',
+                                 self.x, self.y, # 월드 위치
+                                 self.width, self.height)
         # 동작이 끝났을 때 서있기 모션으로 전환 (단, 달리기 모션은 제외) (동작이 끝나고 즉시 바뀌기 보다는 잠깐의 딜레이 이후 바뀌도록 유도)
         # 처음은 end_motion이 False이므로 그냥 넘어가지만, 그 아래 코드에서 True로 바뀐다.
         # 이후 그 다음 프레임에 end_motion이 True이기에 draw_stand()이 호출되고, 다시 end_motion은 False가 된다.
