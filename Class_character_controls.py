@@ -22,7 +22,6 @@ def Character_events():
             character.change_direction_right()
             character.draw_running()
         elif event.type == SDL_KEYUP and (event.key == SDLK_a or event.key == SDLK_d):
-            character.motion = 0
             character.draw_stand()
         # 점프 및 착지
         elif event.type == SDL_KEYDOWN and event.key == SDLK_k:
