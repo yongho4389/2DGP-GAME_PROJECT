@@ -1,6 +1,7 @@
 from pico2d import *
 from Class_Character_main import *
 
+# 캐릭터 키 상호작용
 def Character_events():
     events = get_events() # 이벤트 받아와서 events에 저장 (상태의 현황보다는 상태의 변화를 체크하기 때문에, 키를 꾹 누르고 있다고 해서 계속해서 이벤트가 발생하게 되는 것은 아님)
     # 때문에 값을 대입하는 것보다는 값의 증감으로 주는 것이 키 전환에 따른 변화를 다루는 것이 좀 더 자연스러워진다. (키가 동시에 눌려서 로직이 꼬이는 경우, 어차피 증감이 이뤄지기 때문에 최종적으로 원하는 결과를 얻어내기가 더욱 쉬워진다.)
@@ -35,6 +36,7 @@ def Character_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_i and character.Attacking == False:
             character.draw_skill2_attack()
 
+# 캐릭터 상태 업데이트
 def Character_update():
     if character.Running:
         character.character_move()
