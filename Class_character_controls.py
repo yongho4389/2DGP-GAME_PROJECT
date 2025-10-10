@@ -52,10 +52,11 @@ def Character_update():
         character.character_dash()
     if character.Attacking:
         if character.attack_version == 0 and character.frame == 3:
+            character.skill2_turning = 0.0
             character.draw_attack()
         elif character.attack_version == 1 and character.frame == 5:
             character.draw_attack()
-            character.Attacking = False
+            character.skill1_Attacking = True
         elif character.attack_version == 2 and character.frame == 1:
             character.draw_attack()
-            character.Attacking = False
+            character.skill2_Attacking = True

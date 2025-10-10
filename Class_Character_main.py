@@ -16,6 +16,10 @@ class Character:
         self.ignore_stand = False # 서있기 상태 무시 여부 (달리기 중 반대 방향키를 누른 다음 방향키를 떼었을 때 자연스럽게 움직이기 위함)
         self.Jumping = False # 점프 상태 여부
         self.Attacking = False # 공격 상태 여부
+        self.skill1_Attacking = False
+        self.skill2_Attacking = False
+        self.skill_Activate_time = 0.0 # 스킬 유지 시간
+        self.skill2_turning = 0.0 # skill2 회전량
         self.Dashing = False # 대쉬 상태 여부
 
         # 위치
@@ -36,7 +40,7 @@ class Character:
         self.skill1_damage = 30  # 스킬1 데미지
         self.skill1_range = 100  # 스킬1 사거리
         self.skill2_damage = 25  # 스킬2 데미지
-        self.skill2_range = 150  # 스킬2 사거리
+        self.skill2_range = 100  # 스킬2 사거리
 
         # 생성 위치
         self.ax = self.x + (self.dir * 20)  # 캐릭터의 방향에 따라 공격 위치 조정
@@ -112,6 +116,7 @@ class Character:
         self.range = self.skill1_range
         self.ax = self.x + (self.dir * (20 + self.range // 2))
         self.ay = self.y
+        self.skill_Activate_time = 0.0
     # 대쉬 모션
     def draw_dash(self):
         self.frame = 0
@@ -136,6 +141,7 @@ class Character:
         self.range = self.skill2_range
         self.ax = self.x
         self.ay = self.y
+        self.skill_Activate_time = 0.0
     # 서있기 모션
     def draw_stand(self):
         self.frame = 0
@@ -208,15 +214,30 @@ class Character:
         if self.dir == 1:
             self.attack_image.clip_composite_draw(self.attack_version * (564 // 3), 0,
                                                   564 // 3, 188,
-                                                  0, '',
+                                                  self.skill2_turning, '',
                                                   self.ax, self.ay,
                                                   100 + self.range, 100 + self.range)
         else:
             self.attack_image.clip_composite_draw(self.attack_version * (564 // 3), 0,
                                                   564 // 3, 188,
-                                                  0, 'h',
+                                                  self.skill2_turning, 'h',
                                                   self.ax, self.ay,
                                                   100 + self.range, 100 + self.range)
+
+    # 스킬 지속 시간 처리
+    def skill_update(self, delta_time):
+        self.draw_attack()
+        if self.Attacking and (self.attack_version == 1 or self.attack_version == 2):
+            self.skill_Activate_time += delta_time
+            if self.skill_Activate_time >= 1.0:
+                self.Attacking = False
+                self.skill1_Attacking = False
+                self.skill2_Attacking = False
+                self.skill2_turning = 0.0 # 회전 각도 초기화
+            elif self.attack_version == 1:
+                self.ax += self.dir * (self.range // 2)  # 스킬1은 지속 시간 동안 천천히 앞으로 이동
+            else:
+                self.skill2_turning += 100.0 * delta_time * self.dir
 
 
 # 캐릭터 객체 생성
