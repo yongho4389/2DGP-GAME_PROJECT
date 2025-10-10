@@ -178,9 +178,10 @@ class Character:
         # 처음은 end_motion이 False이므로 그냥 넘어가지만, 그 아래 코드에서 True로 바뀐다.
         # 이후 그 다음 프레임에 end_motion이 True이기에 draw_stand()이 호출되고, 다시 end_motion은 False가 된다.
         if self.end_motion:
-            if self.Running and (self.Jumping or self.Dashing):
+            if self.Running and (self.Jumping or self.Dashing or (self.Attacking and self.attack_version == 0)):
                 self.Jumping = False
                 self.Dashing = False
+                self.Attacking = False
                 self.draw_running()
             else:
                 self.draw_stand()
@@ -190,6 +191,8 @@ class Character:
 
     # 공격 이펙트 그리기
     def draw_attack(self):
+        if self.Running:
+            self.ax += self.dir * 50 # 달리기 중 공격 시 공격 위치 보정
         if self.dir == 1:
             self.attack_image.clip_composite_draw(self.attack_version * (564 // 3), 0,
                                            564 // 3, 188,
