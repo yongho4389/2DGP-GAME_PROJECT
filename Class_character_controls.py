@@ -11,17 +11,17 @@ def Character_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE: # ESC키가 눌리면 종료
             exit()
         # 좌우 이동
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_a and character.Jumping == False:
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_a:
             if character.Running:
                 character.ignore_stand = True
             character.change_direction_left()
-            character.draw_running()
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_d and character.Jumping == False:
+            if character.Jumping != True: character.draw_running()
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_d:
             if character.Running:
                 character.ignore_stand = True
             character.change_direction_right()
-            character.draw_running()
-        elif event.type == SDL_KEYUP and (event.key == SDLK_a or event.key == SDLK_d):
+            if character.Jumping != True: character.draw_running()
+        elif event.type == SDL_KEYUP and (event.key == SDLK_a or event.key == SDLK_d) and character.Jumping == False:
             if character.ignore_stand:
                 character.ignore_stand = False
             else: character.draw_stand()

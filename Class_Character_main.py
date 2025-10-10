@@ -129,6 +129,7 @@ class Character:
             self.y += 10
         else:
             self.y -= 60
+            self.ignore_stand = False
     # 대쉬
     def character_dash(self):
         self.x += self.dir * 50
