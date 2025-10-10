@@ -27,14 +27,12 @@ class Character:
     def frame_update(self):
         frame_count = self.end_frame - self.start_frame + 1 # 얼마의 프레임으로 구성되는지 계산
         self.frame = (self.frame + 1) % frame_count # 해당 프레임 개수를 기반으로 프레임 업데이트
-
     # 프레임 전환 타이밍 계산
     def frame_change(self, delta_time):
         self.time_count += delta_time # 인자로 전달된 delta_time을 time_count에 누적
         if self.time_count >= self.delay: # time_count가 각 동작에게 부여된 delay와 같거나 더 크면 frame_update를 호출하여 frame을 전환. 이후 다시 time_count를 0으로 초기화하여 다음 프레임 전환까지 대기
             self.frame_update()
             self.time_count = 0.0
-
     # 달리기 모션
     def draw_running(self):
         self.frame = 0
@@ -42,62 +40,68 @@ class Character:
         self.end_frame = 7
         self.motion = 4
         self.delay = 0.1
-
-    # 점프 및 착지
+        self.end_motion = False
+    # 점프 및 착지 모션
     def draw_jump_and_down(self):
         self.frame = 0
         self.start_frame = 0
         self.end_frame = 3
         self.motion = 3
         self.delay = 0.3
-
-    # 피격
+        self.end_motion = False
+    # 피격 모션
     def draw_attacked(self):
         self.frame = 0
         self.start_frame = 4
         self.end_frame = 5
         self.motion = 3
         self.delay = 0.5
-
-    # 기본 공격
+        self.end_motion = False
+    # 기본 공격 모션
     def draw_basic_attack(self):
         self.frame = 0
         self.start_frame = 0
         self.end_frame = 5
         self.motion = 2
         self.delay = 0.1
-
-    # 스킬1 공격
+        self.end_motion = False
+    # 스킬1 공격 모션
     def draw_skill1_attack(self):
         self.frame = 0
         self.start_frame = 0
         self.end_frame = 6
         self.motion = 1
         self.delay = 0.2
-
-    # 대쉬
+        self.end_motion = False
+    # 대쉬 모션
     def draw_dash(self):
         self.frame = 0
         self.start_frame = 0
         self.end_frame = 0
         self.motion = 0
         self.delay = 0.0
-
-    # 스킬2 공격
+        self.end_motion = False
+    # 스킬2 공격 모션
     def draw_skill2_attack(self):
         self.frame = 0
         self.start_frame = 1
         self.end_frame = 2
         self.motion = 0
         self.delay = 0.5
-
-    # 서있기
+        self.end_motion = False
+    # 서있기 모션
     def draw_stand(self):
         self.frame = 0
         self.start_frame = 3
         self.end_frame = 3
         self.motion = 0
         self.delay = 0.0
+        self.end_motion = False
+    # 방향 전환
+    def change_direction_left(self):
+        self.dir = -1 # 좌측
+    def change_direction_right(self):
+        self.dir = 1 # 우측
 
     # 캐릭터 그리기
     def draw_character(self):
@@ -123,3 +127,7 @@ class Character:
             self.end_motion = False
         if frame_index >= self.end_frame and self.motion != 4:
             self.end_motion = True
+
+# 캐릭터 객체 생성
+character = Character()
+character.draw_stand()
