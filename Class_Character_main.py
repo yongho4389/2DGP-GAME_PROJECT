@@ -47,7 +47,7 @@ class Character:
         self.start_frame = 0
         self.end_frame = 3
         self.motion = 3
-        self.delay = 0.3
+        self.delay = 0.2
         self.end_motion = False
     # 피격 모션
     def draw_attacked(self):
@@ -71,7 +71,7 @@ class Character:
         self.start_frame = 0
         self.end_frame = 6
         self.motion = 1
-        self.delay = 0.2
+        self.delay = 0.1
         self.end_motion = False
     # 대쉬 모션
     def draw_dash(self):

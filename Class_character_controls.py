@@ -24,3 +24,19 @@ def Character_events():
         elif event.type == SDL_KEYUP and (event.key == SDLK_a or event.key == SDLK_d):
             character.motion = 0
             character.draw_stand()
+        # 점프 및 착지
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_k:
+            character.draw_jump_and_down()
+        # 피격
+        # 기본 공격
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_j:
+            character.draw_basic_attack()
+        # skill1
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_u:
+            character.draw_skill1_attack()
+        # 대쉬
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_l:
+            character.draw_dash()
+        # skill2
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_i:
+            character.draw_skill2_attack()
