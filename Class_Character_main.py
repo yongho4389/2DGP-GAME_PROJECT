@@ -13,6 +13,7 @@ class Character:
         self.end_motion = False # 동작 종료 여부
 
         self.Running = False # 달리기 상태 여부
+        self.ignore_stand = False # 서있기 상태 무시 여부 (달리기 중 반대 방향키를 누른 다음 방향키를 떼었을 때 자연스럽게 움직이기 위함)
         self.Jumping = False # 점프 상태 여부
         self.Attacking = False # 공격 상태 여부
         self.Dashing = False # 대쉬 상태 여부

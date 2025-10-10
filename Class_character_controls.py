@@ -12,13 +12,19 @@ def Character_events():
             exit()
         # 좌우 이동
         elif event.type == SDL_KEYDOWN and event.key == SDLK_a:
+            if character.Running:
+                character.ignore_stand = True
             character.change_direction_left()
             character.draw_running()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_d:
+            if character.Running:
+                character.ignore_stand = True
             character.change_direction_right()
             character.draw_running()
         elif event.type == SDL_KEYUP and (event.key == SDLK_a or event.key == SDLK_d):
-            character.draw_stand()
+            if character.ignore_stand:
+                character.ignore_stand = False
+            else: character.draw_stand()
         # 점프 및 착지
         elif event.type == SDL_KEYDOWN and event.key == SDLK_k and character.Jumping == False:
             character.draw_jump_and_down()
