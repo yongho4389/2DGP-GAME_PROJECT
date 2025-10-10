@@ -107,6 +107,11 @@ class Character:
         self.end_motion = False
         self.Attacking = True
         self.attack_version = 1
+        # skill1 데미지 및 사거리로 초기화
+        self.damage = self.skill1_damage
+        self.range = self.skill1_range
+        self.ax = self.x + (self.dir * (20 + self.range // 2))
+        self.ay = self.y
     # 대쉬 모션
     def draw_dash(self):
         self.frame = 0
@@ -126,6 +131,11 @@ class Character:
         self.end_motion = False
         self.Attacking = True
         self.attack_version = 2
+        # skill2 데미지 및 사거리로 초기화
+        self.damage = self.skill2_damage
+        self.range = self.skill2_range
+        self.ax = self.x
+        self.ay = self.y
     # 서있기 모션
     def draw_stand(self):
         self.frame = 0
@@ -136,8 +146,10 @@ class Character:
         self.end_motion = False
         self.Running = False
         self.Jumping = False
-        self.Attacking = False
         self.Dashing = False
+        # 기본 공격만 서있기 변경 시 Attacking 상태 해제 (스킬은 스킬이 완전히 끝나야 Attacking 상태 해제)
+        if self.attack_version == 0:
+            self.Attacking = False
     # 방향 전환
     def change_direction_left(self):
         self.dir = -1 # 좌측
@@ -191,20 +203,21 @@ class Character:
 
     # 공격 이펙트 그리기
     def draw_attack(self):
-        if self.Running:
+        if self.attack_version == 0 and self.Running:
             self.ax += self.dir * 50 # 달리기 중 공격 시 공격 위치 보정
         if self.dir == 1:
             self.attack_image.clip_composite_draw(self.attack_version * (564 // 3), 0,
-                                           564 // 3, 188,
-                                           0, '',
-                                           self.ax, self.ay,
-                                           100 + self.range, 100 + self.range)
+                                                  564 // 3, 188,
+                                                  0, '',
+                                                  self.ax, self.ay,
+                                                  100 + self.range, 100 + self.range)
         else:
             self.attack_image.clip_composite_draw(self.attack_version * (564 // 3), 0,
-                                           564 // 3, 188,
-                                           0, 'h',
-                                           self.ax, self.ay,
-                                           100 + self.range, 100 + self.range)
+                                                  564 // 3, 188,
+                                                  0, 'h',
+                                                  self.ax, self.ay,
+                                                  100 + self.range, 100 + self.range)
+
 
 # 캐릭터 객체 생성
 character = Character()
