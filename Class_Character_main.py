@@ -30,6 +30,22 @@ class Character:
         # 좌우 방향 (초기값은 오른쪽)
         self.dir = 1
 
+        # 캐릭터 능력치
+        self.basic_damage = 10  # 기본 공격 데미지
+        self.basic_range = 20  # 기본 공격 사거리
+        self.skill1_damage = 30  # 스킬1 데미지
+        self.skill1_range = 100  # 스킬1 사거리
+        self.skill2_damage = 25  # 스킬2 데미지
+        self.skill2_range = 150  # 스킬2 사거리
+
+        # 생성 위치
+        self.ax = self.x + (self.dir * 20)  # 캐릭터의 방향에 따라 공격 위치 조정
+        self.ay = self.y
+
+        # 생성 이미지
+        self.attack_image = load_image('attack_effect_sheets.png')  # 564 x 188
+        self.attack_version = 0  # 기본 공격
+
     # 프레임 증가 함수
     def frame_update(self):
         frame_count = self.end_frame - self.start_frame + 1 # 얼마의 프레임으로 구성되는지 계산
@@ -75,6 +91,12 @@ class Character:
         self.delay = 0.1
         self.end_motion = False
         self.Attacking = True
+        self.attack_version = 0
+        # 기본 공격 데미지 및 사거리로 초기화
+        self.damage = self.basic_damage
+        self.range = self.basic_range
+        self.ax = self.x + (self.dir * (20 + self.range // 2))
+        self.ay = self.y
     # 스킬1 공격 모션
     def draw_skill1_attack(self):
         self.frame = 0
@@ -84,6 +106,7 @@ class Character:
         self.delay = 0.1
         self.end_motion = False
         self.Attacking = True
+        self.attack_version = 1
     # 대쉬 모션
     def draw_dash(self):
         self.frame = 0
@@ -102,6 +125,7 @@ class Character:
         self.delay = 0.5
         self.end_motion = False
         self.Attacking = True
+        self.attack_version = 2
     # 서있기 모션
     def draw_stand(self):
         self.frame = 0
@@ -163,6 +187,21 @@ class Character:
             self.end_motion = False
         if frame_index >= self.end_frame and self.motion != 4:
             self.end_motion = True
+
+    # 공격 이펙트 그리기
+    def draw_attack(self):
+        if self.dir == 1:
+            self.attack_image.clip_composite_draw(self.attack_version * (564 // 3), 0,
+                                           564 // 3, 188,
+                                           0, '',
+                                           self.ax, self.ay,
+                                           100 + self.range, 100 + self.range)
+        else:
+            self.attack_image.clip_composite_draw(self.attack_version * (564 // 3), 0,
+                                           564 // 3, 188,
+                                           0, 'h',
+                                           self.ax, self.ay,
+                                           100 + self.range, 100 + self.range)
 
 # 캐릭터 객체 생성
 character = Character()

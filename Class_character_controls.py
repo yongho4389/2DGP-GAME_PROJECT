@@ -50,3 +50,6 @@ def Character_update():
         character.character_jump()
     if character.Dashing:
         character.character_dash()
+    if character.Attacking:
+        if character.attack_version == 0 and character.frame == 3:
+            character.draw_attack()
