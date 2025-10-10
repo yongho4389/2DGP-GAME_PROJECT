@@ -11,6 +11,9 @@ class Character:
         self.delay = 0.1 # 애니메이션별 프레임 딜레이
         self.time_count = 0.0 # 누적 시간 (이를 통해 각 동작별 프레임 전환 타이밍을 달리 할 수 있음) (동작에 따라 게임의 전체 딜레이가 바뀌는 것을 방지)
         self.end_motion = False # 동작 종료 여부
+
+        self.Running = False # 달리기 상태 여부
+
         # 위치
         self.x = 400
         self.y = 300
@@ -41,6 +44,7 @@ class Character:
         self.motion = 4
         self.delay = 0.1
         self.end_motion = False
+        self.Running = True
     # 점프 및 착지 모션
     def draw_jump_and_down(self):
         self.frame = 0
@@ -97,11 +101,16 @@ class Character:
         self.motion = 0
         self.delay = 0.0
         self.end_motion = False
+        self.Running = False
     # 방향 전환
     def change_direction_left(self):
         self.dir = -1 # 좌측
     def change_direction_right(self):
         self.dir = 1 # 우측
+
+    # 이동
+    def character_move(self):
+        self.x += self.dir * 10
 
     # 캐릭터 그리기
     def draw_character(self):
