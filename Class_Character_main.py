@@ -129,7 +129,7 @@ class Character:
             self.y += 10
         else:
             self.y -= 60
-            self.ignore_stand = False
+            self.ignore_stand = False # 착지 후에 달리기가 멈추지 않는 버그 방지
     # 대쉬
     def character_dash(self):
         self.x += self.dir * 50
