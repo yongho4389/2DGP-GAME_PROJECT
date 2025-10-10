@@ -38,7 +38,7 @@ class Character:
         self.basic_damage = 10  # 기본 공격 데미지
         self.basic_range = 20  # 기본 공격 사거리
         self.skill1_damage = 30  # 스킬1 데미지
-        self.skill1_range = 100  # 스킬1 사거리
+        self.skill1_range = 20  # 스킬1 사거리
         self.skill2_damage = 25  # 스킬2 데미지
         self.skill2_range = 100  # 스킬2 사거리
 
@@ -110,6 +110,7 @@ class Character:
         self.delay = 0.1
         self.end_motion = False
         self.Attacking = True
+        self.skill1_Attacking = False
         self.attack_version = 1
         # skill1 데미지 및 사거리로 초기화
         self.damage = self.skill1_damage
@@ -135,6 +136,7 @@ class Character:
         self.delay = 0.5
         self.end_motion = False
         self.Attacking = True
+        self.skill2_Attacking = False
         self.attack_version = 2
         # skill2 데미지 및 사거리로 초기화
         self.damage = self.skill2_damage
@@ -153,9 +155,7 @@ class Character:
         self.Running = False
         self.Jumping = False
         self.Dashing = False
-        # 기본 공격만 서있기 변경 시 Attacking 상태 해제 (스킬은 스킬이 완전히 끝나야 Attacking 상태 해제)
-        if self.attack_version == 0:
-            self.Attacking = False
+        self.Attacking = False
     # 방향 전환
     def change_direction_left(self):
         self.dir = -1 # 좌측
@@ -227,17 +227,18 @@ class Character:
     # 스킬 지속 시간 처리
     def skill_update(self, delta_time):
         self.draw_attack()
-        if self.Attacking and (self.attack_version == 1 or self.attack_version == 2):
-            self.skill_Activate_time += delta_time
-            if self.skill_Activate_time >= 1.0:
-                self.Attacking = False
-                self.skill1_Attacking = False
-                self.skill2_Attacking = False
-                self.skill2_turning = 0.0 # 회전 각도 초기화
-            elif self.attack_version == 1:
-                self.ax += self.dir * (self.range // 2)  # 스킬1은 지속 시간 동안 천천히 앞으로 이동
-            else:
-                self.skill2_turning += 100.0 * delta_time * self.dir
+        self.skill_Activate_time += delta_time
+        if self.skill_Activate_time >= 1.0:
+            self.Attacking = False
+            self.skill1_Attacking = False
+            self.skill2_Attacking = False
+            self.skill2_turning = 0.0 # 회전 각도 초기화
+        elif self.attack_version == 1:
+            self.ax += self.dir * (self.range // 2)  # 스킬1은 지속 시간 동안 천천히 앞으로 이동
+        else:
+            self.ax = self.x
+            self.ay = self.y
+            self.skill2_turning += 100.0 * delta_time * self.dir
 
 
 # 캐릭터 객체 생성
