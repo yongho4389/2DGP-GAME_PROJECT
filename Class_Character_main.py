@@ -125,9 +125,9 @@ class Character:
     # 점프
     def character_jump(self):
         if self.frame < 3:
-            self.y += 5
+            self.y += 10
         else:
-            self.y -= 30
+            self.y -= 60
     # 대쉬
     def character_dash(self):
         self.x += self.dir * 50
