@@ -53,3 +53,9 @@ def Character_update():
     if character.Attacking:
         if character.attack_version == 0 and character.frame == 3:
             character.draw_attack()
+        elif character.attack_version == 1 and character.frame == 5:
+            character.draw_attack()
+            character.Attacking = False
+        elif character.attack_version == 2 and character.frame == 1:
+            character.draw_attack()
+            character.Attacking = False
