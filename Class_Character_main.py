@@ -131,7 +131,6 @@ class Character:
     # 대쉬
     def character_dash(self):
         self.x += self.dir * 50
-        self.Dashing = False
 
     # 캐릭터 그리기
     def draw_character(self):
@@ -153,7 +152,12 @@ class Character:
         # 처음은 end_motion이 False이므로 그냥 넘어가지만, 그 아래 코드에서 True로 바뀐다.
         # 이후 그 다음 프레임에 end_motion이 True이기에 draw_stand()이 호출되고, 다시 end_motion은 False가 된다.
         if self.end_motion:
-            self.draw_stand()
+            if self.Running and (self.Jumping or self.Dashing):
+                self.Jumping = False
+                self.Dashing = False
+                self.draw_running()
+            else:
+                self.draw_stand()
             self.end_motion = False
         if frame_index >= self.end_frame and self.motion != 4:
             self.end_motion = True
