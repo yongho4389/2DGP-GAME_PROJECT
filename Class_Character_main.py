@@ -79,7 +79,7 @@ class Character:
         self.start_frame = 0
         self.end_frame = 0
         self.motion = 0
-        self.delay = 0.0
+        self.delay = 0.1
         self.end_motion = False
     # 스킬2 공격 모션
     def draw_skill2_attack(self):
