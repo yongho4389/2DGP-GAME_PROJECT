@@ -15,6 +15,7 @@ class Character:
         self.Running = False # 달리기 상태 여부
         self.Jumping = False # 점프 상태 여부
         self.Attacking = False # 공격 상태 여부
+        self.Dashing = False # 대쉬 상태 여부
 
         # 위치
         self.x = 400
@@ -90,6 +91,7 @@ class Character:
         self.motion = 0
         self.delay = 0.1
         self.end_motion = False
+        self.Dashing = True
     # 스킬2 공격 모션
     def draw_skill2_attack(self):
         self.frame = 0
@@ -110,6 +112,7 @@ class Character:
         self.Running = False
         self.Jumping = False
         self.Attacking = False
+        self.Dashing = False
     # 방향 전환
     def change_direction_left(self):
         self.dir = -1 # 좌측
@@ -125,6 +128,10 @@ class Character:
             self.y += 5
         else:
             self.y -= 30
+    # 대쉬
+    def character_dash(self):
+        self.x += self.dir * 50
+        self.Dashing = False
 
     # 캐릭터 그리기
     def draw_character(self):

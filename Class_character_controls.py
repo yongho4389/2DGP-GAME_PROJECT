@@ -29,7 +29,7 @@ def Character_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_u and character.Attacking == False:
             character.draw_skill1_attack()
         # 대쉬
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_l:
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_l and character.Dashing == False:
             character.draw_dash()
         # skill2
         elif event.type == SDL_KEYDOWN and event.key == SDLK_i and character.Attacking == False:
@@ -40,3 +40,5 @@ def Character_update():
         character.character_move()
     if character.Jumping:
         character.character_jump()
+    if character.Dashing:
+        character.character_dash()
