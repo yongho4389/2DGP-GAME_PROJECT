@@ -196,7 +196,7 @@ class Character:
         # 처음은 end_motion이 False이므로 그냥 넘어가지만, 그 아래 코드에서 True로 바뀐다.
         # 이후 그 다음 프레임에 end_motion이 True이기에 draw_stand()이 호출되고, 다시 end_motion은 False가 된다.
         if self.end_motion:
-            if self.Running and (self.Jumping or self.Dashing or (self.Attacking and self.attack_version == 0)):
+            if self.Running and (self.Jumping or self.Dashing or self.Attacking):
                 self.Jumping = False
                 self.Dashing = False
                 self.Attacking = False
