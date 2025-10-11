@@ -14,11 +14,11 @@ def Main_character_loop():
     character.frame_change(0.1)  # 프레임 전환 처리
     character.draw_character()  # 캐릭터 최종 상태 출력
 
-# character.draw_running()
 # 게임 루프
 while True:
     clear_canvas()
     Main_character_loop()
     update_canvas()
     delay(0.1)
+
 close_canvas()
