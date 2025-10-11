@@ -17,6 +17,7 @@ class Character:
         self.Jumping = False # 점프 상태 여부
         self.Attacking = False # 공격 상태 여부
         self.skill1_Attacking = False
+        self.skill1_scale = 0 # skill1 크기 증가량
         self.skill2_Attacking = False
         self.skill_Activate_time = 0.0 # 스킬 유지 시간
         self.skill2_turning = 0.0 # skill2 회전량
@@ -215,12 +216,16 @@ class Character:
     def draw_attack(self):
         if self.attack_version == 0 and self.Running:
             self.ax += self.dir * 50 # 달리기 중 공격 위치 보정
+        if self.attack_version == 1:
+            self.skill1_scale = 200
+        else:
+            self.skill1_scale = 0
         if self.adir == 1:
             self.attack_image.clip_composite_draw(self.attack_version * (564 // 3), 0,
                                                   564 // 3, 188,
                                                   self.skill2_turning, '',
                                                   self.ax, self.ay,
-                                                  100 + self.range, 100 + self.range)
+                                                  100 + self.range, 100 + self.range + self.skill1_scale)
         else:
             self.attack_image.clip_composite_draw(self.attack_version * (564 // 3), 0,
                                                   564 // 3, 188,
