@@ -204,7 +204,6 @@ class Character:
                 self.Jumping = False
                 self.Dashing = False
                 self.Attacking = False
-                self.ignore_stand = False
                 self.draw_running()
             else:
                 self.draw_stand()
