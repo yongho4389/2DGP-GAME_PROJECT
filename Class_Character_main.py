@@ -69,6 +69,7 @@ class Character:
         self.delay = 0.1
         self.end_motion = False
         self.Running = True
+        self.Attacking = False
     # 점프 및 착지 모션
     def draw_jump_and_down(self):
         self.frame = 0
@@ -203,6 +204,7 @@ class Character:
                 self.Jumping = False
                 self.Dashing = False
                 self.Attacking = False
+                self.ignore_stand = False
                 self.draw_running()
             else:
                 self.draw_stand()
