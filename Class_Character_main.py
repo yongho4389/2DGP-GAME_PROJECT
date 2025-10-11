@@ -69,7 +69,7 @@ class Character:
         self.delay = 0.1
         self.end_motion = False
         self.Running = True
-        self.Attacking = False
+        self.Attacking = False # 공격 중 이동 시 공격이 계속되는 버그 방지
     # 점프 및 착지 모션
     def draw_jump_and_down(self):
         self.frame = 0
