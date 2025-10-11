@@ -2,6 +2,7 @@ from pico2d import *
 open_canvas()
 
 from Class_Character_main import *
+from Class_stage import *
 from Class_character_controls import *
 
 # 메인 캐릭터 처리
@@ -17,6 +18,7 @@ def Main_character_loop():
 # 게임 루프
 while True:
     clear_canvas()
+    stage1.draw()
     Main_character_loop()
     update_canvas()
     delay(0.1)

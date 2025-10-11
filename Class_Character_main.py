@@ -24,10 +24,10 @@ class Character:
 
         # 위치
         self.x = 400
-        self.y = 300
+        self.y = 100
         # 크기
-        self.width = 100
-        self.height = 100
+        self.width = 200
+        self.height = 200
         # animation sheet 크기
         self.sheet_width = 2856
         self.sheet_height = 1910
@@ -36,11 +36,11 @@ class Character:
 
         # 캐릭터 능력치
         self.basic_damage = 10  # 기본 공격 데미지
-        self.basic_range = 20  # 기본 공격 사거리
+        self.basic_range = 40  # 기본 공격 사거리
         self.skill1_damage = 30  # 스킬1 데미지
         self.skill1_range = 20  # 스킬1 사거리
         self.skill2_damage = 25  # 스킬2 데미지
-        self.skill2_range = 100  # 스킬2 사거리
+        self.skill2_range = 200  # 스킬2 사거리
 
         # 생성 위치
         self.ax = self.x + (self.dir * 20)  # 캐릭터의 방향에 따라 공격 위치 조정
@@ -172,9 +172,9 @@ class Character:
     # 점프
     def character_jump(self):
         if self.frame < 3:
-            self.y += 10
+            self.y += 20
         else:
-            self.y -= 60
+            self.y -= 120
             self.ignore_stand = False # 착지 후에 달리기가 멈추지 않는 버그 방지
     # 대쉬
     def character_dash(self):
