@@ -213,7 +213,7 @@ class Character:
     # 공격 이펙트 그리기
     def draw_attack(self):
         if self.attack_version == 0 and self.Running:
-            self.ax += self.dir * 50 # 달리기 중 공격 시 공격 위치 보정
+            self.ax += self.dir * 50 # 달리기 중 공격 위치 보정
         if self.adir == 1:
             self.attack_image.clip_composite_draw(self.attack_version * (564 // 3), 0,
                                                   564 // 3, 188,

@@ -26,7 +26,7 @@ def Character_events():
                 character.ignore_stand = False
             else: character.draw_stand()
         # 점프 및 착지
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_k and character.Jumping == False:
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_k and character.Jumping == False and character.Attacking == False:
             character.draw_jump_and_down()
         # 피격
         # 기본 공격
