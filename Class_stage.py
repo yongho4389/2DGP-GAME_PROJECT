@@ -13,7 +13,7 @@ class Stage:
         self.x = 400
         self.y = 400
         self.stage_level = 0
-        self.special_stage = True # 상점 진입 혹은 보스 스테이지 진입 시 True로 변경
+        self.special_stage = False # 상점 진입 혹은 보스 스테이지 진입 시 True로 변경
 
     def draw(self):
         # 스테이지
