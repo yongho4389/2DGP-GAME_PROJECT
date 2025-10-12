@@ -97,6 +97,8 @@ class Character:
         self.delay = 0.1
         self.end_motion = False
         self.Attacking = True
+        self.skill1_Attacking = False
+        self.skill2_Attacking = False
         self.attack_version = 0
         # 기본 공격 데미지 및 사거리로 초기화
         self.damage = self.basic_damage
@@ -231,7 +233,7 @@ class Character:
                                                   564 // 3, 188,
                                                   self.skill2_turning, 'h',
                                                   self.ax, self.ay,
-                                                  100 + self.range, 100 + self.range)
+                                                  100 + self.range, 100 + self.range + self.skill1_scale)
 
     # 스킬 지속 시간 처리
     def skill_update(self, delta_time):
