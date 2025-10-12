@@ -14,13 +14,13 @@ class Stage1:
 
     def draw(self):
         camera.start_position = 0
-        camera.end_position = self.width * 3 - 40
+        camera.end_position = (self.width * 3) - 40
         for i in range(3):
             # 구름
-            self.image.clip_draw(0 * self.w // 3, 1 * self.h // 3, self.w // 3, self.h // 3, (i * self.width - 20) + self.x - camera.x, self.y, self.width, 1000)
+            self.image.clip_draw(0 * self.w // 3, 1 * self.h // 3, self.w // 3, self.h // 3, (i * (self.width - 20)) + self.x - camera.x, self.y, self.width, 1000)
             # 나무
-            self.image.clip_draw(1 * self.w // 3, 1 * self.h // 3, self.w // 3, self.h // 3, (i * self.width - 20) + self.x - camera.x, self.y, self.width, 1000)
+            self.image.clip_draw(1 * self.w // 3, 1 * self.h // 3, self.w // 3, self.h // 3, (i * (self.width - 20)) + self.x - camera.x, self.y, self.width, 1000)
             # 땅
-            self.image.clip_draw(2 * self.w // 3, 1 * self.h // 3, self.w // 3, self.h // 3, (i * self.width - 20) + self.x - camera.x, self.y // 4, self.width, 400)
+            self.image.clip_draw(2 * self.w // 3, 1 * self.h // 3, self.w // 3, self.h // 3, (i * (self.width - 20)) + self.x - camera.x, self.y // 4, self.width, 400)
 
 stage1 = Stage1()

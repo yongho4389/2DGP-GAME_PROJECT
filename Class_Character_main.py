@@ -184,10 +184,19 @@ class Character:
     def character_dash(self):
         self.x += self.dir * 50
 
+    def setting_camera(self):
+        # 카메라 위치 최신화
+        if camera.x >= camera.start_position and camera.x <= camera.end_position - 800:
+            camera.x = self.x - 400
+        # 카메라 맵 벗어나는 경우 보정
+        if camera.x < 0:
+            camera.x = 0
+        if camera.x > camera.end_position - 800:
+            camera.x = camera.end_position - 800
+
     # 캐릭터 그리기
     def draw_character(self):
-        # 카메라 위치 최신화
-        camera.x = self.x - 400
+        self.setting_camera()
         frame_index = self.start_frame + self.frame # start_frame과 frame을 활용하여 실제 시트에서 사용될 프레임 인덱스를 계산
         # 우측 방향
         if self.dir == 1:
@@ -220,7 +229,7 @@ class Character:
     # 공격 이펙트 그리기
     def draw_attack(self):
         # 카메라 위치 최신화
-        camera.x = self.x - 400
+        self.setting_camera()
         if self.attack_version == 0 and self.Running:
             self.ax += self.dir * 50 # 달리기 중 공격 위치 보정
         if self.attack_version == 1:
