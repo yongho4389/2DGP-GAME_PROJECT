@@ -11,8 +11,8 @@ class Normal_Stage:
         self.h = 2496
         self.x = 400
         self.y = 400
-        self.stage_level = 3
-        self.special_stage = True
+        self.stage_level = 0
+        self.special_stage = False # 상점 진입 혹은 보스 스테이지 진입 시 True로 변경
 
     def draw(self):
         if self.special_stage: # 특수 스테이지인 경우 맵 크기는 1배
