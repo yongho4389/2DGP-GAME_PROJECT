@@ -41,9 +41,18 @@ def Character_events():
         # skill2
         elif event.type == SDL_KEYDOWN and event.key == SDLK_i and character.Attacking == False and character.Jumping == False:
             character.draw_skill2_attack()
+        # 포탈
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_w:
+            character.taking_portal()
 
 # 캐릭터 상태 업데이트
 def Character_update():
+    # 히트 박스
+    hitbox_size = 50
+    character.hx1 = character.x - hitbox_size
+    character.hy1 = character.y + hitbox_size
+    character.hx2 = character.x + hitbox_size
+    character.hy2 = character.y - hitbox_size
     if character.Running:
         character.character_move()
     if character.Jumping:

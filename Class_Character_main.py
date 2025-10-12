@@ -1,6 +1,7 @@
 # 주인공 캐릭터 관련 클래스 및 함수 정의
 from pico2d import *
 from Class_camera import *
+from Class_stage import *
 
 class Character:
     def __init__(self):
@@ -30,6 +31,11 @@ class Character:
         # 크기
         self.width = 200
         self.height = 200
+        # 히트 박스
+        self.hx1 = self.x - 50
+        self.hy1 = self.y + 50
+        self.hx2 = self.x + 50
+        self.hy2 = self.y - 50
         # animation sheet 크기
         self.sheet_width = 2856
         self.sheet_height = 1910
@@ -193,8 +199,8 @@ class Character:
         self.x += self.dir * 50
         self.out_of_position()
 
+    # 카메라 위치 최신화
     def setting_camera(self):
-        # 카메라 위치 최신화
         if camera.x >= camera.start_position and camera.x <= camera.end_position - 800:
             camera.x = self.x - 400
         # 카메라 맵 벗어나는 경우 보정
@@ -202,6 +208,37 @@ class Character:
             camera.x = 0
         if camera.x > camera.end_position - 800:
             camera.x = camera.end_position - 800
+
+    def taking_portal(self):
+        if stage.stage_level == 3:
+            return # 보스 스테이지에서는 포탈 무시
+        # 좌측 끝 포탈
+        if stage.portal_sx >= self.hx1 and stage.portal_sx <= self.hx2:
+            if stage.stage_level == 0 and not stage.special_stage:
+                return # 0레벨 일반 스테이지에서 좌측 포탈은 무시
+            # 상점 스테이지에서 이전으로 돌아가는 경우
+            if stage.special_stage:
+                stage.special_stage = False
+            else:
+                stage.stage_level -= 1
+                stage.special_stage = True
+            # 플레이어 위치 우측 끝으로 보정
+            self.x = camera.end_position - 50
+
+        # 우측 끝 포탈
+        elif stage.portal_ex >= self.hx1 and stage.portal_ex <= self.hx2:
+            # 일반 스테이지에서 다음으로 넘어가는 경우 스페셜 스테이지로 전환
+            if not stage.special_stage:
+                stage.special_stage = True
+            # 상점 스테이지라면 다음 레벨로 진입
+            else:
+                stage.stage_level += 1
+                stage.special_stage = False
+            # 보스 스테이지 또한 스페셜 스테이지로 전환
+            if stage.stage_level == 3:
+                stage.special_stage = True
+            # 플레이어 위치 좌측 끝으로 보정
+            self.x = camera.start_position + 50
 
     # 캐릭터 그리기
     def draw_character(self):
