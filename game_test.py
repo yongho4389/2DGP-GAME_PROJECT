@@ -18,7 +18,7 @@ def Main_character_loop():
 # 게임 루프
 while True:
     clear_canvas()
-    stage1.draw()
+    stage.draw()
     Main_character_loop()
     update_canvas()
     delay(0.1)
