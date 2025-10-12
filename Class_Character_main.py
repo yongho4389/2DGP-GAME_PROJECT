@@ -210,6 +210,7 @@ class Character:
             camera.x = camera.end_position - 800
 
     def taking_portal(self):
+        self.Running = False
         if stage.stage_level == 3:
             return # 보스 스테이지에서는 포탈 무시
         # 좌측 끝 포탈
@@ -219,12 +220,13 @@ class Character:
             # 상점 스테이지에서 이전으로 돌아가는 경우
             if stage.special_stage:
                 stage.special_stage = False
+                # 플레이어 위치 일반 스테이지의 우측 끝으로 보정
+                self.x = (stage.width * 3 - 40) - 50
             else:
                 stage.stage_level -= 1
                 stage.special_stage = True
-            # 플레이어 위치 우측 끝으로 보정
-            self.x = camera.end_position - 50
-
+                # 플레이어 위치 스페셜 스테이지의 우측 끝으로 보정
+                self.x = stage.width - 50
         # 우측 끝 포탈
         elif stage.portal_ex >= self.hx1 and stage.portal_ex <= self.hx2:
             # 일반 스테이지에서 다음으로 넘어가는 경우 스페셜 스테이지로 전환
