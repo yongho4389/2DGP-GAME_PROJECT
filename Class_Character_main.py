@@ -1,5 +1,6 @@
 # 주인공 캐릭터 관련 클래스 및 함수 정의
 from pico2d import *
+from Class_camera import *
 
 class Character:
     def __init__(self):
@@ -185,19 +186,21 @@ class Character:
 
     # 캐릭터 그리기
     def draw_character(self):
+        # 카메라 위치 최신화
+        camera.x = self.x - 400
         frame_index = self.start_frame + self.frame # start_frame과 frame을 활용하여 실제 시트에서 사용될 프레임 인덱스를 계산
         # 우측 방향
         if self.dir == 1:
             self.image.clip_draw(frame_index * (self.sheet_width // 8), (self.motion * self.sheet_height // 5), # 시트상 위치
                                  self.sheet_width // 8, self.sheet_height // 5, # 시트상 크기
-                                 self.x, self.y, # 월드 위치
+                                 self.x - camera.x, self.y, # 월드 위치
                                  self.width, self.height)
         # 좌측 방향
         else:
             self.image.clip_composite_draw(frame_index * (self.sheet_width // 8), (self.motion * self.sheet_height // 5), # 시트상 위치
                                  self.sheet_width // 8, self.sheet_height // 5, # 시트상 크기
                                  0, 'h',
-                                 self.x, self.y, # 월드 위치
+                                 self.x - camera.x, self.y, # 월드 위치
                                  self.width, self.height)
         # 동작이 끝났을 때 서있기 모션으로 전환 (단, 달리기 모션은 제외) (동작이 끝나고 즉시 바뀌기 보다는 잠깐의 딜레이 이후 바뀌도록 유도)
         # 처음은 end_motion이 False이므로 그냥 넘어가지만, 그 아래 코드에서 True로 바뀐다.
@@ -216,6 +219,8 @@ class Character:
 
     # 공격 이펙트 그리기
     def draw_attack(self):
+        # 카메라 위치 최신화
+        camera.x = self.x - 400
         if self.attack_version == 0 and self.Running:
             self.ax += self.dir * 50 # 달리기 중 공격 위치 보정
         if self.attack_version == 1:
@@ -226,13 +231,13 @@ class Character:
             self.attack_image.clip_composite_draw(self.attack_version * (564 // 3), 0,
                                                   564 // 3, 188,
                                                   self.skill2_turning, '',
-                                                  self.ax, self.ay,
+                                                  self.ax - camera.x, self.ay,
                                                   100 + self.range, 100 + self.range + self.skill1_scale)
         else:
             self.attack_image.clip_composite_draw(self.attack_version * (564 // 3), 0,
                                                   564 // 3, 188,
                                                   self.skill2_turning, 'h',
-                                                  self.ax, self.ay,
+                                                  self.ax - camera.x, self.ay,
                                                   100 + self.range, 100 + self.range + self.skill1_scale)
 
     # 스킬 지속 시간 처리
