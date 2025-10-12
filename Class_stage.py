@@ -11,7 +11,7 @@ class Normal_Stage:
         self.h = 1872
         self.x = 400
         self.y = 400
-        self.stage_level = 0
+        self.stage_level = 2
 
     def draw(self):
         # 카메라 위치 최신화

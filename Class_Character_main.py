@@ -26,7 +26,7 @@ class Character:
 
         # 위치
         self.x = 400
-        self.y = 100
+        self.y = 125
         # 크기
         self.width = 200
         self.height = 200
