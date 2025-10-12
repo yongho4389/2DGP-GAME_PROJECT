@@ -170,9 +170,17 @@ class Character:
     def change_direction_right(self):
         self.dir = 1 # 우측
 
+    # 화면 밖으로 나가는지 체크
+    def out_of_position(self):
+        if self.x < camera.start_position + 50:
+            self.x = camera.start_position + 50
+        if self.x > camera.end_position - 50:
+            self.x = camera.end_position - 50
+
     # 이동
     def character_move(self):
         self.x += self.dir * 10
+        self.out_of_position()
     # 점프
     def character_jump(self):
         if self.frame < 3:
@@ -183,6 +191,7 @@ class Character:
     # 대쉬
     def character_dash(self):
         self.x += self.dir * 50
+        self.out_of_position()
 
     def setting_camera(self):
         # 카메라 위치 최신화
