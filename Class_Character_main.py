@@ -173,7 +173,6 @@ class Character:
             self.x = camera.start_position + 50
         if self.x > camera.end_position - 50:
             self.x = camera.end_position - 50
-
     # 이동
     def character_move(self):
         self.x += self.dir * 10
@@ -184,7 +183,6 @@ class Character:
             self.y += 20
         else:
             self.y -= 120
-            self.ignore_stand = False # 착지 후에 달리기가 멈추지 않는 버그 방지
     # 대쉬
     def character_dash(self):
         self.x += self.dir * 50
@@ -199,7 +197,6 @@ class Character:
             camera.x = 0
         if camera.x > camera.end_position - 800:
             camera.x = camera.end_position - 800
-
     # 포탈 이동 처리
     def taking_portal(self):
         if stage.stage_level == 3:
@@ -237,7 +234,6 @@ class Character:
                 stage.set_camera_stage_range()
             # 플레이어 위치 좌측 끝으로 보정
             self.x = camera.start_position + 50
-
     # 캐릭터 그리기
     def draw_character(self):
         self.setting_camera()
