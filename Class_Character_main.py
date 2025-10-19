@@ -74,8 +74,17 @@ class Character:
             self.frame_update()
             self.time_count = 0.0
     # 상태 변환 함수
-    def change_state(self, pre_state, cur_state, new_state):
-        pass
+    def change_state(self, pre_state, cur_state, new_state, Input):
+        # 왼쪽 달리기
+        if new_state == 'Running' and Input == 'a':
+            if cur_state == 'Running':
+                character.ignore_stand = True
+            character.change_direction_left()
+            if cur_state != 'Jumping': character.start_running()
+
+        # 캐릭터 현재 상태 최신화
+        self.pre_state = cur_state
+        self.cur_state = new_state
 
     # 달리기 모션
     def start_running(self):

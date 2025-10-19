@@ -12,10 +12,11 @@ def Character_events():
             exit()
         # 좌우 이동
         elif event.type == SDL_KEYDOWN and event.key == SDLK_a:
-            if character.Running:
-                character.ignore_stand = True
-            character.change_direction_left()
-            if character.Jumping != True: character.start_running()
+            # if character.Running:
+            #     character.ignore_stand = True
+            # character.change_direction_left()
+            # if character.Jumping != True: character.start_running()
+            character.change_state(character.pre_state, character.cur_state, 'Running', 'a')
         elif event.type == SDL_KEYDOWN and event.key == SDLK_d:
             if character.Running:
                 character.ignore_stand = True
@@ -53,7 +54,7 @@ def Character_update():
     character.hy1 = character.y + hitbox_size
     character.hx2 = character.x + hitbox_size
     character.hy2 = character.y - hitbox_size
-    if character.Running:
+    if character.Running or character.cur_state == 'Running':
         character.character_move()
     if character.Jumping:
         character.character_jump()
