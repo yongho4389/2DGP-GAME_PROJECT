@@ -14,7 +14,7 @@ class Character:
         self.time_count = 0.0 # 누적 시간 (이를 통해 각 동작별 프레임 전환 타이밍을 달리 할 수 있음) (동작에 따라 게임의 전체 딜레이가 바뀌는 것을 방지)
         self.end_motion = False # 동작 종료 여부
         self.pre_state = 'None' # 이전 상태
-        self.cur_state = 'STAND' # 현재 상태
+        self.cur_state = 'Standing' # 현재 상태
 
         self.Running = False # 달리기 상태 여부
         self.ignore_stand = False # 서있기 상태 무시 여부 (달리기 중 반대 방향키를 누른 다음 방향키를 떼었을 때 자연스럽게 움직이기 위함)
