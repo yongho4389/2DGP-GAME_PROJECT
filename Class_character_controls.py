@@ -46,41 +46,25 @@ def Character_events():
             exit()
         # 좌우 이동
         elif event.type == SDL_KEYDOWN and event.key == SDLK_a:
-            # if character.Running:
-            #     character.ignore_stand = True
-            # character.change_direction_left()
-            # if character.Jumping != True: character.start_running()
             change_state(character.pre_state, character.cur_state, 'Running', 'a')
         elif event.type == SDL_KEYDOWN and event.key == SDLK_d:
-            # if character.Running:
-            #     character.ignore_stand = True
-            # character.change_direction_right()
-            # if character.Jumping != True: character.start_running()
             change_state(character.pre_state, character.cur_state, 'Running', 'd')
         elif event.type == SDL_KEYUP and (event.key == SDLK_a or event.key == SDLK_d):
-            # if character.ignore_stand:
-            #     character.ignore_stand = False
-            # else: character.start_stand()
             change_state(character.pre_state, character.cur_state, 'Standing', '')
         # 점프 및 착지
         elif event.type == SDL_KEYDOWN and event.key == SDLK_k:
-            # character.start_jump_and_down()
             change_state(character.pre_state, character.cur_state, 'Jumping', 'k')
         # 기본 공격
         elif event.type == SDL_KEYDOWN and event.key == SDLK_j:
-            # character.start_basic_attack()
             change_state(character.pre_state, character.cur_state, 'Attacking', 'j')
         # skill1
         elif event.type == SDL_KEYDOWN and event.key == SDLK_u:
-            # character.start_skill1_attack()
             change_state(character.pre_state, character.cur_state, 'Attacking', 'u')
         # 대쉬
         elif event.type == SDL_KEYDOWN and event.key == SDLK_l:
-            # character.start_dash()
             change_state(character.pre_state, character.cur_state, 'Dashing', 'l')
         # skill2
         elif event.type == SDL_KEYDOWN and event.key == SDLK_i:
-            # character.start_skill2_attack()
             change_state(character.pre_state, character.cur_state, 'Attacking', 'i')
         # 포탈 (이건 상태로 취급하지 않음)
         elif event.type == SDL_KEYDOWN and event.key == SDLK_w:
