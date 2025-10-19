@@ -183,6 +183,13 @@ class Character:
             self.y += 20
         else:
             self.y -= 120
+    # 지상 유지
+    def character_land(self):
+        if self.y > 125:
+            self.y -= 20
+        # 맵 벗어남 방지
+        if self.y < 125:
+            self.y = 125
     # 대쉬
     def character_dash(self):
         self.x += self.dir * 50
@@ -259,6 +266,7 @@ class Character:
                 self.start_running()
                 self.pre_state = self.cur_state
                 self.cur_state = 'Running'
+                self.ignore_stand = False # 이어지는 달리기가 끊기지 않고 계속해서 유지되는 경우 방지
             else:
                 self.start_stand()
                 self.cur_state = 'Standing'

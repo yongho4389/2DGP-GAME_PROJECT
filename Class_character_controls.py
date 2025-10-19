@@ -5,21 +5,13 @@ from Class_Character_main import *
 def change_state(pre_state, cur_state, new_state, Input):
     # 달리기
     if new_state == 'Running':
-        # 점프 중이면 방향 전환만 하고 종료
-        if cur_state == 'Jumping':
-            if Input == 'a':
-                character.change_direction_left()  # 왼쪽
-            elif Input == 'd':
-                character.change_direction_right()  # 오른쪽
-            return
-        if cur_state == 'Running':
+        if cur_state == 'Running' or cur_state == 'Jumping':
             character.ignore_stand = True
         if Input == 'a': character.change_direction_left() # 왼쪽
         elif Input == 'd': character.change_direction_right() # 오른쪽
         if cur_state != 'Jumping': character.start_running() # 점프 중이 아닐 때만 달리기 수행
     # 서기
     if new_state == 'Standing':
-        if cur_state == 'Jumping': return # 점프 중일 때는 서있기 상태로 전환 불가
         if character.ignore_stand: # 부드러운 방향 전환을 위한 처리
             character.ignore_stand = False
             return
@@ -89,6 +81,9 @@ def Character_update():
     character.hy2 = character.y - hitbox_size
     if character.cur_state == 'Running':
         character.character_move()
+        character.character_land()
+    if character.cur_state == 'Standing':
+        character.character_land()
     if character.cur_state == 'Jumping':
         character.character_jump()
         if character.pre_state == 'Running': # 캐릭터가 뛰는 중이었다면 이동도 같이 수행하기
