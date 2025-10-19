@@ -18,14 +18,16 @@ def Character_events():
             # if character.Jumping != True: character.start_running()
             character.change_state(character.pre_state, character.cur_state, 'Running', 'a')
         elif event.type == SDL_KEYDOWN and event.key == SDLK_d:
-            if character.Running:
-                character.ignore_stand = True
-            character.change_direction_right()
-            if character.Jumping != True: character.start_running()
+            # if character.Running:
+            #     character.ignore_stand = True
+            # character.change_direction_right()
+            # if character.Jumping != True: character.start_running()
+            character.change_state(character.pre_state, character.cur_state, 'Running', 'd')
         elif event.type == SDL_KEYUP and (event.key == SDLK_a or event.key == SDLK_d) and character.Jumping == False:
-            if character.ignore_stand:
-                character.ignore_stand = False
-            else: character.start_stand()
+            # if character.ignore_stand:
+            #     character.ignore_stand = False
+            # else: character.start_stand()
+            character.change_state(character.pre_state, character.cur_state, 'Standing', '')
         # 점프 및 착지
         elif event.type == SDL_KEYDOWN and event.key == SDLK_k and character.Jumping == False and character.Attacking == False:
             character.start_jump_and_down()

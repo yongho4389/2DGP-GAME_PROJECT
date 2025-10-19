@@ -75,12 +75,18 @@ class Character:
             self.time_count = 0.0
     # 상태 변환 함수
     def change_state(self, pre_state, cur_state, new_state, Input):
-        # 왼쪽 달리기
-        if new_state == 'Running' and Input == 'a':
+        # 달리기
+        if new_state == 'Running':
             if cur_state == 'Running':
                 character.ignore_stand = True
-            character.change_direction_left()
-            if cur_state != 'Jumping': character.start_running()
+            if Input == 'a': character.change_direction_left() # 왼쪽
+            elif Input == 'd': character.change_direction_right() # 오른쪽
+            if cur_state != 'Jumping': character.start_running() # 점프 중이 아닐 때만 달리기 수행
+        # 서기
+        if new_state == 'Standing':
+            if character.ignore_stand:
+                character.ignore_stand = False
+            else: character.start_stand()
 
         # 캐릭터 현재 상태 최신화
         self.pre_state = cur_state
