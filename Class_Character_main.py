@@ -5,17 +5,22 @@ from Class_stage import *
 
 class Character:
     def __init__(self):
+        # 생성 이미지
         self.image = load_image('character_motion_sheets.png')
+        self.attack_image = load_image('attack_effect_sheets.png')  # 564 x 188
+        # 애니메이션 관련 변수
         self.frame = 0 # 프레임 진행 현황
         self.start_frame = 3 # 프레임 시작 인덱스
         self.end_frame = 3 # 프레임 종료 인덱스
         self.motion = 0  # 기본 서있기
+        self.attack_version = 0  # 초기 기본 공격 설정
         self.delay = 0.1 # 애니메이션별 프레임 딜레이
         self.time_count = 0.0 # 누적 시간 (이를 통해 각 동작별 프레임 전환 타이밍을 달리 할 수 있음) (동작에 따라 게임의 전체 딜레이가 바뀌는 것을 방지)
         self.end_motion = False # 동작 종료 여부
+
+        # 상태 관련 변수
         self.pre_state = 'None' # 이전 상태
         self.cur_state = 'Standing' # 현재 상태
-
         self.ignore_stand = False # 서있기 상태 무시 여부 (달리기 중 반대 방향키를 누른 다음 방향키를 떼었을 때 자연스럽게 움직이기 위함)
         self.skill1_Attacking = False
         self.skill1_scale = 0 # skill1 크기 증가량
@@ -39,6 +44,9 @@ class Character:
         self.sheet_height = 1910
         # 좌우 방향 (초기값은 오른쪽)
         self.dir = 1
+        # 공격 생성 위치
+        self.ax = self.x + (self.dir * 20)  # 캐릭터의 방향에 따라 공격 위치 조정
+        self.ay = self.y
 
         # 캐릭터 능력치
         self.basic_damage = 10  # 기본 공격 데미지
@@ -47,17 +55,6 @@ class Character:
         self.skill1_range = 20  # 스킬1 사거리
         self.skill2_damage = 25  # 스킬2 데미지
         self.skill2_range = 200  # 스킬2 사거리
-        # 스킬 출력 시 사용될 변수
-        self.range = 0
-        self.adir = self.dir
-
-        # 공격 생성 위치
-        self.ax = self.x + (self.dir * 20)  # 캐릭터의 방향에 따라 공격 위치 조정
-        self.ay = self.y
-
-        # 생성 이미지
-        self.attack_image = load_image('attack_effect_sheets.png')  # 564 x 188
-        self.attack_version = 0  # 기본 공격
 
     # 프레임 증가 함수
     def frame_update(self):
