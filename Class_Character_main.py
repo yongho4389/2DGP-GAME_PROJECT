@@ -241,6 +241,24 @@ class Character:
                 stage.set_camera_stage_range()
             # 플레이어 위치 좌측 끝으로 보정
             self.x = camera.start_position + 50
+    # 하나의 애니메이션이 끝났을 경우 처리
+    def end_motion_check(self, frame_index):
+        # 동작이 끝났을 때 서있기 모션으로 전환 (단, 달리기 모션은 제외) (동작이 끝나고 즉시 바뀌기 보다는 잠깐의 딜레이 이후 바뀌도록 유도)
+        # 처음은 end_motion이 False이므로 그냥 넘어가지만, 그 아래 코드에서 True로 바뀐다.
+        # 이후 그 다음 프레임에 end_motion이 True이기에 draw_stand()이 호출되고, 다시 end_motion은 False가 된다.
+        if self.end_motion:
+            if self.pre_state == 'Running' and (
+                    self.cur_state == 'Jumping' or self.cur_state == 'Dashing' or self.cur_state == 'Attacking'):
+                self.start_running()
+                self.pre_state = self.cur_state
+                self.cur_state = 'Running'
+            else:
+                self.start_stand()
+                self.pre_state = self.cur_state
+                self.cur_state = 'Standing'
+            self.end_motion = False
+        if frame_index >= self.end_frame and self.motion != 4:
+            self.end_motion = True
     # 캐릭터 그리기
     def draw_character(self):
         self.setting_camera()
@@ -260,25 +278,6 @@ class Character:
                                  self.width, self.height)
         # 애니메이션 종료 체크
         self.end_motion_check(frame_index)
-
-    # 하나의 애니메이션이 끝났을 경우 처리
-    def end_motion_check(self, frame_index):
-        # 동작이 끝났을 때 서있기 모션으로 전환 (단, 달리기 모션은 제외) (동작이 끝나고 즉시 바뀌기 보다는 잠깐의 딜레이 이후 바뀌도록 유도)
-        # 처음은 end_motion이 False이므로 그냥 넘어가지만, 그 아래 코드에서 True로 바뀐다.
-        # 이후 그 다음 프레임에 end_motion이 True이기에 draw_stand()이 호출되고, 다시 end_motion은 False가 된다.
-        if self.end_motion:
-            if self.pre_state == 'Running' and (
-                    self.cur_state == 'Jumping' or self.cur_state == 'Dashing' or self.cur_state == 'Attacking'):
-                self.start_running()
-                self.pre_state = self.cur_state
-                self.cur_state = 'Running'
-            else:
-                self.start_stand()
-                self.pre_state = self.cur_state
-                self.cur_state = 'Standing'
-            self.end_motion = False
-        if frame_index >= self.end_frame and self.motion != 4:
-            self.end_motion = True
 
     # 공격 이펙트 그리기
     def draw_attack(self):
@@ -300,7 +299,6 @@ class Character:
                                                   self.skill2_turning, 'h',
                                                   self.ax - camera.x, self.ay,
                                                   100 + self.range, 100 + self.range + self.skill1_scale)
-
     # 스킬 지속 시간 처리
     def skill_update(self, delta_time):
         self.draw_attack()
