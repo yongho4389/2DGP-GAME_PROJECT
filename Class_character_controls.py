@@ -94,20 +94,22 @@ def Character_update():
     character.hy1 = character.y + hitbox_size
     character.hx2 = character.x + hitbox_size
     character.hy2 = character.y - hitbox_size
-    if character.Running or character.cur_state == 'Running':
+    if character.cur_state == 'Running':
         character.character_move()
-    if character.Jumping:
+    if character.cur_state == 'Jumping':
         character.character_jump()
-    if character.Dashing:
+        if character.pre_state == 'Running': # 캐릭터가 뛰는 중이었다면 이동도 같이 수행하기
+            character.character_move()
+    if character.cur_state == 'Dashing':
         character.character_dash()
     # 공격 적용 타이밍 적용
-    if character.Attacking:
-        if character.Attacking and character.attack_version == 0 and character.frame == 3:
+    if character.cur_state == 'Attacking':
+        if character.attack_version == 0 and character.frame == 3: # 프레임 3에 공격 수행
             character.skill2_turning = 0.0
-            character.start_attack()
-        elif character.attack_version == 1 and character.frame == 5 and character.motion == 1:
-            character.start_attack()
+            character.draw_attack()
+        elif character.attack_version == 1 and character.frame == 5 and character.motion == 1: # 프레임 5에 공격 수행
+            character.draw_attack()
             character.skill1_Attacking = True
-        elif character.attack_version == 2 and character.frame == 1 and character.motion == 0:
-            character.start_attack()
+        elif character.attack_version == 2 and character.frame == 1 and character.motion == 0: # 프레임 1에 공격 수행
+            character.draw_attack()
             character.skill2_Attacking = True

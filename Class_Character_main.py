@@ -16,16 +16,12 @@ class Character:
         self.pre_state = 'None' # 이전 상태
         self.cur_state = 'Standing' # 현재 상태
 
-        self.Running = False # 달리기 상태 여부
         self.ignore_stand = False # 서있기 상태 무시 여부 (달리기 중 반대 방향키를 누른 다음 방향키를 떼었을 때 자연스럽게 움직이기 위함)
-        self.Jumping = False # 점프 상태 여부
-        self.Attacking = False # 공격 상태 여부 (얘는 필요함)
         self.skill1_Attacking = False
         self.skill1_scale = 0 # skill1 크기 증가량
         self.skill2_Attacking = False
         self.skill_Activate_time = 0.0 # 스킬 유지 시간
         self.skill2_turning = 0.0 # skill2 회전량
-        self.Dashing = False # 대쉬 상태 여부
 
         # 위치
         self.x = 400
@@ -82,9 +78,6 @@ class Character:
         self.motion = 4
         self.delay = 0.1
         self.end_motion = False
-        self.Running = True
-        self.Attacking = False  # 공격 중 이동 시 공격이 계속되는 버그 방지
-
     # 점프 및 착지 모션
     def start_jump_and_down(self):
         self.frame = 0
@@ -93,8 +86,6 @@ class Character:
         self.motion = 3
         self.delay = 0.2
         self.end_motion = False
-        self.Jumping = True
-
     # 피격 모션
     def start_attacked(self):
         self.frame = 0
@@ -103,7 +94,6 @@ class Character:
         self.motion = 3
         self.delay = 0.5
         self.end_motion = False
-
     # 기본 공격 모션
     def start_basic_attack(self):
         self.frame = 0
@@ -112,7 +102,6 @@ class Character:
         self.motion = 2
         self.delay = 0.1
         self.end_motion = False
-        self.Attacking = True
         self.skill1_Attacking = False
         self.skill2_Attacking = False
         self.attack_version = 0
@@ -122,7 +111,6 @@ class Character:
         self.ax = self.x + (self.dir * (20 + self.range // 2))
         self.ay = self.y
         self.adir = self.dir
-
     # 스킬1 공격 모션
     def start_skill1_attack(self):
         self.frame = 0
@@ -131,7 +119,6 @@ class Character:
         self.motion = 1
         self.delay = 0.1
         self.end_motion = False
-        self.Attacking = True
         self.skill1_Attacking = False
         self.attack_version = 1
         # skill1 데미지 및 사거리로 초기화
@@ -141,7 +128,6 @@ class Character:
         self.ay = self.y
         self.adir = self.dir
         self.skill_Activate_time = 0.0
-
     # 대쉬 모션
     def start_dash(self):
         self.frame = 0
@@ -150,8 +136,6 @@ class Character:
         self.motion = 0
         self.delay = 0.1
         self.end_motion = False
-        self.Dashing = True
-
     # 스킬2 공격 모션
     def start_skill2_attack(self):
         self.frame = 0
@@ -160,7 +144,6 @@ class Character:
         self.motion = 0
         self.delay = 0.5
         self.end_motion = False
-        self.Attacking = True
         self.skill2_Attacking = False
         self.attack_version = 2
         # skill2 데미지 및 사거리로 초기화
@@ -170,7 +153,6 @@ class Character:
         self.ay = self.y
         self.adir = self.dir
         self.skill_Activate_time = 0.0
-
     # 서있기 모션
     def start_stand(self):
         self.frame = 0
@@ -179,10 +161,6 @@ class Character:
         self.motion = 0
         self.delay = 0.0
         self.end_motion = False
-        self.Running = False
-        self.Jumping = False
-        self.Dashing = False
-        self.Attacking = False
     # 방향 전환
     def change_direction_left(self):
         self.dir = -1 # 좌측
@@ -276,13 +254,13 @@ class Character:
         # 처음은 end_motion이 False이므로 그냥 넘어가지만, 그 아래 코드에서 True로 바뀐다.
         # 이후 그 다음 프레임에 end_motion이 True이기에 draw_stand()이 호출되고, 다시 end_motion은 False가 된다.
         if self.end_motion:
-            if self.Running and (self.Jumping or self.Dashing or self.Attacking):
-                self.Jumping = False
-                self.Dashing = False
-                self.Attacking = False
+            if self.pre_state == 'Running' and (self.cur_state == 'Jumping' or self.cur_state == 'Dashing' or self.cur_state == 'Attacking'):
                 self.start_running()
+                self.pre_state = self.cur_state
+                self.cur_state = 'Running'
             else:
                 self.start_stand()
+                self.cur_state = 'Standing'
             self.end_motion = False
         if frame_index >= self.end_frame and self.motion != 4:
             self.end_motion = True
@@ -291,7 +269,7 @@ class Character:
     def draw_attack(self):
         # 카메라 위치 최신화
         self.setting_camera()
-        if self.attack_version == 0 and self.Running:
+        if self.attack_version == 0 and self.pre_state == 'Running':
             self.ax += self.dir * 50 # 달리기 중 공격 위치 보정
         if self.attack_version == 1:
             self.skill1_scale = 200
@@ -315,7 +293,6 @@ class Character:
         self.draw_attack()
         self.skill_Activate_time += delta_time
         if self.skill_Activate_time >= 1.0:
-            self.Attacking = False
             self.skill1_Attacking = False
             self.skill2_Attacking = False
             self.skill2_turning = 0.0 # 회전 각도 초기화
