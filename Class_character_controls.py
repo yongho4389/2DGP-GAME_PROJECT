@@ -5,12 +5,13 @@ from Class_Character_main import *
 def change_state(pre_state, cur_state, new_state, Input):
     # 달리기
     if new_state == 'Running':
-        if cur_state == 'Running' or cur_state == 'Jumping':
+        if cur_state == 'Running' or cur_state == 'Jumping': # 이미 달리고 있거나 점프 중이면 다음 키입력을 통한 서있기를 무시 (부드러운 방향 전환 처리)
             character.ignore_stand = True
         if Input == 'a': character.change_direction_left() # 왼쪽
         elif Input == 'd': character.change_direction_right() # 오른쪽
         if cur_state != 'Jumping':
             character.start_running() # 점프 중이 아닐 때만 달리기 수행
+            # 점프 중이 아니라면 현재 상태를 달리기로 변경, 그렇지 않다면 점프 중에 방향 전환만 된 것이므로 상태 변경은 하지 않음
             character.pre_state = cur_state
             character.cur_state = new_state
         return
