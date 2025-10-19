@@ -1,6 +1,40 @@
 from pico2d import *
 from Class_Character_main import *
 
+# 상태 변환 함수
+def change_state(pre_state, cur_state, new_state, Input):
+    # 달리기
+    if new_state == 'Running':
+        if cur_state == 'Running':
+            character.ignore_stand = True
+        if Input == 'a': character.change_direction_left() # 왼쪽
+        elif Input == 'd': character.change_direction_right() # 오른쪽
+        if cur_state != 'Jumping': character.start_running() # 점프 중이 아닐 때만 달리기 수행
+    # 서기
+    if new_state == 'Standing':
+        if cur_state == 'Jumping': return # 점프 중일 때는 서있기 상태로 전환 불가
+        if character.ignore_stand:
+            character.ignore_stand = False
+        else: character.start_stand()
+    # 점프
+    if new_state == 'Jumping':
+        if cur_state == 'Jumping' or cur_state == 'Attacking': return
+        else: character.start_jump_and_down()
+    # 공격
+    if new_state == 'Attacking':
+        if cur_state == 'Jumping' or cur_state == 'Attacking': return
+        if Input == 'j': character.start_basic_attack() # 기본 공격
+        elif Input == 'u': character.start_skill1_attack() # 스킬1
+        elif Input == 'i': character.start_skill2_attack() # 스킬2
+    # 대쉬
+    if new_state == 'Dashing':
+        if cur_state == 'Dashing' or cur_state == 'Jumping': return
+        else: character.start_dash()
+
+    # 캐릭터 현재 상태 최신화
+    character.pre_state = cur_state
+    character.cur_state = new_state
+
 # 캐릭터 키 상호작용
 def Character_events():
     events = get_events() # 이벤트 받아와서 events에 저장 (상태의 현황보다는 상태의 변화를 체크하기 때문에, 키를 꾹 누르고 있다고 해서 계속해서 이벤트가 발생하게 되는 것은 아님)
@@ -16,35 +50,39 @@ def Character_events():
             #     character.ignore_stand = True
             # character.change_direction_left()
             # if character.Jumping != True: character.start_running()
-            character.change_state(character.pre_state, character.cur_state, 'Running', 'a')
+            change_state(character.pre_state, character.cur_state, 'Running', 'a')
         elif event.type == SDL_KEYDOWN and event.key == SDLK_d:
             # if character.Running:
             #     character.ignore_stand = True
             # character.change_direction_right()
             # if character.Jumping != True: character.start_running()
-            character.change_state(character.pre_state, character.cur_state, 'Running', 'd')
-        elif event.type == SDL_KEYUP and (event.key == SDLK_a or event.key == SDLK_d) and character.Jumping == False:
+            change_state(character.pre_state, character.cur_state, 'Running', 'd')
+        elif event.type == SDL_KEYUP and (event.key == SDLK_a or event.key == SDLK_d):
             # if character.ignore_stand:
             #     character.ignore_stand = False
             # else: character.start_stand()
-            character.change_state(character.pre_state, character.cur_state, 'Standing', '')
+            change_state(character.pre_state, character.cur_state, 'Standing', '')
         # 점프 및 착지
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_k and character.Jumping == False and character.Attacking == False:
-            character.start_jump_and_down()
-        # 피격
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_k:
+            # character.start_jump_and_down()
+            change_state(character.pre_state, character.cur_state, 'Jumping', 'k')
         # 기본 공격
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_j and character.Attacking == False and character.Jumping == False:
-            character.start_basic_attack()
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_j:
+            # character.start_basic_attack()
+            change_state(character.pre_state, character.cur_state, 'Attacking', 'j')
         # skill1
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_u and character.Attacking == False and character.Jumping == False:
-            character.start_skill1_attack()
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_u:
+            # character.start_skill1_attack()
+            change_state(character.pre_state, character.cur_state, 'Attacking', 'u')
         # 대쉬
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_l and character.Dashing == False and character.Jumping == False:
-            character.start_dash()
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_l:
+            # character.start_dash()
+            change_state(character.pre_state, character.cur_state, 'Dashing', 'l')
         # skill2
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_i and character.Attacking == False and character.Jumping == False:
-            character.start_skill2_attack()
-        # 포탈
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_i:
+            # character.start_skill2_attack()
+            change_state(character.pre_state, character.cur_state, 'Attacking', 'i')
+        # 포탈 (이건 상태로 취급하지 않음)
         elif event.type == SDL_KEYDOWN and event.key == SDLK_w:
             character.taking_portal()
 

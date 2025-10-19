@@ -19,7 +19,7 @@ class Character:
         self.Running = False # 달리기 상태 여부
         self.ignore_stand = False # 서있기 상태 무시 여부 (달리기 중 반대 방향키를 누른 다음 방향키를 떼었을 때 자연스럽게 움직이기 위함)
         self.Jumping = False # 점프 상태 여부
-        self.Attacking = False # 공격 상태 여부
+        self.Attacking = False # 공격 상태 여부 (얘는 필요함)
         self.skill1_Attacking = False
         self.skill1_scale = 0 # skill1 크기 증가량
         self.skill2_Attacking = False
@@ -73,24 +73,6 @@ class Character:
         if self.time_count >= self.delay: # time_count가 각 동작에게 부여된 delay와 같거나 더 크면 frame_update를 호출하여 frame을 전환. 이후 다시 time_count를 0으로 초기화하여 다음 프레임 전환까지 대기
             self.frame_update()
             self.time_count = 0.0
-    # 상태 변환 함수
-    def change_state(self, pre_state, cur_state, new_state, Input):
-        # 달리기
-        if new_state == 'Running':
-            if cur_state == 'Running':
-                character.ignore_stand = True
-            if Input == 'a': character.change_direction_left() # 왼쪽
-            elif Input == 'd': character.change_direction_right() # 오른쪽
-            if cur_state != 'Jumping': character.start_running() # 점프 중이 아닐 때만 달리기 수행
-        # 서기
-        if new_state == 'Standing':
-            if character.ignore_stand:
-                character.ignore_stand = False
-            else: character.start_stand()
-
-        # 캐릭터 현재 상태 최신화
-        self.pre_state = cur_state
-        self.cur_state = new_state
 
     # 달리기 모션
     def start_running(self):
