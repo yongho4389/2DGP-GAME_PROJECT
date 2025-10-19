@@ -15,6 +15,7 @@ def change_state(pre_state, cur_state, new_state, Input):
         if cur_state == 'Jumping': return # 점프 중일 때는 서있기 상태로 전환 불가
         if character.ignore_stand:
             character.ignore_stand = False
+            return
         else: character.start_stand()
     # 점프
     if new_state == 'Jumping':
@@ -60,12 +61,12 @@ def Character_events():
         # skill1
         elif event.type == SDL_KEYDOWN and event.key == SDLK_u:
             change_state(character.pre_state, character.cur_state, 'Attacking', 'u')
-        # 대쉬
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_l:
-            change_state(character.pre_state, character.cur_state, 'Dashing', 'l')
         # skill2
         elif event.type == SDL_KEYDOWN and event.key == SDLK_i:
             change_state(character.pre_state, character.cur_state, 'Attacking', 'i')
+        # 대쉬
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_l:
+            change_state(character.pre_state, character.cur_state, 'Dashing', 'l')
         # 포탈 (이건 상태로 취급하지 않음)
         elif event.type == SDL_KEYDOWN and event.key == SDLK_w:
             character.taking_portal()
