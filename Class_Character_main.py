@@ -266,7 +266,6 @@ class Character:
                 self.start_running()
                 self.pre_state = self.cur_state
                 self.cur_state = 'Running'
-                self.ignore_stand = False # 이어지는 달리기가 끊기지 않고 계속해서 유지되는 경우 방지
             else:
                 self.start_stand()
                 self.cur_state = 'Standing'
@@ -278,8 +277,6 @@ class Character:
     def draw_attack(self):
         # 카메라 위치 최신화
         self.setting_camera()
-        if self.attack_version == 0 and self.pre_state == 'Running':
-            self.ax += self.dir * 50 # 달리기 중 공격 위치 보정
         if self.attack_version == 1:
             self.skill1_scale = 200
         else:

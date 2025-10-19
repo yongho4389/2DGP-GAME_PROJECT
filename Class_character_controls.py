@@ -9,7 +9,11 @@ def change_state(pre_state, cur_state, new_state, Input):
             character.ignore_stand = True
         if Input == 'a': character.change_direction_left() # 왼쪽
         elif Input == 'd': character.change_direction_right() # 오른쪽
-        if cur_state != 'Jumping': character.start_running() # 점프 중이 아닐 때만 달리기 수행
+        if cur_state != 'Jumping':
+            character.start_running() # 점프 중이 아닐 때만 달리기 수행
+            character.pre_state = cur_state
+            character.cur_state = new_state
+        return
     # 서기
     if new_state == 'Standing':
         if character.ignore_stand: # 부드러운 방향 전환을 위한 처리
