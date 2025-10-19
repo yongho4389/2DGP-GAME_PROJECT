@@ -268,6 +268,7 @@ class Character:
                 self.cur_state = 'Running'
             else:
                 self.start_stand()
+                self.pre_state = self.cur_state
                 self.cur_state = 'Standing'
             self.end_motion = False
         if frame_index >= self.end_frame and self.motion != 4:
