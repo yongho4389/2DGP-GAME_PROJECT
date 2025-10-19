@@ -5,6 +5,13 @@ from Class_Character_main import *
 def change_state(pre_state, cur_state, new_state, Input):
     # 달리기
     if new_state == 'Running':
+        if cur_state == 'Jumping':
+            if Input == 'a':
+                character.change_direction_left()  # 왼쪽
+            elif Input == 'd':
+                character.change_direction_right()  # 오른쪽
+            character.ignore_stand = False
+            return
         if cur_state == 'Running':
             character.ignore_stand = True
         if Input == 'a': character.change_direction_left() # 왼쪽
