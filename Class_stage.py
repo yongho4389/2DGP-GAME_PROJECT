@@ -20,13 +20,20 @@ class Stage:
         self.portal_ex = 800
         self.portal_y = self.height // 2 - 100
 
-
-    def draw(self):
-        # 스테이지
-        if self.special_stage: # 특수 스테이지인 경우 맵 크기는 1배
-            # 카메라 위치 최신화
+    # 카메라 범위 최신화 (스테이지에 따른 카메라의 허용 범위 설정)
+    def set_camera_stage_range(self):
+        if self.special_stage:
             camera.start_position = 0
             camera.end_position = self.width
+        else:
+            camera.start_position = 0
+            camera.end_position = (self.width * 3) - 40
+
+    def draw(self):
+        # 카메라 범위 최신화
+        self.set_camera_stage_range()
+        # 스테이지
+        if self.special_stage: # 특수 스테이지인 경우 맵 크기는 1배
             # 구름
             self.image.clip_draw(0 * self.w // 3, (3 - self.stage_level) * self.h // 4,
                                  self.w // 3, self.h // 4,
@@ -43,9 +50,6 @@ class Stage:
                                  self.x, self.y // 4,
                                  self.width, 400)
         else:
-            # 카메라 위치 최신화
-            camera.start_position = 0
-            camera.end_position = (self.width * 3) - 40
             for i in range(3):
                 # 구름
                 self.image.clip_draw(0 * self.w // 3, (3 - self.stage_level) * self.h // 4,

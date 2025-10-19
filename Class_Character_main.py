@@ -190,7 +190,7 @@ class Character:
         self.x += self.dir * 50
         self.out_of_position()
 
-    # 카메라 위치 최신화
+    # 카메라 위치를 캐릭터 위치에 맞게 최신화
     def setting_camera(self):
         if camera.x >= camera.start_position and camera.x <= camera.end_position - 800:
             camera.x = self.x - 400
@@ -200,8 +200,8 @@ class Character:
         if camera.x > camera.end_position - 800:
             camera.x = camera.end_position - 800
 
+    # 포탈 이동 처리
     def taking_portal(self):
-        self.Running = False
         if stage.stage_level == 3:
             return # 보스 스테이지에서는 포탈 무시
         # 좌측 끝 포탈
@@ -211,11 +211,14 @@ class Character:
             # 상점 스테이지에서 이전으로 돌아가는 경우
             if stage.special_stage:
                 stage.special_stage = False
+                # 스테이지 변경 후 카메라 범위 최신화
+                stage.set_camera_stage_range()
                 # 플레이어 위치 일반 스테이지의 우측 끝으로 보정
                 self.x = (stage.width * 3 - 40) - 50
             else:
                 stage.stage_level -= 1
                 stage.special_stage = True
+                stage.set_camera_stage_range()
                 # 플레이어 위치 스페셜 스테이지의 우측 끝으로 보정
                 self.x = stage.width - 50
         # 우측 끝 포탈
@@ -227,9 +230,11 @@ class Character:
             else:
                 stage.stage_level += 1
                 stage.special_stage = False
+                stage.set_camera_stage_range()
             # 보스 스테이지 또한 스페셜 스테이지로 전환
             if stage.stage_level == 3:
                 stage.special_stage = True
+                stage.set_camera_stage_range()
             # 플레이어 위치 좌측 끝으로 보정
             self.x = camera.start_position + 50
 

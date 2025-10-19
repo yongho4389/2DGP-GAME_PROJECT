@@ -13,7 +13,7 @@ def change_state(pre_state, cur_state, new_state, Input):
     # 서기
     if new_state == 'Standing':
         if cur_state == 'Jumping': return # 점프 중일 때는 서있기 상태로 전환 불가
-        if character.ignore_stand:
+        if character.ignore_stand: # 부드러운 방향 전환을 위한 처리
             character.ignore_stand = False
             return
         else: character.start_stand()
@@ -50,6 +50,7 @@ def Character_events():
             change_state(character.pre_state, character.cur_state, 'Running', 'a')
         elif event.type == SDL_KEYDOWN and event.key == SDLK_d:
             change_state(character.pre_state, character.cur_state, 'Running', 'd')
+        # 제자리 서기
         elif event.type == SDL_KEYUP and (event.key == SDLK_a or event.key == SDLK_d):
             change_state(character.pre_state, character.cur_state, 'Standing', '')
         # 점프 및 착지
