@@ -258,11 +258,17 @@ class Character:
                                  0, 'h',
                                  self.x - camera.x, self.y, # 월드 위치
                                  self.width, self.height)
+        # 애니메이션 종료 체크
+        self.end_motion_check(frame_index)
+
+    # 하나의 애니메이션이 끝났을 경우 처리
+    def end_motion_check(self, frame_index):
         # 동작이 끝났을 때 서있기 모션으로 전환 (단, 달리기 모션은 제외) (동작이 끝나고 즉시 바뀌기 보다는 잠깐의 딜레이 이후 바뀌도록 유도)
         # 처음은 end_motion이 False이므로 그냥 넘어가지만, 그 아래 코드에서 True로 바뀐다.
         # 이후 그 다음 프레임에 end_motion이 True이기에 draw_stand()이 호출되고, 다시 end_motion은 False가 된다.
         if self.end_motion:
-            if self.pre_state == 'Running' and (self.cur_state == 'Jumping' or self.cur_state == 'Dashing' or self.cur_state == 'Attacking'):
+            if self.pre_state == 'Running' and (
+                    self.cur_state == 'Jumping' or self.cur_state == 'Dashing' or self.cur_state == 'Attacking'):
                 self.start_running()
                 self.pre_state = self.cur_state
                 self.cur_state = 'Running'
