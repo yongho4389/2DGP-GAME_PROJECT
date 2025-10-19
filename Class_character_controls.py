@@ -15,32 +15,32 @@ def Character_events():
             if character.Running:
                 character.ignore_stand = True
             character.change_direction_left()
-            if character.Jumping != True: character.draw_running()
+            if character.Jumping != True: character.start_running()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_d:
             if character.Running:
                 character.ignore_stand = True
             character.change_direction_right()
-            if character.Jumping != True: character.draw_running()
+            if character.Jumping != True: character.start_running()
         elif event.type == SDL_KEYUP and (event.key == SDLK_a or event.key == SDLK_d) and character.Jumping == False:
             if character.ignore_stand:
                 character.ignore_stand = False
-            else: character.draw_stand()
+            else: character.start_stand()
         # 점프 및 착지
         elif event.type == SDL_KEYDOWN and event.key == SDLK_k and character.Jumping == False and character.Attacking == False:
-            character.draw_jump_and_down()
+            character.start_jump_and_down()
         # 피격
         # 기본 공격
         elif event.type == SDL_KEYDOWN and event.key == SDLK_j and character.Attacking == False and character.Jumping == False:
-            character.draw_basic_attack()
+            character.start_basic_attack()
         # skill1
         elif event.type == SDL_KEYDOWN and event.key == SDLK_u and character.Attacking == False and character.Jumping == False:
-            character.draw_skill1_attack()
+            character.start_skill1_attack()
         # 대쉬
         elif event.type == SDL_KEYDOWN and event.key == SDLK_l and character.Dashing == False and character.Jumping == False:
-            character.draw_dash()
+            character.start_dash()
         # skill2
         elif event.type == SDL_KEYDOWN and event.key == SDLK_i and character.Attacking == False and character.Jumping == False:
-            character.draw_skill2_attack()
+            character.start_skill2_attack()
         # 포탈
         elif event.type == SDL_KEYDOWN and event.key == SDLK_w:
             character.taking_portal()
@@ -63,10 +63,10 @@ def Character_update():
     if character.Attacking:
         if character.Attacking and character.attack_version == 0 and character.frame == 3:
             character.skill2_turning = 0.0
-            character.draw_attack()
+            character.start_attack()
         elif character.attack_version == 1 and character.frame == 5 and character.motion == 1:
-            character.draw_attack()
+            character.start_attack()
             character.skill1_Attacking = True
         elif character.attack_version == 2 and character.frame == 1 and character.motion == 0:
-            character.draw_attack()
+            character.start_attack()
             character.skill2_Attacking = True

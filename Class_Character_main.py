@@ -13,6 +13,8 @@ class Character:
         self.delay = 0.1 # 애니메이션별 프레임 딜레이
         self.time_count = 0.0 # 누적 시간 (이를 통해 각 동작별 프레임 전환 타이밍을 달리 할 수 있음) (동작에 따라 게임의 전체 딜레이가 바뀌는 것을 방지)
         self.end_motion = False # 동작 종료 여부
+        self.pre_state = 'None' # 이전 상태
+        self.cur_state = 'STAND' # 현재 상태
 
         self.Running = False # 달리기 상태 여부
         self.ignore_stand = False # 서있기 상태 무시 여부 (달리기 중 반대 방향키를 누른 다음 방향키를 떼었을 때 자연스럽게 움직이기 위함)
@@ -49,8 +51,11 @@ class Character:
         self.skill1_range = 20  # 스킬1 사거리
         self.skill2_damage = 25  # 스킬2 데미지
         self.skill2_range = 200  # 스킬2 사거리
+        # 스킬 출력 시 사용될 변수
+        self.range = 0
+        self.adir = self.dir
 
-        # 생성 위치
+        # 공격 생성 위치
         self.ax = self.x + (self.dir * 20)  # 캐릭터의 방향에 따라 공격 위치 조정
         self.ay = self.y
 
@@ -68,8 +73,12 @@ class Character:
         if self.time_count >= self.delay: # time_count가 각 동작에게 부여된 delay와 같거나 더 크면 frame_update를 호출하여 frame을 전환. 이후 다시 time_count를 0으로 초기화하여 다음 프레임 전환까지 대기
             self.frame_update()
             self.time_count = 0.0
+    # 상태 변환 함수
+    def change_state(self, pre_state, cur_state, new_state):
+        pass
+
     # 달리기 모션
-    def draw_running(self):
+    def start_running(self):
         self.frame = 0
         self.start_frame = 0
         self.end_frame = 7
@@ -77,9 +86,10 @@ class Character:
         self.delay = 0.1
         self.end_motion = False
         self.Running = True
-        self.Attacking = False # 공격 중 이동 시 공격이 계속되는 버그 방지
+        self.Attacking = False  # 공격 중 이동 시 공격이 계속되는 버그 방지
+
     # 점프 및 착지 모션
-    def draw_jump_and_down(self):
+    def start_jump_and_down(self):
         self.frame = 0
         self.start_frame = 0
         self.end_frame = 3
@@ -87,16 +97,18 @@ class Character:
         self.delay = 0.2
         self.end_motion = False
         self.Jumping = True
+
     # 피격 모션
-    def draw_attacked(self):
+    def start_attacked(self):
         self.frame = 0
         self.start_frame = 4
         self.end_frame = 5
         self.motion = 3
         self.delay = 0.5
         self.end_motion = False
+
     # 기본 공격 모션
-    def draw_basic_attack(self):
+    def start_basic_attack(self):
         self.frame = 0
         self.start_frame = 0
         self.end_frame = 5
@@ -113,8 +125,9 @@ class Character:
         self.ax = self.x + (self.dir * (20 + self.range // 2))
         self.ay = self.y
         self.adir = self.dir
+
     # 스킬1 공격 모션
-    def draw_skill1_attack(self):
+    def start_skill1_attack(self):
         self.frame = 0
         self.start_frame = 0
         self.end_frame = 6
@@ -131,8 +144,9 @@ class Character:
         self.ay = self.y
         self.adir = self.dir
         self.skill_Activate_time = 0.0
+
     # 대쉬 모션
-    def draw_dash(self):
+    def start_dash(self):
         self.frame = 0
         self.start_frame = 0
         self.end_frame = 0
@@ -140,8 +154,9 @@ class Character:
         self.delay = 0.1
         self.end_motion = False
         self.Dashing = True
+
     # 스킬2 공격 모션
-    def draw_skill2_attack(self):
+    def start_skill2_attack(self):
         self.frame = 0
         self.start_frame = 1
         self.end_frame = 2
@@ -158,8 +173,9 @@ class Character:
         self.ay = self.y
         self.adir = self.dir
         self.skill_Activate_time = 0.0
+
     # 서있기 모션
-    def draw_stand(self):
+    def start_stand(self):
         self.frame = 0
         self.start_frame = 3
         self.end_frame = 3
@@ -267,9 +283,9 @@ class Character:
                 self.Jumping = False
                 self.Dashing = False
                 self.Attacking = False
-                self.draw_running()
+                self.start_running()
             else:
-                self.draw_stand()
+                self.start_stand()
             self.end_motion = False
         if frame_index >= self.end_frame and self.motion != 4:
             self.end_motion = True
@@ -316,4 +332,4 @@ class Character:
 
 # 캐릭터 객체 생성
 character = Character()
-character.draw_stand()
+character.start_stand()
