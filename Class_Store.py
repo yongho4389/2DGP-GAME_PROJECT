@@ -68,6 +68,8 @@ class Store:
             self.element_image.clip_draw(420, 170, 210, 170, self.healing_x, self.healing_y, 100, 100)
             self.font.draw(self.healing_x - 15, self.healing_y + 8, f'{self.heal_cost}G', (255, 255, 255)) # 회복 비용 출력
             self.element_image.clip_draw(630, 170, 210, 170, self.healing_x, self.healing_y + 75, 200, 200)
+            self.font.draw(self.healing_x - 75, self.healing_y + 100, f'회복', (255, 255, 255))
+
             # 기본 공격 강화 버튼
             # 기본 공격 데미지 강화
             self.element_image.clip_draw(420, 170, 210, 170, self.basic_damage_x, self.basic_damage_y, 100, 100)
