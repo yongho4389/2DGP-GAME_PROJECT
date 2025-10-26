@@ -19,8 +19,8 @@ class Store:
         self.x_button_x = self.window_x + 350
         self.x_button_y = self.window_y + 220
         # 체력 회복
-        self.healing_x = self.window_x - 250
-        self.healing_y = self.window_y
+        self.healing_x = self.window_x - 220
+        self.healing_y = self.window_y - 30
         self.heal_cost = 100
         # 기본 공격 강화
         self.basic_damage_x = self.window_x - 40
