@@ -31,6 +31,16 @@ class Store:
         self.basic_range_cost = 100
         self.basic_range_level = 1
 
+        # skill1 강화
+        self.skill1_damage_x = self.window_x + 180
+        self.skill1_damage_y = self.window_y + 60
+        self.skill1_damage_cost = 100
+        self.skill1_damage_level = 1
+        self.skill1_range_x = self.window_x + 260
+        self.skill1_range_y = self.window_y + 60
+        self.skill1_range_cost = 100
+        self.skill1_range_level = 1
+
         self.store_onoff = False
 
     def draw(self):
@@ -59,6 +69,29 @@ class Store:
             # 기본 공격 아이콘
             self.element_image.clip_draw(0, 0, 210, 170, (self.basic_damage_x + self.basic_range_x) // 2,
                                          (self.basic_damage_y + self.basic_range_y) // 2 + 90, 200, 200)
+            self.font.draw((self.basic_damage_x + self.basic_range_x) // 2 - 130,
+                           (self.basic_damage_y + self.basic_range_y) // 2 + 130,
+                           f'기본 공격', (255, 255, 255))
+
+            # skill1 강화 버튼
+            # skill1 데미지 강화
+            self.element_image.clip_draw(420, 170, 210, 170, self.skill1_damage_x, self.skill1_damage_y, 100, 100)
+            self.font.draw(self.skill1_damage_x - 15, self.skill1_damage_y + 8, f'{self.skill1_damage_cost}G',
+                           (255, 255, 255))
+            self.font.draw(self.skill1_damage_x - 40, self.skill1_damage_y + 40, f'LV {self.skill1_damage_level}',
+                           (255, 255, 255))
+            # skill1 범위 강화
+            self.element_image.clip_draw(420, 170, 210, 170, self.skill1_range_x, self.skill1_range_y, 100, 100)
+            self.font.draw(self.skill1_range_x - 15, self.skill1_range_y + 8, f'{self.skill1_range_cost}G',
+                           (255, 255, 255))
+            self.font.draw(self.skill1_range_x + 5, self.skill1_range_y + 40, f'LV {self.skill1_range_level}',
+                           (255, 255, 255))
+            # skill1 아이콘
+            self.element_image.clip_draw(210, 0, 210, 170, (self.skill1_damage_x + self.skill1_range_x) // 2,
+                                         (self.skill1_damage_y + self.skill1_range_y) // 2 + 90, 200, 200)
+            self.font.draw((self.skill1_damage_x + self.skill1_range_x) // 2 - 100,
+                           (self.skill1_damage_y + self.skill1_range_y) // 2 + 130,
+                           f'Skill1', (255, 255, 255))
 
     def store_click(self, mx, my):
         if self.stage.special_stage and not self.store_onoff and mx >= self.x - 150 and mx <= self.x + 150 and my >= self.y - 250 and my <= self.y + 250:
