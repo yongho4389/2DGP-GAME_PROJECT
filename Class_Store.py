@@ -62,7 +62,7 @@ class Store:
         self.skill1_range_upgrade = 15  # skill1 범위 강화량
 
         self.skill2_damage_upgrade = 5  # skill2 데미지 강화량
-        self.skill2_range_upgrade = 20  # skill2 범위 강화량
+        self.skill2_range_upgrade = 50  # skill2 범위 강화량
 
     def draw(self):
         self.image.clip_draw(0, 0, 227, 341, self.x, self.y, 300, 500)
@@ -194,4 +194,24 @@ class Store:
                     self.skill1_range_cost += 50
                     if self.skill1_range_level >= 5:
                         self.skill1_range_cost = 0 # 최대 레벨 도달 시 비용 0으로 설정
+                return
+            # skill2 데미지 강화
+            if mx >= self.skill2_damage_x - 50 and mx <= self.skill2_damage_x + 50 and my >= self.skill2_damage_y - 50 and my <= self.skill2_damage_y + 50:
+                if character.Gold >= self.skill2_damage_cost and self.skill2_damage_level != 5:
+                    character.skill2_damage += self.skill2_damage_upgrade
+                    character.Gold -= self.skill2_damage_cost
+                    self.skill2_damage_level += 1
+                    self.skill2_damage_cost += 50
+                    if self.skill2_damage_level >= 5:
+                        self.skill2_damage_cost = 0 # 최대 레벨 도달 시 비용 0으로 설정
+                return
+            # skill2 범위 강화
+            if mx >= self.skill2_range_x - 50 and mx <= self.skill2_range_x + 50 and my >= self.skill2_range_y - 50 and my <= self.skill2_range_y + 50:
+                if character.Gold >= self.skill2_range_cost and self.skill2_range_level != 5:
+                    character.skill2_range += self.skill2_range_upgrade
+                    character.Gold -= self.skill2_range_cost
+                    self.skill2_range_level += 1
+                    self.skill2_range_cost += 50
+                    if self.skill2_range_level >= 5:
+                        self.skill2_range_cost = 0 # 최대 레벨 도달 시 비용 0으로 설정
                 return
