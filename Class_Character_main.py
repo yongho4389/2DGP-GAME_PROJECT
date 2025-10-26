@@ -46,7 +46,7 @@ class Character:
         self.sheet_height = 1910
         # 좌우 방향 (초기값은 오른쪽)
         self.dir = 1
-        # 공격 생성 위치
+        # 공격 생성 위치 (또는 현재 공격 위치)
         self.ax = self.x + (self.dir * 20)  # 캐릭터의 방향에 따라 공격 위치 조정
         self.ay = self.y
 
