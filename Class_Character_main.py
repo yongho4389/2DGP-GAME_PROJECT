@@ -8,6 +8,7 @@ class Character:
         # 생성 이미지
         self.image = load_image('character_motion_sheets.png')
         self.attack_image = load_image('attack_effect_sheets.png')  # 564 x 188
+        self.UI_image = load_image('character_UI_sheet.png')
         # 애니메이션 관련 변수
         self.frame = 0 # 프레임 진행 현황
         self.start_frame = 3 # 프레임 시작 인덱스
@@ -48,7 +49,13 @@ class Character:
         self.ax = self.x + (self.dir * 20)  # 캐릭터의 방향에 따라 공격 위치 조정
         self.ay = self.y
 
+        # 재화
+        self.Gold = 100
+        self.EXP = 0  # 경험치
+
         # 캐릭터 능력치
+        self.HP = 100  # 체력
+        self.LV = 1     # 레벨
         self.basic_damage = 10  # 기본 공격 데미지
         self.basic_range = 40  # 기본 공격 사거리
         self.skill1_damage = 30  # 스킬1 데미지
@@ -256,6 +263,9 @@ class Character:
             self.end_motion = False
         if frame_index >= self.end_frame and self.motion != 4:
             self.end_motion = True
+    # UI 그리기
+    def draw_UI(self):
+        pass
     # 캐릭터 그리기
     def draw_character(self):
         self.setting_camera()
@@ -275,6 +285,7 @@ class Character:
                                  self.width, self.height)
         # 애니메이션 종료 체크
         self.end_motion_check(frame_index)
+        self.draw_UI()
 
     # 공격 이펙트 그리기
     def draw_attack(self):
