@@ -1,5 +1,6 @@
 from pico2d import *
 from Class_camera import *
+from Class_Store import *
 
 # 일반 스테이지 관련 클래스 및 함수 정의 (사냥터)
 class Stage:
@@ -68,7 +69,7 @@ class Stage:
                                      self.width, 400)
         # 상점
         if self.special_stage and self.stage_level < 3:
-            self.store_image.clip_draw(0, 0, 227, 341, self.width // 2 + 100, self.height // 2 - 75, 300, 500)
+            store.draw()
         # 포탈
         if self.stage_level != 3:
             self.portal_sx = camera.start_position + 50
@@ -79,3 +80,4 @@ class Stage:
 
 
 stage = Stage()
+store = Store(stage)
