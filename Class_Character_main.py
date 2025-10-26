@@ -265,7 +265,13 @@ class Character:
             self.end_motion = True
     # UI 그리기
     def draw_UI(self):
-        pass
+        w = 2720 // 5
+        h = 185
+        sx = 130
+        sy = 550
+        self.UI_image.clip_draw(0, 0, w, h, sx, sy, 400, 100) # HP 바 테두리
+        self.UI_image.clip_draw(w * 1, 0, w, h, sx + 32, sy + 21, 400, 100) # HP 바
+        self.UI_image.clip_draw(w * 3, 0, w, h, sx + 32, sy + 8, 190, 50) # 경험치 바
     # 캐릭터 그리기
     def draw_character(self):
         self.setting_camera()
