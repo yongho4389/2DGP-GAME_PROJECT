@@ -13,8 +13,8 @@ class Stage:
         self.h = 2496
         self.x = 400
         self.y = 400
-        self.stage_level = 0
-        self.special_stage = True # 상점 진입 혹은 보스 스테이지 진입 시 True로 변경
+        self.stage_level = 0 # 보스 스테이지는 3
+        self.special_stage = False # 상점 진입 혹은 보스 스테이지 진입 시 True로 변경
 
         self.portal_image = load_image('portal_sheet.png')
         self.portal_sx = 0

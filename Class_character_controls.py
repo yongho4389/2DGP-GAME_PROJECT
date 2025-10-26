@@ -90,6 +90,10 @@ def Character_update():
     character.hy1 = character.y + hitbox_size
     character.hx2 = character.x + hitbox_size
     character.hy2 = character.y - hitbox_size
+    if character.HP <= 0:
+        pass
+    if character.EXP >= character.MAX_EXP:
+        pass
     # 상태에 따른 동작 처리
     # 달리기
     if character.cur_state == 'Running':

@@ -141,7 +141,7 @@ class Store:
             character.font.draw(self.window_x - 305, self.window_y - 190, f'Gold: {character.Gold}', (255, 255, 0))
 
     def store_click(self, mx, my, character):
-        if self.stage.special_stage and not self.store_onoff and mx >= self.x - 150 and mx <= self.x + 150 and my >= self.y - 250 and my <= self.y + 250:
+        if self.stage.special_stage and self.stage.stage_level != 3 and not self.store_onoff and mx >= self.x - 150 and mx <= self.x + 150 and my >= self.y - 250 and my <= self.y + 250:
             self.store_onoff = True
             return
         if self.store_onoff:
