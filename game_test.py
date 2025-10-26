@@ -20,7 +20,7 @@ while True:
     clear_canvas()
     stage.draw()
     Main_character_loop()
-    store.store_draw() # 상점을 열면 캐릭터보다 앞에 그려지도록 하기
+    store.store_draw(character) # 상점을 열면 캐릭터보다 앞에 그려지도록 하기
     update_canvas()
     delay(0.1)
 

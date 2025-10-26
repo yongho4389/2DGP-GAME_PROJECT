@@ -52,11 +52,21 @@ class Store:
         self.skill2_range_cost = 100
         self.skill2_range_level = 1
 
+        # 상점 창 열림 여부
         self.store_onoff = False
+
+        self.basic_damage_upgrade = 5  # 기본 공격 데미지 강화량
+        self.basic_range_upgrade = 10  # 기본 공격 범위 강화량
+
+        self.skill1_damage_upgrade = 10  # skill1 데미지 강화량
+        self.skill1_range_upgrade = 15  # skill1 범위 강화량
+
+        self.skill2_damage_upgrade = 5  # skill2 데미지 강화량
+        self.skill2_range_upgrade = 20  # skill2 범위 강화량
 
     def draw(self):
         self.image.clip_draw(0, 0, 227, 341, self.x, self.y, 300, 500)
-    def store_draw(self):
+    def store_draw(self, character):
         if self.store_onoff:
             # 기본 창 형성
             self.element_image.clip_draw(0, 170, 210, 170, self.window_x, self.window_y, 1400, 600)
@@ -126,11 +136,42 @@ class Store:
                            (self.skill2_damage_y + self.skill2_range_y) // 2 + 130,
                            f'Skill2', (255, 255, 255))
 
-    def store_click(self, mx, my):
+            # 골드 보유량
+            character.UI_image.clip_draw(2720 // 5 * 4, 0, 2720 // 5, 185, self.window_x - 330, self.window_y - 190, 250, 100)  # 골드 보유량
+            character.font.draw(self.window_x - 305, self.window_y - 190, f'Gold: {character.Gold}', (255, 255, 0))
+
+    def store_click(self, mx, my, character):
         if self.stage.special_stage and not self.store_onoff and mx >= self.x - 150 and mx <= self.x + 150 and my >= self.y - 250 and my <= self.y + 250:
             self.store_onoff = True
             return
         if self.store_onoff:
+            # X 버튼
             if mx >= self.x_button_x - 25 and mx <= self.x_button_x + 25 and my >= self.x_button_y - 25 and my <= self.x_button_y + 25:
                 self.store_onoff = False
+                return
+            # 회복 버튼
+            if mx >= self.healing_x - 50 and mx <= self.healing_x + 50 and my >= self.healing_y - 50 and my <= self.healing_y + 50:
+                if character.Gold >= self.heal_cost:
+                    character.HP = character.Max_HP
+                    character.Gold -= self.heal_cost
+                return
+            # 기본 공격 데미지 강화
+            if mx >= self.basic_damage_x - 50 and mx <= self.basic_damage_x + 50 and my >= self.basic_damage_y - 50 and my <= self.basic_damage_y + 50:
+                if character.Gold >= self.basic_damage_cost and self.basic_damage_level != 5:
+                    character.basic_damage += self.basic_damage_upgrade
+                    character.Gold -= self.basic_damage_cost
+                    self.basic_damage_level += 1
+                    self.basic_damage_cost += 50
+                    if self.basic_damage_level >= 5:
+                        self.basic_damage_cost = 0 # 최대 레벨 도달 시 비용 0으로 설정
+                return
+            # 기본 공격 범위 강화
+            if mx >= self.basic_range_x - 50 and mx <= self.basic_range_x + 50 and my >= self.basic_range_y - 50 and my <= self.basic_range_y + 50:
+                if character.Gold >= self.basic_range_cost and self.basic_range_level != 5:
+                    character.basic_range += self.basic_range_upgrade
+                    character.Gold -= self.basic_range_cost
+                    self.basic_range_level += 1
+                    self.basic_range_cost += 50
+                    if self.basic_range_level >= 5:
+                        self.basic_range_cost = 0 # 최대 레벨 도달 시 비용 0으로 설정
                 return
