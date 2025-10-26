@@ -9,6 +9,7 @@ class Character:
         self.image = load_image('character_motion_sheets.png')
         self.attack_image = load_image('attack_effect_sheets.png')  # 564 x 188
         self.UI_image = load_image('character_UI_sheet.png')
+        self.font = load_font('C:\Windows\Fonts\malgun.ttf', 20)
         # 애니메이션 관련 변수
         self.frame = 0 # 프레임 진행 현황
         self.start_frame = 3 # 프레임 시작 인덱스
@@ -271,7 +272,11 @@ class Character:
         sy = 550
         self.UI_image.clip_draw(0, 0, w, h, sx, sy, 400, 100) # HP 바 테두리
         self.UI_image.clip_draw(w * 1, 0, w, h, sx + 32, sy + 21, 400, 100) # HP 바
-        self.UI_image.clip_draw(w * 3, 0, w, h, sx + 32, sy + 8, 190, 50) # 경험치 바
+        self.UI_image.clip_draw(w * 2, 0, w, h, sx + 32, sy + 8, 190, 50) # 경험치 바
+        self.UI_image.clip_draw(w * 3, 0, w, h, sx - 100, sy + 20, 200, 100)  # 레벨
+        self.font.draw(sx - 85, sy + 22, f'{self.LV}', (255, 255, 255))
+        self.UI_image.clip_draw(w * 4, 0, w, h, sx - 100, sy - 50, 250, 100)  # 골드 보유량
+        self.font.draw(sx - 75, sy - 50, f'Gold: {self.Gold}', (255, 255, 0))
     # 캐릭터 그리기
     def draw_character(self):
         self.setting_camera()
