@@ -1,5 +1,6 @@
 from pico2d import *
 from Class_Character_main import *
+from Class_stage import *
 
 # 상태 변환 함수
 def change_state(pre_state, cur_state, new_state, Input):
@@ -79,7 +80,7 @@ def Character_events():
         elif event.type == SDL_MOUSEBUTTONDOWN:
             # x축은 그대로, y축은 아래가 0이 되도록 화면 크기에서 빼주기 (윈도우 좌표에서 pico2d 좌표계로 변경)
             mouse_x, mouse_y = event.x, stage.height - event.y
-            character.click_store(mouse_x, mouse_y)
+            store.store_click(mouse_x, mouse_y)
 
 # 캐릭터 상태 업데이트
 def Character_update():

@@ -14,7 +14,7 @@ class Stage:
         self.x = 400
         self.y = 400
         self.stage_level = 0
-        self.special_stage = False # 상점 진입 혹은 보스 스테이지 진입 시 True로 변경
+        self.special_stage = True # 상점 진입 혹은 보스 스테이지 진입 시 True로 변경
 
         self.portal_image = load_image('portal_sheet.png')
         self.portal_sx = 0
@@ -67,9 +67,6 @@ class Stage:
                                      self.w // 3, self.h // 4,
                                      (i * (self.width - 20)) + self.x - camera.x, self.y // 4,
                                      self.width, 400)
-        # 상점
-        if self.special_stage and self.stage_level < 3:
-            store.draw()
         # 포탈
         if self.stage_level != 3:
             self.portal_sx = camera.start_position + 50
@@ -77,6 +74,9 @@ class Stage:
             # 화면은 어차피 항상 왼쪽이 0좌표다. 때문에 camera.x를 빼줘야 제대로된 위치에 포탈이 그려진다.
             self.portal_image.clip_draw(0, 0, 128, 256, self.portal_sx - camera.x, self.portal_y, 100, 300)
             self.portal_image.clip_draw(0, 0, 128, 256, self.portal_ex - camera.x, self.portal_y, 100, 300)
+        # 상점
+        if self.special_stage and self.stage_level < 3:
+            store.draw()
 
 
 stage = Stage()
