@@ -52,7 +52,8 @@ class Character:
 
         # 재화
         self.Gold = 100
-        self.EXP = 0  # 경험치
+        self.MaxEXP = 100 # 최대 경험치
+        self.EXP = 10  # 경험치
 
         # 캐릭터 능력치
         self.MaxHP = 100  # 최대 체력
@@ -271,11 +272,11 @@ class Character:
         h = 185
         sx = 130
         sy = 550
-        hp_length = 400 / self.MaxHP * self.HP # HP바 길이가 출력되는 부분 100% 기준으로 계산됨. (최대 400)
-        hp_x = 64 / self.MaxHP * self.HP # 최대 64
+        hp_length = 400 * (self.HP / self.MaxHP) # HP바 길이가 출력되는 부분 100% 기준으로 계산됨. (최대 400)
+        exp_length = 190 * (self.EXP / self.MaxEXP) # 경험치 바 길이 계산 (최대 190)
         self.UI_image.clip_draw(0, 0, w, h, sx, sy, 400, 100) # HP 바 테두리
-        self.UI_image.clip_draw(w * 1, 0, w, h, sx + hp_x - 32, sy + 21, hp_length, 100) # HP 바
-        self.UI_image.clip_draw(w * 2, 0, w, h, sx + 32, sy + 8, 190, 50) # 경험치 바
+        self.UI_image.clip_draw(w * 1, 0, w, h, sx + 32, sy + 21, hp_length, 100) # HP 바
+        self.UI_image.clip_draw(w * 2, 0, w, h, sx + 32, sy + 8, exp_length, 50) # 경험치 바
         self.UI_image.clip_draw(w * 3, 0, w, h, sx - 100, sy + 20, 200, 100)  # 레벨
         self.font.draw(sx - 85, sy + 22, f'{self.LV}', (255, 255, 255))
         self.UI_image.clip_draw(w * 4, 0, w, h, sx - 100, sy - 50, 250, 100)  # 골드 보유량
