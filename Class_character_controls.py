@@ -75,6 +75,11 @@ def Character_events():
         # 포탈 (이건 상태로 취급하지 않음)
         elif event.type == SDL_KEYDOWN and event.key == SDLK_w:
             character.taking_portal()
+        # 상점 관련 클릭
+        elif event.type == SDL_MOUSEBUTTONDOWN:
+            # x축은 그대로, y축은 아래가 0이 되도록 화면 크기에서 빼주기 (윈도우 좌표에서 pico2d 좌표계로 변경)
+            mouse_x, mouse_y = event.x, stage.height - event.y
+            character.click_store(mouse_x, mouse_y)
 
 # 캐릭터 상태 업데이트
 def Character_update():
