@@ -92,7 +92,7 @@ def Character_update():
     character.hy2 = character.y - hitbox_size
     if character.HP <= 0:
         pass
-    if character.EXP >= character.MAX_EXP:
+    if character.EXP >= character.Max_EXP:
         pass
     # 상태에 따른 동작 처리
     # 달리기
