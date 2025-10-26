@@ -175,3 +175,23 @@ class Store:
                     if self.basic_range_level >= 5:
                         self.basic_range_cost = 0 # 최대 레벨 도달 시 비용 0으로 설정
                 return
+            # skill1 데미지 강화
+            if mx >= self.skill1_damage_x - 50 and mx <= self.skill1_damage_x + 50 and my >= self.skill1_damage_y - 50 and my <= self.skill1_damage_y + 50:
+                if character.Gold >= self.skill1_damage_cost and self.skill1_damage_level != 5:
+                    character.skill1_damage += self.skill1_damage_upgrade
+                    character.Gold -= self.skill1_damage_cost
+                    self.skill1_damage_level += 1
+                    self.skill1_damage_cost += 50
+                    if self.skill1_damage_level >= 5:
+                        self.skill1_damage_cost = 0 # 최대 레벨 도달 시 비용 0으로 설정
+                return
+            # skill1 범위 강화
+            if mx >= self.skill1_range_x - 50 and mx <= self.skill1_range_x + 50 and my >= self.skill1_range_y - 50 and my <= self.skill1_range_y + 50:
+                if character.Gold >= self.skill1_range_cost and self.skill1_range_level != 5:
+                    character.skill1_range += self.skill1_range_upgrade
+                    character.Gold -= self.skill1_range_cost
+                    self.skill1_range_level += 1
+                    self.skill1_range_cost += 50
+                    if self.skill1_range_level >= 5:
+                        self.skill1_range_cost = 0 # 최대 레벨 도달 시 비용 0으로 설정
+                return
