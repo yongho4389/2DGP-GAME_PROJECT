@@ -8,7 +8,7 @@ from Class_character_controls import *
 # 메인 캐릭터 처리
 def Main_character_loop():
     Character_events()  # 키 입력 우선 처리
-    Character_update()  # 캐릭터 상태 처리
+    character.update()  # 캐릭터 상태 처리
     # 스킬 지속 시간 처리
     if character.skill1_Attacking or character.skill2_Attacking:
         character.skill_update(0.1)

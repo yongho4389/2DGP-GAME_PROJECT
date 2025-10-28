@@ -266,6 +266,49 @@ class Character:
             self.end_motion = False
         if frame_index >= self.end_frame and self.motion != 4:
             self.end_motion = True
+
+    # 캐릭터 상태 업데이트
+    def update(self):
+        # 히트 박스
+        hitbox_size = 50
+        self.hx1 = self.x - hitbox_size
+        self.hy1 = self.y + hitbox_size
+        self.hx2 = self.x + hitbox_size
+        self.hy2 = self.y - hitbox_size
+        if self.HP <= 0:
+            pass
+        if self.EXP >= self.Max_EXP:
+            pass
+        # 상태에 따른 동작 처리
+        # 달리기
+        if self.cur_state == 'Running':
+            self.character_move()
+            self.character_land()
+        # 서기
+        if self.cur_state == 'Standing':
+            self.character_land()
+        # 점프
+        if self.cur_state == 'Jumping':
+            self.character_jump()
+            if self.pre_state == 'Running':  # 캐릭터가 뛰는 중이었다면 이동도 같이 수행하기
+                self.character_move()
+        # 대쉬
+        if self.cur_state == 'Dashing':
+            self.character_dash()
+        # 공격
+        if self.cur_state == 'Attacking':
+            # 기본 공격
+            if self.attack_version == 0 and self.frame == 3:  # 프레임 3에 공격 수행
+                self.skill2_turning = 0.0
+                self.draw_attack()
+            # 스킬1
+            elif self.attack_version == 1 and self.frame == 5 and self.motion == 1:  # 프레임 5에 공격 수행
+                self.draw_attack()
+                self.skill1_Attacking = True
+            # 스킬2
+            elif self.attack_version == 2 and self.frame == 1 and self.motion == 0:  # 프레임 1에 공격 수행
+                self.draw_attack()
+                self.skill2_Attacking = True
     # UI 그리기
     def draw_UI(self):
         w = 2720 // 5  # 544
