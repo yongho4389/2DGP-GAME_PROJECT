@@ -34,6 +34,7 @@ class Character:
         self.width = 200
         self.height = 200
         # 히트 박스
+        self.hitbox_size = 50
         self.hx1 = self.x - 50
         self.hy1 = self.y + 50
         self.hx2 = self.x + 50
@@ -207,12 +208,11 @@ class Character:
 
     # 캐릭터 상태 업데이트
     def update(self):
-        # 히트 박스
-        hitbox_size = 50
-        self.hx1 = self.x - hitbox_size
-        self.hy1 = self.y + hitbox_size
-        self.hx2 = self.x + hitbox_size
-        self.hy2 = self.y - hitbox_size
+        # 히트 박스 갱신
+        self.hx1 = self.x - self.hitbox_size
+        self.hy1 = self.y + self.hitbox_size
+        self.hx2 = self.x + self.hitbox_size
+        self.hy2 = self.y - self.hitbox_size
         self.frame_change(0.1)  # 프레임 전환 처리
         if self.HP <= 0:
             pass
