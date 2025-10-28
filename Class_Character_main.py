@@ -224,10 +224,10 @@ class Character:
             self.character_move()
             self.character_land()
         # 서기
-        elif self.cur_state == 'Standing':
+        if self.cur_state == 'Standing':
             self.character_land()
         # 점프
-        elif self.cur_state == 'Jumping':
+        if self.cur_state == 'Jumping':
             self.character_jump()
             if self.pre_state == 'Running':  # 캐릭터가 뛰는 중이었다면 이동도 같이 수행하기
                 self.character_move()
