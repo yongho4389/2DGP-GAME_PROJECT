@@ -214,8 +214,10 @@ class Character:
         self.hx2 = self.x + self.hitbox_size
         self.hy2 = self.y - self.hitbox_size
         self.frame_change(0.1)  # 프레임 전환 처리
+        # 캐릭터 사망
         if self.HP <= 0:
             pass
+        # 캐릭터 레벨업
         if self.EXP >= self.Max_EXP:
             pass
         # 상태에 따른 동작 처리
