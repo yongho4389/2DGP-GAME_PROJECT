@@ -21,7 +21,6 @@ while True:
     Character_events(character, stage, store)  # 키 입력 우선 처리
     game_world.update()
     game_world.render()
-    # store.store_draw(character) # 상점을 열면 캐릭터보다 앞에 그려지도록 하기
     update_canvas()
     delay(0.1)
 

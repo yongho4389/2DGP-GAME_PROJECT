@@ -9,7 +9,6 @@ class Store:
         # 폰트 불러오기
         self.font = load_font('C:\Windows\Fonts\malgun.ttf', 20)
 
-
         # 상점 기본창 위치
         self.window_x = self.stage.width // 2
         self.window_y = self.stage.height // 2
