@@ -11,7 +11,7 @@ def Main_character_loop():
     character.update()  # 캐릭터 상태 처리
     # 스킬 지속 시간 처리
     if character.skill1_Attacking or character.skill2_Attacking:
-        character.skill_update(0.1)
+        character.attack.skill_update(0.1)
     character.frame_change(0.1)  # 프레임 전환 처리
     character.draw_character()  # 캐릭터 최종 상태 출력
 

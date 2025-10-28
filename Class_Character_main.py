@@ -2,12 +2,12 @@
 from pico2d import *
 from Class_camera import *
 from Class_stage import *
+from Class_skills import Skills
 
 class Character:
     def __init__(self):
         # 생성 이미지
         self.image = load_image('character_motion_sheets.png')
-        self.attack_image = load_image('attack_effect_sheets.png')  # 564 x 188
         self.UI_image = load_image('character_UI_sheet.png')
         self.font = load_font('C:\Windows\Fonts\malgun.ttf', 20)
         # 애니메이션 관련 변수
@@ -15,7 +15,6 @@ class Character:
         self.start_frame = 3 # 프레임 시작 인덱스
         self.end_frame = 3 # 프레임 종료 인덱스
         self.motion = 0  # 기본 서있기
-        self.attack_version = 0  # 초기 기본 공격 설정
         self.delay = 0.1 # 애니메이션별 프레임 딜레이
         self.time_count = 0.0 # 누적 시간 (이를 통해 각 동작별 프레임 전환 타이밍을 달리 할 수 있음) (동작에 따라 게임의 전체 딜레이가 바뀌는 것을 방지)
         self.end_motion = False # 동작 종료 여부
@@ -25,10 +24,8 @@ class Character:
         self.cur_state = 'Standing' # 현재 상태
         self.ignore_stand = False # 서있기 상태 무시 여부 (달리기 중 반대 방향키를 누른 다음 방향키를 떼었을 때 자연스럽게 움직이기 위함)
         self.skill1_Attacking = False
-        self.skill1_scale = 0 # skill1 크기 증가량
         self.skill2_Attacking = False
-        self.skill_Activate_time = 0.0 # 스킬 유지 시간
-        self.skill2_turning = 0.0 # skill2 회전량
+        self.attack = None
 
         # 위치
         self.x = 400
@@ -46,9 +43,6 @@ class Character:
         self.sheet_height = 1910
         # 좌우 방향 (초기값은 오른쪽)
         self.dir = 1
-        # 공격 생성 위치 (또는 현재 공격 위치)
-        self.ax = self.x + (self.dir * 20)  # 캐릭터의 방향에 따라 공격 위치 조정
-        self.ay = self.y
 
         # 재화
         self.Gold = 1000
@@ -111,13 +105,7 @@ class Character:
         self.end_motion = False
         self.skill1_Attacking = False
         self.skill2_Attacking = False
-        self.attack_version = 0
-        # 기본 공격 데미지 및 사거리로 초기화
-        self.damage = self.basic_damage
-        self.range = self.basic_range
-        self.ax = self.x + (self.dir * (20 + self.range // 2))
-        self.ay = self.y
-        self.adir = self.dir
+        self.attack = Skills(self, 0)
     # 스킬1 공격 모션
     def start_skill1_attack(self):
         self.frame = 0
@@ -127,14 +115,7 @@ class Character:
         self.delay = 0.1
         self.end_motion = False
         self.skill1_Attacking = False
-        self.attack_version = 1
-        # skill1 데미지 및 사거리로 초기화
-        self.damage = self.skill1_damage
-        self.range = self.skill1_range
-        self.ax = self.x + (self.dir * (20 + self.range // 2))
-        self.ay = self.y
-        self.adir = self.dir
-        self.skill_Activate_time = 0.0
+        self.attack = Skills(self, 1)
     # 대쉬 모션
     def start_dash(self):
         self.frame = 0
@@ -152,14 +133,8 @@ class Character:
         self.delay = 0.5
         self.end_motion = False
         self.skill2_Attacking = False
-        self.attack_version = 2
-        # skill2 데미지 및 사거리로 초기화
-        self.damage = self.skill2_damage
-        self.range = self.skill2_range
-        self.ax = self.x
-        self.ay = self.y
-        self.adir = self.dir
-        self.skill_Activate_time = 0.0
+        self.attack = Skills(self, 2)
+
     # 서있기 모션
     def start_stand(self):
         self.frame = 0
@@ -298,16 +273,15 @@ class Character:
         # 공격
         if self.cur_state == 'Attacking':
             # 기본 공격
-            if self.attack_version == 0 and self.frame == 3:  # 프레임 3에 공격 수행
-                self.skill2_turning = 0.0
-                self.draw_attack()
+            if self.attack.attack_version == 0 and self.frame == 3:  # 프레임 3에 공격 수행
+                self.attack.draw_attack()
             # 스킬1
-            elif self.attack_version == 1 and self.frame == 5 and self.motion == 1:  # 프레임 5에 공격 수행
-                self.draw_attack()
+            elif self.attack.attack_version == 1 and self.frame == 5 and self.motion == 1:  # 프레임 5에 공격 수행
+                self.attack.draw_attack()
                 self.skill1_Attacking = True
             # 스킬2
-            elif self.attack_version == 2 and self.frame == 1 and self.motion == 0:  # 프레임 1에 공격 수행
-                self.draw_attack()
+            elif self.attack.attack_version == 2 and self.frame == 1 and self.motion == 0:  # 프레임 1에 공격 수행
+                self.attack.draw_attack()
                 self.skill2_Attacking = True
     # UI 그리기
     def draw_UI(self):
@@ -346,41 +320,6 @@ class Character:
         # 애니메이션 종료 체크
         self.end_motion_check(frame_index)
         self.draw_UI()
-
-    # 공격 이펙트 그리기
-    def draw_attack(self):
-        # 카메라 위치 최신화
-        self.setting_camera()
-        if self.attack_version == 1:
-            self.skill1_scale = 200
-        else:
-            self.skill1_scale = 0
-        if self.adir == 1:
-            self.attack_image.clip_composite_draw(self.attack_version * (564 // 3), 0,
-                                                  564 // 3, 188,
-                                                  self.skill2_turning, '',
-                                                  self.ax - camera.x, self.ay,
-                                                  100 + self.range, 100 + self.range + self.skill1_scale)
-        else:
-            self.attack_image.clip_composite_draw(self.attack_version * (564 // 3), 0,
-                                                  564 // 3, 188,
-                                                  self.skill2_turning, 'h',
-                                                  self.ax - camera.x, self.ay,
-                                                  100 + self.range, 100 + self.range + self.skill1_scale)
-    # 스킬 지속 시간 처리
-    def skill_update(self, delta_time):
-        self.draw_attack()
-        self.skill_Activate_time += delta_time
-        if self.skill_Activate_time >= 1.0:
-            self.skill1_Attacking = False
-            self.skill2_Attacking = False
-            self.skill2_turning = 0.0 # 회전 각도 초기화
-        elif self.attack_version == 1:
-            self.ax += self.adir * (self.range // 2)  # 스킬1은 지속 시간 동안 천천히 앞으로 이동
-        else:
-            self.ax = self.x
-            self.ay = self.y
-            self.skill2_turning += 100.0 * delta_time * self.adir
 
 
 # 캐릭터 객체 생성
