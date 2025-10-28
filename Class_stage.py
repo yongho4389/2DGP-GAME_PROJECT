@@ -79,7 +79,7 @@ class Stage:
             self.portal_image.clip_draw(0, 0, 128, 256, self.portal_ex - camera.x, self.portal_y, 100, 300)
         # 상점
         if self.special_stage and self.stage_level < 3:
-            self.image.clip_draw(0, 0, 227, 341, self.store_pos_x, self.store_pos_y, 300, 500)
+            self.store_image.clip_draw(0, 0, 227, 341, self.store_pos_x, self.store_pos_y, 300, 500)
 
     # 포탈 이동 처리
     def taking_portal(self):

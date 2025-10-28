@@ -10,7 +10,7 @@ class Skills:
             Skills.image = load_image('attack_effect_sheets.png')
 
         self.turning = 0.0
-        self.skill_Activate_time = 0.0
+        self.skill_Activate_time = get_time()
         self.adir = self.character.dir
 
         if attack_version == 0:
@@ -32,7 +32,7 @@ class Skills:
             self.ay = self.character.y
 
     # 공격 이펙트 그리기
-    def draw_attack(self):
+    def draw(self):
         # 카메라 위치 최신화
         self.character.setting_camera()
         skill1_scale = 0
@@ -54,15 +54,17 @@ class Skills:
                                                   100 + self.range, 100 + self.range + skill1_scale)
 
     # 스킬 지속 시간 처리
-    def skill_update(self, delta_time):
-        self.draw_attack()
-        self.skill_Activate_time += delta_time
-        if self.skill_Activate_time >= 1.0:
-            self.character.skill1_Attacking = False
-            self.character.skill2_Attacking = False
-        elif self.attack_version == 1:
-            self.ax += self.adir * (self.range // 2)  # 스킬1은 지속 시간 동안 천천히 앞으로 이동
-        else:
-            self.ax = self.character.x
-            self.ay = self.character.y
-            self.turning += 100.0 * delta_time * self.adir
+    def update(self):
+        self.draw()
+        if self.attack_version == 1:
+            if get_time() - self.skill_Activate_time >= 1.0:
+                self.character.skill1_Attacking = False
+            else:
+                self.ax += self.adir * (self.range // 2)  # 스킬1은 지속 시간 동안 천천히 앞으로 이동
+        elif self.attack_version == 2:
+            if get_time() - self.skill_Activate_time >= 2.0:
+                self.character.skill2_Attacking = False
+            else:
+                self.ax = self.character.x
+                self.ay = self.character.y
+                self.turning += 10.0 * self.adir

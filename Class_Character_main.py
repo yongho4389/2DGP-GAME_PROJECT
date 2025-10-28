@@ -2,7 +2,7 @@
 from pico2d import *
 from Class_camera import camera
 from Class_skills import Skills
-from Class_character_controls import Character_events
+import game_world
 
 class Character:
     def __init__(self):
@@ -134,7 +134,6 @@ class Character:
         self.end_motion = False
         self.skill2_Attacking = False
         self.attack = Skills(self, 2)
-
     # 서있기 모션
     def start_stand(self):
         self.frame = 0
@@ -214,9 +213,6 @@ class Character:
         self.hy1 = self.y + hitbox_size
         self.hx2 = self.x + hitbox_size
         self.hy2 = self.y - hitbox_size
-        # 스킬 지속 시간 처리
-        if self.skill1_Attacking or self.skill2_Attacking:
-            self.attack.skill_update(0.1)
         self.frame_change(0.1)  # 프레임 전환 처리
         if self.HP <= 0:
             pass
@@ -242,14 +238,14 @@ class Character:
         if self.cur_state == 'Attacking':
             # 기본 공격
             if self.attack.attack_version == 0 and self.frame == 3:  # 프레임 3에 공격 수행
-                self.attack.draw_attack()
+                game_world.add_object(self.attack, 1)
             # 스킬1
             elif self.attack.attack_version == 1 and self.frame == 5 and self.motion == 1:  # 프레임 5에 공격 수행
-                self.attack.draw_attack()
+                game_world.add_object(self.attack, 1)
                 self.skill1_Attacking = True
             # 스킬2
             elif self.attack.attack_version == 2 and self.frame == 1 and self.motion == 0:  # 프레임 1에 공격 수행
-                self.attack.draw_attack()
+                game_world.add_object(self.attack, 1)
                 self.skill2_Attacking = True
     # UI 그리기
     def draw_UI(self):
