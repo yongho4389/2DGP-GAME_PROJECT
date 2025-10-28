@@ -1,16 +1,14 @@
 from pico2d import *
-from Class_Character_main import *
-from Class_stage import *
 
 class Store:
-    def __init__(self, stage):
+    def __init__(self, stage, character):
+        self.character = character
         self.stage = stage
         self.image = load_image('store_sheet.png')
         self.element_image = load_image('store_element_sheet.png')
         # 폰트 불러오기
         self.font = load_font('C:\Windows\Fonts\malgun.ttf', 20)
-        self.x = self.stage.width // 2 + 100
-        self.y = self.stage.height // 2 - 75
+
 
         # 상점 기본창 위치
         self.window_x = self.stage.width // 2
@@ -65,8 +63,6 @@ class Store:
         self.skill2_range_upgrade = 50  # skill2 범위 강화량
 
     def draw(self):
-        self.image.clip_draw(0, 0, 227, 341, self.x, self.y, 300, 500)
-    def store_draw(self, character):
         if self.store_onoff:
             # 기본 창 형성
             self.element_image.clip_draw(0, 170, 210, 170, self.window_x, self.window_y, 1400, 600)
@@ -137,11 +133,11 @@ class Store:
                            f'Skill2', (255, 255, 255))
 
             # 골드 보유량
-            character.UI_image.clip_draw(2720 // 5 * 4, 0, 2720 // 5, 185, self.window_x - 330, self.window_y - 190, 250, 100)  # 골드 보유량
-            character.font.draw(self.window_x - 305, self.window_y - 190, f'Gold: {character.Gold}', (255, 255, 0))
+            self.character.UI_image.clip_draw(2720 // 5 * 4, 0, 2720 // 5, 185, self.window_x - 330, self.window_y - 190, 250, 100)  # 골드 보유량
+            self.character.font.draw(self.window_x - 305, self.window_y - 190, f'Gold: {self.character.Gold}', (255, 255, 0))
 
     def store_click(self, mx, my, character):
-        if self.stage.special_stage and self.stage.stage_level != 3 and not self.store_onoff and mx >= self.x - 150 and mx <= self.x + 150 and my >= self.y - 250 and my <= self.y + 250:
+        if self.stage.special_stage and self.stage.stage_level != 3 and not self.store_onoff and mx >= self.stage.store_pos_x - 150 and mx <= self.stage.store_pos_x + 150 and my >= self.stage.store_pos_y - 250 and my <= self.stage.store_pos_y + 250:
             self.store_onoff = True
             return
         if self.store_onoff:
@@ -215,3 +211,6 @@ class Store:
                     if self.skill2_range_level >= 5:
                         self.skill2_range_cost = 0 # 최대 레벨 도달 시 비용 0으로 설정
                 return
+
+    def update(self):
+        pass

@@ -1,9 +1,7 @@
 from pico2d import *
-from Class_Character_main import *
-from Class_stage import *
 
 # 상태 변환 함수
-def change_state(pre_state, cur_state, new_state, Input):
+def change_state(character, pre_state, cur_state, new_state, Input):
     # 달리기
     if new_state == 'Running':
         if cur_state == 'Running' or cur_state == 'Jumping': # 이미 달리고 있거나 점프 중이면 다음 키입력을 통한 서있기를 무시 (부드러운 방향 전환 처리)
@@ -42,7 +40,7 @@ def change_state(pre_state, cur_state, new_state, Input):
     character.cur_state = new_state
 
 # 캐릭터 키 상호작용
-def Character_events():
+def Character_events(character, stage, store):
     events = get_events() # 이벤트 받아와서 events에 저장 (상태의 현황보다는 상태의 변화를 체크하기 때문에, 키를 꾹 누르고 있다고 해서 계속해서 이벤트가 발생하게 되는 것은 아님)
     # 때문에 값을 대입하는 것보다는 값의 증감으로 주는 것이 키 전환에 따른 변화를 다루는 것이 좀 더 자연스러워진다. (키가 동시에 눌려서 로직이 꼬이는 경우, 어차피 증감이 이뤄지기 때문에 최종적으로 원하는 결과를 얻어내기가 더욱 쉬워진다.)
     for event in events: # 받아온 이벤트는 리스트로 전달된다. 때문에 for문으로 하나씩 꺼내서 처리
@@ -52,30 +50,30 @@ def Character_events():
             exit()
         # 좌우 이동
         elif event.type == SDL_KEYDOWN and event.key == SDLK_a:
-            change_state(character.pre_state, character.cur_state, 'Running', 'a')
+            change_state(character, character.pre_state, character.cur_state, 'Running', 'a')
         elif event.type == SDL_KEYDOWN and event.key == SDLK_d:
-            change_state(character.pre_state, character.cur_state, 'Running', 'd')
+            change_state(character, character.pre_state, character.cur_state, 'Running', 'd')
         # 제자리 서기
         elif event.type == SDL_KEYUP and (event.key == SDLK_a or event.key == SDLK_d):
-            change_state(character.pre_state, character.cur_state, 'Standing', '')
+            change_state(character, character.pre_state, character.cur_state, 'Standing', '')
         # 점프 및 착지
         elif event.type == SDL_KEYDOWN and event.key == SDLK_k:
-            change_state(character.pre_state, character.cur_state, 'Jumping', 'k')
+            change_state(character, character.pre_state, character.cur_state, 'Jumping', 'k')
         # 기본 공격
         elif event.type == SDL_KEYDOWN and event.key == SDLK_j:
-            change_state(character.pre_state, character.cur_state, 'Attacking', 'j')
+            change_state(character, character.pre_state, character.cur_state, 'Attacking', 'j')
         # skill1
         elif event.type == SDL_KEYDOWN and event.key == SDLK_u:
-            change_state(character.pre_state, character.cur_state, 'Attacking', 'u')
+            change_state(character, character.pre_state, character.cur_state, 'Attacking', 'u')
         # skill2
         elif event.type == SDL_KEYDOWN and event.key == SDLK_i:
-            change_state(character.pre_state, character.cur_state, 'Attacking', 'i')
+            change_state(character, character.pre_state, character.cur_state, 'Attacking', 'i')
         # 대쉬
         elif event.type == SDL_KEYDOWN and event.key == SDLK_l:
-            change_state(character.pre_state, character.cur_state, 'Dashing', 'l')
+            change_state(character, character.pre_state, character.cur_state, 'Dashing', 'l')
         # 포탈 (이건 상태로 취급하지 않음)
         elif event.type == SDL_KEYDOWN and event.key == SDLK_w:
-            character.taking_portal()
+            stage.taking_portal()
         # 상점 관련 클릭
         elif event.type == SDL_MOUSEBUTTONDOWN:
             # x축은 그대로, y축은 아래가 0이 되도록 화면 크기에서 빼주기 (윈도우 좌표에서 pico2d 좌표계로 변경)

@@ -1,8 +1,8 @@
 # 주인공 캐릭터 관련 클래스 및 함수 정의
 from pico2d import *
-from Class_camera import *
-from Class_stage import *
+from Class_camera import camera
 from Class_skills import Skills
+from Class_character_controls import Character_events
 
 class Character:
     def __init__(self):
@@ -186,43 +186,7 @@ class Character:
             camera.x = 0
         if camera.x > camera.end_position - 800:
             camera.x = camera.end_position - 800
-    # 포탈 이동 처리
-    def taking_portal(self):
-        if stage.stage_level == 3:
-            return # 보스 스테이지에서는 포탈 무시
-        # 좌측 끝 포탈
-        if stage.portal_sx >= self.hx1 and stage.portal_sx <= self.hx2:
-            if stage.stage_level == 0 and not stage.special_stage:
-                return # 0레벨 일반 스테이지에서 좌측 포탈은 무시
-            # 상점 스테이지에서 이전으로 돌아가는 경우
-            if stage.special_stage:
-                stage.special_stage = False
-                # 스테이지 변경 후 카메라 범위 최신화
-                stage.set_camera_stage_range()
-                # 플레이어 위치 일반 스테이지의 우측 끝으로 보정
-                self.x = (stage.width * 3 - 40) - 50
-            else:
-                stage.stage_level -= 1
-                stage.special_stage = True
-                stage.set_camera_stage_range()
-                # 플레이어 위치 스페셜 스테이지의 우측 끝으로 보정
-                self.x = stage.width - 50
-        # 우측 끝 포탈
-        elif stage.portal_ex >= self.hx1 and stage.portal_ex <= self.hx2:
-            # 일반 스테이지에서 다음으로 넘어가는 경우 스페셜 스테이지로 전환
-            if not stage.special_stage:
-                stage.special_stage = True
-            # 상점 스테이지라면 다음 레벨로 진입
-            else:
-                stage.stage_level += 1
-                stage.special_stage = False
-                stage.set_camera_stage_range()
-            # 보스 스테이지 또한 스페셜 스테이지로 전환
-            if stage.stage_level == 3:
-                stage.special_stage = True
-                stage.set_camera_stage_range()
-            # 플레이어 위치 좌측 끝으로 보정
-            self.x = camera.start_position + 50
+
     # 하나의 애니메이션이 끝났을 경우 처리
     def end_motion_check(self, frame_index):
         # 동작이 끝났을 때 서있기 모션으로 전환 (단, 달리기 모션은 제외) (동작이 끝나고 즉시 바뀌기 보다는 잠깐의 딜레이 이후 바뀌도록 유도)
@@ -250,6 +214,10 @@ class Character:
         self.hy1 = self.y + hitbox_size
         self.hx2 = self.x + hitbox_size
         self.hy2 = self.y - hitbox_size
+        # 스킬 지속 시간 처리
+        if self.skill1_Attacking or self.skill2_Attacking:
+            self.attack.skill_update(0.1)
+        self.frame_change(0.1)  # 프레임 전환 처리
         if self.HP <= 0:
             pass
         if self.EXP >= self.Max_EXP:
@@ -301,7 +269,7 @@ class Character:
         self.UI_image.clip_draw(w * 4, 0, w, h, sx - 100, sy - 50, 250, 100)  # 골드 보유량
         self.font.draw(sx - 75, sy - 50, f'Gold: {self.Gold}', (255, 255, 0))
     # 캐릭터 그리기
-    def draw_character(self):
+    def draw(self):
         self.setting_camera()
         frame_index = self.start_frame + self.frame # start_frame과 frame을 활용하여 실제 시트에서 사용될 프레임 인덱스를 계산
         # 우측 방향
@@ -320,8 +288,3 @@ class Character:
         # 애니메이션 종료 체크
         self.end_motion_check(frame_index)
         self.draw_UI()
-
-
-# 캐릭터 객체 생성
-character = Character()
-character.start_stand()
