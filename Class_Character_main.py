@@ -163,7 +163,7 @@ class Character:
         if self.frame < 3:
             self.y += 20
         else:
-            self.y -= 120
+            self.y -= 60
     # 지상 유지
     def character_land(self):
         if self.y > 125:
@@ -224,10 +224,10 @@ class Character:
             self.character_move()
             self.character_land()
         # 서기
-        if self.cur_state == 'Standing':
+        elif self.cur_state == 'Standing':
             self.character_land()
         # 점프
-        if self.cur_state == 'Jumping':
+        elif self.cur_state == 'Jumping':
             self.character_jump()
             if self.pre_state == 'Running':  # 캐릭터가 뛰는 중이었다면 이동도 같이 수행하기
                 self.character_move()
