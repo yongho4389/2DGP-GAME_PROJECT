@@ -1,5 +1,6 @@
 from pico2d import *
 from Class_camera import camera
+import game_world
 
 class Skills:
     image = None
@@ -56,14 +57,23 @@ class Skills:
     # 스킬 지속 시간 처리
     def update(self):
         self.draw()
+        if self.attack_version == 0:
+            if get_time() - self.skill_Activate_time >= 0.5:
+                self.character.basic_Attacking = False
+                if self in game_world.world[1]:
+                    game_world.remove_object(self)
         if self.attack_version == 1:
-            if get_time() - self.skill_Activate_time >= 1.0:
+            if get_time() - self.skill_Activate_time >= 2.0:
                 self.character.skill1_Attacking = False
+                if self in game_world.world[1]:
+                    game_world.remove_object(self)
             else:
                 self.ax += self.adir * (self.range // 2)  # 스킬1은 지속 시간 동안 천천히 앞으로 이동
         elif self.attack_version == 2:
             if get_time() - self.skill_Activate_time >= 2.0:
                 self.character.skill2_Attacking = False
+                if self in game_world.world[1]:
+                    game_world.remove_object(self)
             else:
                 self.ax = self.character.x
                 self.ay = self.character.y
