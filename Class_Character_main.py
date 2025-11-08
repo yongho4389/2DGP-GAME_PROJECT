@@ -3,6 +3,7 @@ from pico2d import *
 from Class_camera import camera
 from Class_skills import Skills
 import game_world
+import game_framework
 
 class Character:
     def __init__(self):

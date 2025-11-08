@@ -1,6 +1,7 @@
 from pico2d import *
 from Class_camera import camera
 import game_world
+import game_framework
 
 class Skills:
     image = None
