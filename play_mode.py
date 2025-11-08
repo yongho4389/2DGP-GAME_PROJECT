@@ -38,7 +38,7 @@ def init():
     game_world.add_object(store, 2)
 
     monster = Basic_Monster(600, 125, stage)
-    game_world.add_object(monster, 2)
+    game_world.add_object(monster, 0)
     game_world.add_collision_pair('character:monster', None, monster)  # 몬스터 직접 충돌
 
 def update():

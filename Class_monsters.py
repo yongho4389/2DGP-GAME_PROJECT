@@ -20,3 +20,19 @@ class Basic_Monster:
 
     def draw(self):
         self.image.clip_draw(self.stage.stage_level * self.width, 0, self.width, self.height, self.x - camera.x, self.y, 100, 100)
+        draw_rectangle(*self.get_screen_bb())
+
+    # 화면용 바운딩 박스
+    def get_screen_bb(self):
+        # 렌더링용(화면 좌표)
+        x1, y1, x2, y2 = self.get_bb()
+        return x1 - camera.x, y1, x2 - camera.x, y2
+
+    def get_bb(self):
+        xb = self.width / 8
+        yb = self.height / 8
+        return self.x - xb, self.y - yb, self.x + xb, self.y + yb
+
+    def handle_collision(self, group, other):
+        if group == 'character:monster':
+            pass
