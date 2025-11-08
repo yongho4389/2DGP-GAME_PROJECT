@@ -4,6 +4,7 @@ from Class_camera import camera
 from Class_skills import Skills
 import game_world
 import game_framework
+import time
 
 PIXEL_PER_METER = (10.0 / 0.3) # 10 pixel 30 cm. 즉, 1 meter 당 몇 픽셀인지 계산. 10pixel을 0.3(m)으로 나누어 1미터 당 픽셀 수를 구함
 RUN_SPEED_KMPH = 20.0 # Km / Hour (여기서 현실적인 속도를 결정) (km/h)
@@ -27,6 +28,8 @@ class Character:
         self.TIME_PER_ACTION = 1  # 한 동작을 수행하는데 걸리는 시간 (초)
         self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION  # 초당 몇 동작을 수행하는지
         self.end_motion = False # 동작 종료 여부
+        self.dash_start_time = 0.0
+        self.DASH_DURATION = 0.2  # 대쉬 지속 시간(초)
 
         # 상태 관련 변수
         self.pre_state = 'None' # 이전 상태
@@ -131,9 +134,10 @@ class Character:
         self.start_frame = 0
         self.end_frame = 0
         self.motion = 0
-        self.TIME_PER_ACTION = 5  # 한 동작을 수행하는데 걸리는 시간 (초)
+        self.TIME_PER_ACTION = 1  # 한 동작을 수행하는데 걸리는 시간 (초)
         self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION  # 초당 몇 동작을 수행하는지
         self.end_motion = False
+        self.dash_start_time = get_time()
     # 스킬2 공격 모션
     def start_skill2_attack(self):
         self.frame = 0
@@ -206,11 +210,16 @@ class Character:
         # 이후 그 다음 프레임에 end_motion이 True이기에 draw_stand()이 호출되고, 다시 end_motion은 False가 된다.
         if self.end_motion:
             if self.pre_state == 'Running' and (
-                    self.cur_state == 'Jumping' or self.cur_state == 'Dashing' or self.cur_state == 'Attacking'):
+                    self.cur_state == 'Jumping' or self.cur_state == 'Attacking'):
+                self.start_running()
+                self.pre_state = self.cur_state
+                self.cur_state = 'Running'
+            elif self.pre_state == 'Dashing' and self.cur_state == 'Standing':
                 self.start_running()
                 self.pre_state = self.cur_state
                 self.cur_state = 'Running'
             else:
+                if self.cur_state == 'Dashing': return
                 self.start_stand()
                 self.pre_state = self.cur_state
                 self.cur_state = 'Standing'
@@ -248,6 +257,11 @@ class Character:
         # 대쉬
         if self.cur_state == 'Dashing':
             self.character_dash()
+            # 대쉬 지속 시간 체크
+            if get_time() - self.dash_start_time >= self.DASH_DURATION:
+                self.start_stand()
+                self.pre_state = 'Dashing'
+                self.cur_state = 'Standing'
         # 공격
         if self.cur_state == 'Attacking':
             # 기본 공격
