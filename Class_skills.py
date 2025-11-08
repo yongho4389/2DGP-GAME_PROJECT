@@ -109,4 +109,10 @@ class Skills:
 
     def handle_collision(self, group, other):
         if group == 'attack:monster':
-            pass
+            if self.attack_version == 0 or self.attack_version == 1:
+                # 기본 공격과 스킬1은 충돌 시 바로 삭제
+                game_world.remove_object(self)
+                if self.attack_version == 0:
+                    self.character.basic_Attacking = False
+                elif self.attack_version == 1:
+                    self.character.skill1_Attacking = False

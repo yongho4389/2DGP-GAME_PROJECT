@@ -1,5 +1,6 @@
 from pico2d import *
 from Class_camera import camera
+import game_world
 
 # 기본 잡몹
 class Basic_Monster:
@@ -43,7 +44,6 @@ class Basic_Monster:
         elif group == 'attack:monster':
             self.HP -= other.damage
             if self.HP <= 0: # 사망 시 삭제
-                import game_world
                 game_world.remove_object(self)
                 self.character.Gold += 10 + (self.stage.stage_level * 10) # 골드 획득
                 self.character.EXP += 5 + (self.stage.stage_level * 5) # 경험치 획득
