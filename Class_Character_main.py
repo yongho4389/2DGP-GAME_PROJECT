@@ -5,6 +5,16 @@ from Class_skills import Skills
 import game_world
 import game_framework
 
+PIXEL_PER_METER = (10.0 / 0.3) # 10 pixel 30 cm. 즉, 1 meter 당 몇 픽셀인지 계산. 10pixel을 0.3(m)으로 나누어 1미터 당 픽셀 수를 구함
+FLY_SPEED_KMPH = 50.0 # Km / Hour (여기서 현실적인 속도를 결정) (km/h)
+FLY_SPEED_MPM = (FLY_SPEED_KMPH * 1000.0 / 60.0) # Meter / Minute
+FLY_SPEED_MPS = (FLY_SPEED_MPM / 60.0) # Meter / Second
+FLY_SPEED_PPS = (FLY_SPEED_MPS * PIXEL_PER_METER) # 초당 몇 픽셀을 이동할지 결졍 (PPS) (이것이 속도가 됨)
+
+TIME_PER_ACTION = 1/1 # 한 동작을 수행하는데 걸리는 시간 (초)
+ACTION_PER_TIME = 1.0 / TIME_PER_ACTION # 초당 몇 동작을 수행하는지
+FRAMES_PER_ACTION = 14 # 한 동작을 수행하는데 필요한 프레임 수
+
 class Character:
     def __init__(self):
         # 생성 이미지
