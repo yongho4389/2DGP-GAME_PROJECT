@@ -229,11 +229,6 @@ class Character:
 
     # 캐릭터 상태 업데이트
     def update(self):
-        # 히트 박스 갱신
-        self.hx1 = self.x - self.hitbox_size
-        self.hy1 = self.y + self.hitbox_size
-        self.hx2 = self.x + self.hitbox_size
-        self.hy2 = self.y - self.hitbox_size
         self.frame_update()
         # 캐릭터 사망
         if self.HP <= 0:
@@ -312,3 +307,20 @@ class Character:
         # 애니메이션 종료 체크
         self.end_motion_check(frame_index)
         self.draw_UI()
+        draw_rectangle(*self.get_screen_bb())
+
+    # 화면용 바운딩 박스
+    def get_screen_bb(self):
+        # 렌더링용(화면 좌표)
+        x1, y1, x2, y2 = self.get_bb()
+        return x1 - camera.x, y1, x2 - camera.x, y2
+
+    def get_bb(self):
+        xb = self.width / 4
+        yb = self.height / 4
+        return self.x - xb, self.y - yb, self.x + xb, self.y + yb
+
+    def handle_collision(self, group, other):
+        if group == 'character:monster':
+            if other.stopped == False:
+                pass
