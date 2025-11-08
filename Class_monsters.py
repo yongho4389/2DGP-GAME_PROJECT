@@ -16,7 +16,7 @@ class Basic_Monster:
         self.width = 256
         self.height = 256
 
-        self.HP = self.stage.stage_level * 20 + 10
+        self.HP = self.stage.stage_level * 20 + 100
         self.damage = self.stage.stage_level * 5 + 10
 
 
@@ -43,7 +43,7 @@ class Basic_Monster:
             pass
         elif group == 'attack:monster':
             self.HP -= other.damage
-            if self.HP <= 0: # 사망 시 삭제
+            if self.HP <= 0:  # 사망 시 삭제
                 game_world.remove_object(self)
-                self.character.Gold += 10 + (self.stage.stage_level * 10) # 골드 획득
-                self.character.EXP += 5 + (self.stage.stage_level * 5) # 경험치 획득
+                self.character.Gold += 10 + (self.stage.stage_level * 10)  # 골드 획득
+                self.character.EXP += 5 + (self.stage.stage_level * 5)  # 경험치 획득

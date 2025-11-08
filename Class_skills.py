@@ -20,7 +20,6 @@ class Skills:
         self.turning = 0.0
         self.skill_Activate_time = get_time()
         self.adir = self.character.dir
-        self.attack_version = attack_version
 
         if attack_version == 0:
             self.damage = self.character.basic_damage
@@ -64,26 +63,20 @@ class Skills:
         draw_rectangle(*self.get_screen_bb())
     # 스킬 지속 시간 처리
     def update(self):
-        # 히트박스 최신화
-        self.hitbox = (self.ax - (self.range // 2), self.ay - (self.range // 2),
-                       self.ax + (self.range // 2), self.ay + (self.range // 2))
         if self.attack_version == 0:
             if get_time() - self.skill_Activate_time >= 0.5:
                 self.character.basic_Attacking = False
-                if self in game_world.world[1]:
-                    game_world.remove_object(self)
+                game_world.remove_object(self)
         if self.attack_version == 1:
             if get_time() - self.skill_Activate_time >= 2.0:
                 self.character.skill1_Attacking = False
-                if self in game_world.world[1]:
-                    game_world.remove_object(self)
+                game_world.remove_object(self)
             else:
                 self.ax += self.adir * SKILL1_SPEED_PPS * game_framework.frame_time # 스킬1은 지속 시간 동안 천천히 앞으로 이동
         elif self.attack_version == 2:
             if get_time() - self.skill_Activate_time >= 2.0:
                 self.character.skill2_Attacking = False
-                if self in game_world.world[1]:
-                    game_world.remove_object(self)
+                game_world.remove_object(self)
             else:
                 self.ax = self.character.x
                 self.ay = self.character.y
@@ -109,10 +102,13 @@ class Skills:
 
     def handle_collision(self, group, other):
         if group == 'attack:monster':
+            print('a')
             if self.attack_version == 0 or self.attack_version == 1:
                 # 기본 공격과 스킬1은 충돌 시 바로 삭제
-                game_world.remove_object(self)
                 if self.attack_version == 0:
                     self.character.basic_Attacking = False
                 elif self.attack_version == 1:
                     self.character.skill1_Attacking = False
+                if self in game_world.world[1]:
+                    # game_world.remove_object(self)
+                    self.skill_Activate_time = 0 # 충돌 후 바로 삭제되도록 시간 초기화
