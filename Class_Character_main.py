@@ -6,13 +6,12 @@ import game_world
 import game_framework
 
 PIXEL_PER_METER = (10.0 / 0.3) # 10 pixel 30 cm. 즉, 1 meter 당 몇 픽셀인지 계산. 10pixel을 0.3(m)으로 나누어 1미터 당 픽셀 수를 구함
-FLY_SPEED_KMPH = 10.0 # Km / Hour (여기서 현실적인 속도를 결정) (km/h)
-FLY_SPEED_MPM = (FLY_SPEED_KMPH * 1000.0 / 60.0) # Meter / Minute
-FLY_SPEED_MPS = (FLY_SPEED_MPM / 60.0) # Meter / Second
-FLY_SPEED_PPS = (FLY_SPEED_MPS * PIXEL_PER_METER) # 초당 몇 픽셀을 이동할지 결졍 (PPS) (이것이 속도가 됨)
-
-TIME_PER_ACTION = 1/10 # 한 동작을 수행하는데 걸리는 시간 (초)
-ACTION_PER_TIME = 1.0 / TIME_PER_ACTION # 초당 몇 동작을 수행하는지
+RUN_SPEED_KMPH = 20.0 # Km / Hour (여기서 현실적인 속도를 결정) (km/h)
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0) # Meter / Minute
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0) # Meter / Second
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER) # 초당 몇 픽셀을 이동할지 결졍 (PPS) (이것이 속도가 됨)
+JUMP_HEIGHT_PSS = RUN_SPEED_PPS * 2 # 점프 높이 (Pixel Per Second Speed)
+DASH_SPEED_PSS = RUN_SPEED_PPS * 2 # 대쉬 속도 (Pixel Per Second Speed)
 
 class Character:
     def __init__(self):
@@ -25,8 +24,8 @@ class Character:
         self.start_frame = 3 # 프레임 시작 인덱스
         self.end_frame = 3 # 프레임 종료 인덱스
         self.motion = 0  # 기본 서있기
-        # self.delay = 0.1 # 애니메이션별 프레임 딜레이
-        # self.time_count = 0.0 # 누적 시간 (이를 통해 각 동작별 프레임 전환 타이밍을 달리 할 수 있음) (동작에 따라 게임의 전체 딜레이가 바뀌는 것을 방지)
+        self.TIME_PER_ACTION = 1  # 한 동작을 수행하는데 걸리는 시간 (초)
+        self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION  # 초당 몇 동작을 수행하는지
         self.end_motion = False # 동작 종료 여부
 
         # 상태 관련 변수
@@ -74,7 +73,7 @@ class Character:
     # 프레임 증가 함수
     def frame_update(self):
         frame_count = self.end_frame - self.start_frame + 1 # 얼마의 프레임으로 구성되는지 계산
-        self.frame = (self.frame + frame_count * ACTION_PER_TIME * game_framework.frame_time) % frame_count # 해당 프레임 개수를 기반으로 프레임 업데이트
+        self.frame = (self.frame + frame_count * self.ACTION_PER_TIME * game_framework.frame_time) % frame_count # 해당 프레임 개수를 기반으로 프레임 업데이트
 
     # 달리기 모션
     def start_running(self):
@@ -82,6 +81,8 @@ class Character:
         self.start_frame = 0
         self.end_frame = 7
         self.motion = 4
+        self.TIME_PER_ACTION = 1  # 한 동작을 수행하는데 걸리는 시간 (초)
+        self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION  # 초당 몇 동작을 수행하는지
         self.end_motion = False
     # 점프 및 착지 모션
     def start_jump_and_down(self):
@@ -89,6 +90,8 @@ class Character:
         self.start_frame = 0
         self.end_frame = 3
         self.motion = 3
+        self.TIME_PER_ACTION = 0.5  # 한 동작을 수행하는데 걸리는 시간 (초)
+        self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION  # 초당 몇 동작을 수행하는지
         self.end_motion = False
     # 피격 모션
     def start_attacked(self):
@@ -96,6 +99,8 @@ class Character:
         self.start_frame = 4
         self.end_frame = 5
         self.motion = 3
+        self.TIME_PER_ACTION = 1  # 한 동작을 수행하는데 걸리는 시간 (초)
+        self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION  # 초당 몇 동작을 수행하는지
         self.end_motion = False
     # 기본 공격 모션
     def start_basic_attack(self):
@@ -103,6 +108,8 @@ class Character:
         self.start_frame = 0
         self.end_frame = 5
         self.motion = 2
+        self.TIME_PER_ACTION = 0.5  # 한 동작을 수행하는데 걸리는 시간 (초)
+        self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION  # 초당 몇 동작을 수행하는지
         self.end_motion = False
         self.skill1_Attacking = False
         self.skill2_Attacking = False
@@ -113,6 +120,8 @@ class Character:
         self.start_frame = 0
         self.end_frame = 6
         self.motion = 1
+        self.TIME_PER_ACTION = 1  # 한 동작을 수행하는데 걸리는 시간 (초)
+        self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION  # 초당 몇 동작을 수행하는지
         self.end_motion = False
         self.skill1_Attacking = False
         self.attack = Skills(self, 1)
@@ -122,6 +131,8 @@ class Character:
         self.start_frame = 0
         self.end_frame = 0
         self.motion = 0
+        self.TIME_PER_ACTION = 5  # 한 동작을 수행하는데 걸리는 시간 (초)
+        self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION  # 초당 몇 동작을 수행하는지
         self.end_motion = False
     # 스킬2 공격 모션
     def start_skill2_attack(self):
@@ -129,6 +140,8 @@ class Character:
         self.start_frame = 1
         self.end_frame = 2
         self.motion = 0
+        self.TIME_PER_ACTION = 1  # 한 동작을 수행하는데 걸리는 시간 (초)
+        self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION  # 초당 몇 동작을 수행하는지
         self.end_motion = False
         self.skill2_Attacking = False
         self.attack = Skills(self, 2)
@@ -138,6 +151,8 @@ class Character:
         self.start_frame = 3
         self.end_frame = 3
         self.motion = 0
+        self.TIME_PER_ACTION = 1  # 한 동작을 수행하는데 걸리는 시간 (초)
+        self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION  # 초당 몇 동작을 수행하는지
         self.end_motion = False
     # 방향 전환
     def change_direction_left(self):
@@ -153,24 +168,24 @@ class Character:
             self.x = camera.end_position - 50
     # 이동
     def character_move(self):
-        self.x += self.dir * 10
+        self.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
         self.out_of_position()
     # 점프
     def character_jump(self):
         if int(self.frame) < 3:
-            self.y += 20
+            self.y += JUMP_HEIGHT_PSS * game_framework.frame_time
         else:
-            self.y -= 60
+            self.y -= JUMP_HEIGHT_PSS * game_framework.frame_time * 3
     # 지상 유지
     def character_land(self):
         if self.y > 125:
-            self.y -= 20
+            self.y -= JUMP_HEIGHT_PSS * game_framework.frame_time
         # 맵 벗어남 방지
         if self.y < 125:
             self.y = 125
     # 대쉬
     def character_dash(self):
-        self.x += self.dir * 50
+        self.x += self.dir * DASH_SPEED_PSS * game_framework.frame_time
         self.out_of_position()
 
     # 카메라 위치를 캐릭터 위치에 맞게 최신화
