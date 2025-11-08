@@ -3,6 +3,7 @@ from pico2d import *
 from Class_Character_main import Character
 from Class_stage import Stage
 from Class_Store import Store
+from Class_monsters import Basic_Monster
 from Class_character_controls import *
 import game_world
 
@@ -26,15 +27,19 @@ def init():
     global character, stage, store
 
     character = Character()
-    character.start_stand()
+    character.start_stand() # 플레이어 초기 상태 설정
     game_world.add_object(character, 1)
-    game_world.add_collision_pair('character:monster', boy, None) # 몬스터 직접 충돌
+    game_world.add_collision_pair('character:monster', character, None) # 몬스터 직접 충돌
 
     stage = Stage(character)
     game_world.add_object(stage, 0)
 
     store = Store(stage, character)
     game_world.add_object(store, 2)
+
+    monster = Basic_Monster(600, 125, stage)
+    game_world.add_object(monster, 2)
+    game_world.add_collision_pair('character:monster', None, monster)  # 몬스터 직접 충돌
 
 def update():
     game_world.update()
