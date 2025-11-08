@@ -179,7 +179,7 @@ class Character:
         if int(self.frame) < 2:
             self.y += JUMP_HEIGHT_PSS * game_framework.frame_time
         else:
-            self.y -= JUMP_HEIGHT_PSS * game_framework.frame_time
+            self.y -= JUMP_HEIGHT_PSS * game_framework.frame_time * 2
     # 지상 유지
     def character_land(self):
         if self.y > 125:

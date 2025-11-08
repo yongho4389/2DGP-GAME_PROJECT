@@ -3,6 +3,12 @@ from Class_camera import camera
 import game_world
 import game_framework
 
+PIXEL_PER_METER = (10.0 / 0.3) # 10 pixel 30 cm. 즉, 1 meter 당 몇 픽셀인지 계산. 10pixel을 0.3(m)으로 나누어 1미터 당 픽셀 수를 구함
+SKILL1_SPEED_KMPH = 2.0 # Km / Hour (여기서 현실적인 속도를 결정) (km/h)
+SKILL1_SPEED_MPM = (SKILL1_SPEED_KMPH * 1000.0 / 60.0) # Meter / Minute
+SKILL1_SPEED_MPS = (SKILL1_SPEED_MPM / 60.0) # Meter / Second
+SKILL1_SPEED_PPS = (SKILL1_SPEED_MPS * PIXEL_PER_METER) # 초당 몇 픽셀을 이동할지 결졍 (PPS) (이것이 속도가 됨)
+
 class Skills:
     image = None
     def __init__(self, character, attack_version):
@@ -74,7 +80,7 @@ class Skills:
                 if self in game_world.world[1]:
                     game_world.remove_object(self)
             else:
-                self.ax += self.adir * (self.range // 2)  # 스킬1은 지속 시간 동안 천천히 앞으로 이동
+                self.ax += self.adir * SKILL1_SPEED_PPS * game_framework.frame_time # 스킬1은 지속 시간 동안 천천히 앞으로 이동
         elif self.attack_version == 2:
             if get_time() - self.skill_Activate_time >= 2.0:
                 self.character.skill2_Attacking = False
@@ -83,4 +89,4 @@ class Skills:
             else:
                 self.ax = self.character.x
                 self.ay = self.character.y
-                self.turning += 10.0 * self.adir
+                self.turning += self.adir * game_framework.frame_time
