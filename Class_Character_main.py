@@ -4,7 +4,6 @@ from Class_camera import camera
 from Class_skills import Skills
 import game_world
 import game_framework
-import time
 
 PIXEL_PER_METER = (10.0 / 0.3) # 10 pixel 30 cm. 즉, 1 meter 당 몇 픽셀인지 계산. 10pixel을 0.3(m)으로 나누어 1미터 당 픽셀 수를 구함
 RUN_SPEED_KMPH = 20.0 # Km / Hour (여기서 현실적인 속도를 결정) (km/h)
@@ -324,4 +323,4 @@ class Character:
         if group == 'character:monster':
             self.HP -= other.damage
             self.start_attacked()
-            self.x -= self.dir * 10  # 피격 시 바라보는 반대 방향으로 약간 밀려남
+            self.x -= self.dir * 100  # 피격 시 바라보는 반대 방향으로 약간 밀려남

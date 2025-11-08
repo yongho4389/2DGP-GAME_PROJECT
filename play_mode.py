@@ -43,6 +43,7 @@ def init():
 
 def update():
     game_world.update()
+    game_world.handle_collision()  # 충돌 검사 및 충돌 처리
 
 def draw():
     clear_canvas()
