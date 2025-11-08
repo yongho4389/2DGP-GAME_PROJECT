@@ -5,10 +5,13 @@ import game_world
 # 기본 잡몹
 class Basic_Monster:
     image = None
+    UI_image = None
     def __init__(self, x, y, stage, character):
         # 이미지 1번만 로드
         if Basic_Monster.image == None:
             Basic_Monster.image = load_image('./image_sheets/basic_monster_image.png')
+        if Basic_Monster.UI_image == None:
+            Basic_Monster.UI_image = load_image('./image_sheets/character_UI_sheet.png')
         self.x = x
         self.y = y
         self.stage = stage
@@ -16,7 +19,8 @@ class Basic_Monster:
         self.width = 256
         self.height = 256
 
-        self.HP = self.stage.stage_level * 20 + 100
+        self.MAX_HP = self.stage.stage_level * 20 + 100 # 테스트를 위해 100을 더한 것. 실제로는 10만 더하기
+        self.HP = self.MAX_HP
         self.damage = self.stage.stage_level * 5 + 10
 
 
@@ -26,6 +30,9 @@ class Basic_Monster:
     def draw(self):
         self.image.clip_draw(self.stage.stage_level * self.width, 0, self.width, self.height, self.x - camera.x, self.y, 100, 100)
         draw_rectangle(*self.get_screen_bb())
+
+        hp_length = 400 * (self.HP / self.MAX_HP)  # HP바 길이가 출력되는 부분 100% 기준으로 계산됨. (최대 400)
+        self.UI_image.clip_draw(2720 // 5, 0, 2720 // 5, 185, self.x - camera.x, self.y + 50, hp_length, 100)  # HP 바
 
     # 화면용 바운딩 박스
     def get_screen_bb(self):
