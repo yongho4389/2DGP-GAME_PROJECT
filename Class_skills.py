@@ -20,6 +20,7 @@ class Skills:
         self.turning = 0.0
         self.skill_Activate_time = get_time()
         self.adir = self.character.dir
+        self.attack_version = attack_version
 
         if attack_version == 0:
             self.damage = self.character.basic_damage
@@ -38,9 +39,6 @@ class Skills:
             self.range = self.character.skill2_range
             self.ax = self.character.x
             self.ay = self.character.y
-
-        self.hitbox = (self.ax - (self.range // 2), self.ay - (self.range // 2),
-                       self.ax + (self.range // 2), self.ay + (self.range // 2))
 
     # 공격 이펙트 그리기
     def draw(self):
@@ -63,7 +61,7 @@ class Skills:
                                                   self.turning, 'h',
                                                   self.ax - camera.x, self.ay,
                                                   100 + self.range, 100 + self.range + skill1_scale)
-
+        draw_rectangle(*self.get_screen_bb())
     # 스킬 지속 시간 처리
     def update(self):
         # 히트박스 최신화
@@ -90,3 +88,25 @@ class Skills:
                 self.ax = self.character.x
                 self.ay = self.character.y
                 self.turning += self.adir * game_framework.frame_time
+
+    # 화면용 바운딩 박스
+    def get_screen_bb(self):
+        # 렌더링용(화면 좌표)
+        x1, y1, x2, y2 = self.get_bb()
+        return x1 - camera.x, y1, x2 - camera.x, y2
+
+    def get_bb(self):
+        if self.attack_version == 2:
+            xb = self.range / 2
+            yb = self.range / 2
+        elif self.attack_version == 1:
+            xb = self.range * 2
+            yb = self.range * 3
+        else:
+            xb = self.range
+            yb = self.range
+        return self.ax - xb, self.ay - yb, self.ax + xb, self.ay + yb
+
+    def handle_collision(self, group, other):
+        if group == 'attack:monster':
+            pass
