@@ -111,7 +111,7 @@ class Character:
         self.start_frame = 0
         self.end_frame = 5
         self.motion = 2
-        self.TIME_PER_ACTION = 0.5  # 한 동작을 수행하는데 걸리는 시간 (초)
+        self.TIME_PER_ACTION = 0.75  # 한 동작을 수행하는데 걸리는 시간 (초)
         self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION  # 초당 몇 동작을 수행하는지
         self.end_motion = False
         self.skill1_Attacking = False
