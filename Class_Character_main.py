@@ -322,5 +322,6 @@ class Character:
 
     def handle_collision(self, group, other):
         if group == 'character:monster':
-            if other.stopped == False:
-                pass
+            self.HP -= other.damage
+            self.start_attacked()
+            self.x -= self.dir * 10  # 피격 시 바라보는 반대 방향으로 약간 밀려남
