@@ -10,7 +10,7 @@ RUN_SPEED_KMPH = 20.0 # Km / Hour (여기서 현실적인 속도를 결정) (km/
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0) # Meter / Minute
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0) # Meter / Second
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER) # 초당 몇 픽셀을 이동할지 결졍 (PPS) (이것이 속도가 됨)
-JUMP_HEIGHT_PSS = RUN_SPEED_PPS * 2 # 점프 높이 (Pixel Per Second Speed)
+JUMP_HEIGHT_PSS = RUN_SPEED_PPS # 점프 높이 (Pixel Per Second Speed)
 DASH_SPEED_PSS = RUN_SPEED_PPS * 2 # 대쉬 속도 (Pixel Per Second Speed)
 
 class Character:
@@ -90,7 +90,7 @@ class Character:
         self.start_frame = 0
         self.end_frame = 3
         self.motion = 3
-        self.TIME_PER_ACTION = 0.5  # 한 동작을 수행하는데 걸리는 시간 (초)
+        self.TIME_PER_ACTION = 1  # 한 동작을 수행하는데 걸리는 시간 (초)
         self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION  # 초당 몇 동작을 수행하는지
         self.end_motion = False
     # 피격 모션
@@ -151,7 +151,7 @@ class Character:
         self.start_frame = 3
         self.end_frame = 3
         self.motion = 0
-        self.TIME_PER_ACTION = 1  # 한 동작을 수행하는데 걸리는 시간 (초)
+        self.TIME_PER_ACTION = 0.5  # 한 동작을 수행하는데 걸리는 시간 (초)
         self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION  # 초당 몇 동작을 수행하는지
         self.end_motion = False
     # 방향 전환
@@ -172,10 +172,10 @@ class Character:
         self.out_of_position()
     # 점프
     def character_jump(self):
-        if int(self.frame) < 3:
+        if int(self.frame) < 2:
             self.y += JUMP_HEIGHT_PSS * game_framework.frame_time
         else:
-            self.y -= JUMP_HEIGHT_PSS * game_framework.frame_time * 3
+            self.y -= JUMP_HEIGHT_PSS * game_framework.frame_time
     # 지상 유지
     def character_land(self):
         if self.y > 125:
@@ -183,6 +183,7 @@ class Character:
         # 맵 벗어남 방지
         if self.y < 125:
             self.y = 125
+
     # 대쉬
     def character_dash(self):
         self.x += self.dir * DASH_SPEED_PSS * game_framework.frame_time

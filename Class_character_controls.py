@@ -23,7 +23,8 @@ def change_state(character, pre_state, cur_state, new_state, Input):
     # 점프
     if new_state == 'Jumping':
         if cur_state == 'Jumping' or cur_state == 'Attacking': return
-        else: character.start_jump_and_down()
+        else:
+            character.start_jump_and_down()
     # 공격
     if new_state == 'Attacking':
         if cur_state == 'Jumping' or cur_state == 'Attacking': return
