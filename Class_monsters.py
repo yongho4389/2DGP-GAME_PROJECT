@@ -41,7 +41,8 @@ class Basic_Monster:
     def handle_collision(self, group, other):
         if group == 'character:monster':
             pass
-        elif group == 'attack:monster':
+        elif group == 'attack:monster' and other.is_attack:
+            other.is_attack = False  # 공격 판정은 한 번만 되도록 하며, 몬스터에게 실제 변화가 일어났을 때 공격 판정이 적용되었음을 알림
             self.HP -= other.damage
             if self.HP <= 0:  # 사망 시 삭제
                 game_world.remove_object(self)

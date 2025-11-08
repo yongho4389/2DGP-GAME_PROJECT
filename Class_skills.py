@@ -20,6 +20,7 @@ class Skills:
         self.turning = 0.0
         self.skill_Activate_time = get_time()
         self.adir = self.character.dir
+        self.is_attack = True # 공격 여부 결정 (필드에 남아있어도 몬스터 당 한 번만 공격하도록)
 
         if attack_version == 0:
             self.damage = self.character.basic_damage
@@ -101,8 +102,7 @@ class Skills:
         return self.ax - xb, self.ay - yb, self.ax + xb, self.ay + yb
 
     def handle_collision(self, group, other):
-        if group == 'attack:monster':
-            print('a')
+        if group == 'attack:monster' and self.is_attack:
             if self.attack_version == 0 or self.attack_version == 1:
                 # 기본 공격과 스킬1은 충돌 시 바로 삭제
                 if self.attack_version == 0:
@@ -111,4 +111,4 @@ class Skills:
                     self.character.skill1_Attacking = False
                 if self in game_world.world[1]:
                     # game_world.remove_object(self)
-                    self.skill_Activate_time = 0 # 충돌 후 바로 삭제되도록 시간 초기화
+                    self.skill_Activate_time = 0 # 충돌 후 바로 삭제되도록 시간 초기화 (update에서 처리)
