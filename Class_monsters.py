@@ -30,7 +30,8 @@ class Basic_Monster:
     def draw(self):
         self.image.clip_draw(self.stage.stage_level * self.width, 0, self.width, self.height, self.x - camera.x, self.y, 100, 100)
         draw_rectangle(*self.get_screen_bb())
-
+        
+        # 체력바
         hp_length = 400 * (self.HP / self.MAX_HP)  # HP바 길이가 출력되는 부분 100% 기준으로 계산됨. (최대 400)
         self.UI_image.clip_draw(2720 // 5, 0, 2720 // 5, 185, self.x - camera.x, self.y + 50, hp_length, 100)  # HP 바
 
