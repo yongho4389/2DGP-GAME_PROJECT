@@ -315,7 +315,7 @@ class Character:
         return x1 - camera.x, y1, x2 - camera.x, y2
 
     def get_bb(self):
-        xb = self.width / 4
+        xb = self.width / 8
         yb = self.height / 4
         return self.x - xb, self.y - yb, self.x + xb, self.y + yb
 
