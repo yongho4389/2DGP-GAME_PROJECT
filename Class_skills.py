@@ -60,7 +60,6 @@ class Skills:
 
     # 스킬 지속 시간 처리
     def update(self):
-        self.draw()
         # 히트박스 최신화
         self.hitbox = (self.ax - (self.range // 2), self.ay - (self.range // 2),
                        self.ax + (self.range // 2), self.ay + (self.range // 2))

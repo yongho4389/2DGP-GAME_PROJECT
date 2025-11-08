@@ -6,14 +6,13 @@ import game_world
 import game_framework
 
 PIXEL_PER_METER = (10.0 / 0.3) # 10 pixel 30 cm. 즉, 1 meter 당 몇 픽셀인지 계산. 10pixel을 0.3(m)으로 나누어 1미터 당 픽셀 수를 구함
-FLY_SPEED_KMPH = 50.0 # Km / Hour (여기서 현실적인 속도를 결정) (km/h)
+FLY_SPEED_KMPH = 10.0 # Km / Hour (여기서 현실적인 속도를 결정) (km/h)
 FLY_SPEED_MPM = (FLY_SPEED_KMPH * 1000.0 / 60.0) # Meter / Minute
 FLY_SPEED_MPS = (FLY_SPEED_MPM / 60.0) # Meter / Second
 FLY_SPEED_PPS = (FLY_SPEED_MPS * PIXEL_PER_METER) # 초당 몇 픽셀을 이동할지 결졍 (PPS) (이것이 속도가 됨)
 
-TIME_PER_ACTION = 1/1 # 한 동작을 수행하는데 걸리는 시간 (초)
+TIME_PER_ACTION = 1/10 # 한 동작을 수행하는데 걸리는 시간 (초)
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION # 초당 몇 동작을 수행하는지
-FRAMES_PER_ACTION = 14 # 한 동작을 수행하는데 필요한 프레임 수
 
 class Character:
     def __init__(self):
@@ -26,8 +25,8 @@ class Character:
         self.start_frame = 3 # 프레임 시작 인덱스
         self.end_frame = 3 # 프레임 종료 인덱스
         self.motion = 0  # 기본 서있기
-        self.delay = 0.1 # 애니메이션별 프레임 딜레이
-        self.time_count = 0.0 # 누적 시간 (이를 통해 각 동작별 프레임 전환 타이밍을 달리 할 수 있음) (동작에 따라 게임의 전체 딜레이가 바뀌는 것을 방지)
+        # self.delay = 0.1 # 애니메이션별 프레임 딜레이
+        # self.time_count = 0.0 # 누적 시간 (이를 통해 각 동작별 프레임 전환 타이밍을 달리 할 수 있음) (동작에 따라 게임의 전체 딜레이가 바뀌는 것을 방지)
         self.end_motion = False # 동작 종료 여부
 
         # 상태 관련 변수
@@ -75,13 +74,7 @@ class Character:
     # 프레임 증가 함수
     def frame_update(self):
         frame_count = self.end_frame - self.start_frame + 1 # 얼마의 프레임으로 구성되는지 계산
-        self.frame = (self.frame + 1) % frame_count # 해당 프레임 개수를 기반으로 프레임 업데이트
-    # 프레임 전환 타이밍 계산
-    def frame_change(self, delta_time):
-        self.time_count += delta_time # 인자로 전달된 delta_time을 time_count에 누적
-        if self.time_count >= self.delay: # time_count가 각 동작에게 부여된 delay와 같거나 더 크면 frame_update를 호출하여 frame을 전환. 이후 다시 time_count를 0으로 초기화하여 다음 프레임 전환까지 대기
-            self.frame_update()
-            self.time_count = 0.0
+        self.frame = (self.frame + frame_count * ACTION_PER_TIME * game_framework.frame_time) % frame_count # 해당 프레임 개수를 기반으로 프레임 업데이트
 
     # 달리기 모션
     def start_running(self):
@@ -89,7 +82,6 @@ class Character:
         self.start_frame = 0
         self.end_frame = 7
         self.motion = 4
-        self.delay = 0.1
         self.end_motion = False
     # 점프 및 착지 모션
     def start_jump_and_down(self):
@@ -97,7 +89,6 @@ class Character:
         self.start_frame = 0
         self.end_frame = 3
         self.motion = 3
-        self.delay = 0.2
         self.end_motion = False
     # 피격 모션
     def start_attacked(self):
@@ -105,7 +96,6 @@ class Character:
         self.start_frame = 4
         self.end_frame = 5
         self.motion = 3
-        self.delay = 0.5
         self.end_motion = False
     # 기본 공격 모션
     def start_basic_attack(self):
@@ -113,7 +103,6 @@ class Character:
         self.start_frame = 0
         self.end_frame = 5
         self.motion = 2
-        self.delay = 0.1
         self.end_motion = False
         self.skill1_Attacking = False
         self.skill2_Attacking = False
@@ -124,7 +113,6 @@ class Character:
         self.start_frame = 0
         self.end_frame = 6
         self.motion = 1
-        self.delay = 0.1
         self.end_motion = False
         self.skill1_Attacking = False
         self.attack = Skills(self, 1)
@@ -134,7 +122,6 @@ class Character:
         self.start_frame = 0
         self.end_frame = 0
         self.motion = 0
-        self.delay = 0.1
         self.end_motion = False
     # 스킬2 공격 모션
     def start_skill2_attack(self):
@@ -142,7 +129,6 @@ class Character:
         self.start_frame = 1
         self.end_frame = 2
         self.motion = 0
-        self.delay = 0.5
         self.end_motion = False
         self.skill2_Attacking = False
         self.attack = Skills(self, 2)
@@ -152,7 +138,6 @@ class Character:
         self.start_frame = 3
         self.end_frame = 3
         self.motion = 0
-        self.delay = 0.0
         self.end_motion = False
     # 방향 전환
     def change_direction_left(self):
@@ -172,7 +157,7 @@ class Character:
         self.out_of_position()
     # 점프
     def character_jump(self):
-        if self.frame < 3:
+        if int(self.frame) < 3:
             self.y += 20
         else:
             self.y -= 60
@@ -224,7 +209,7 @@ class Character:
         self.hy1 = self.y + self.hitbox_size
         self.hx2 = self.x + self.hitbox_size
         self.hy2 = self.y - self.hitbox_size
-        self.frame_change(0.1)  # 프레임 전환 처리
+        self.frame_update()
         # 캐릭터 사망
         if self.HP <= 0:
             pass
@@ -250,14 +235,14 @@ class Character:
         # 공격
         if self.cur_state == 'Attacking':
             # 기본 공격
-            if self.attack.attack_version == 0 and self.frame == 3:  # 프레임 3에 공격 수행
+            if self.attack.attack_version == 0 and int(self.frame) == 3:  # 프레임 3에 공격 수행
                 game_world.add_object(self.attack, 1)
             # 스킬1
-            elif self.attack.attack_version == 1 and self.frame == 5 and self.motion == 1:  # 프레임 5에 공격 수행
+            elif self.attack.attack_version == 1 and int(self.frame) == 5 and self.motion == 1:  # 프레임 5에 공격 수행
                 game_world.add_object(self.attack, 1)
                 self.skill1_Attacking = True
             # 스킬2
-            elif self.attack.attack_version == 2 and self.frame == 1 and self.motion == 0:  # 프레임 1에 공격 수행
+            elif self.attack.attack_version == 2 and int(self.frame) == 1 and self.motion == 0:  # 프레임 1에 공격 수행
                 game_world.add_object(self.attack, 1)
                 self.skill2_Attacking = True
     # UI 그리기
@@ -280,7 +265,7 @@ class Character:
     # 캐릭터 그리기
     def draw(self):
         self.setting_camera()
-        frame_index = self.start_frame + self.frame # start_frame과 frame을 활용하여 실제 시트에서 사용될 프레임 인덱스를 계산
+        frame_index = self.start_frame + int(self.frame) # start_frame과 frame을 활용하여 실제 시트에서 사용될 프레임 인덱스를 계산
         # 우측 방향
         if self.dir == 1:
             self.image.clip_draw(frame_index * (self.sheet_width // 8), (self.motion * self.sheet_height // 5), # 시트상 위치
