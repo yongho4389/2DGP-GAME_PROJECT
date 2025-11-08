@@ -4,16 +4,20 @@ from Class_camera import camera
 # 기본 잡몹
 class Basic_Monster:
     image = None
-    def __init__(self, x, y, stage):
-        self.x = x
-        self.y = y
-        self.stage = stage
-        self.width = 256
-        self.height = 256
-        self.damage = self.stage.stage_level * 5 + 10
+    def __init__(self, x, y, stage, character):
         # 이미지 1번만 로드
         if Basic_Monster.image == None:
             Basic_Monster.image = load_image('./image_sheets/basic_monster_image.png')
+        self.x = x
+        self.y = y
+        self.stage = stage
+        self.character = character
+        self.width = 256
+        self.height = 256
+
+        self.HP = self.stage.stage_level * 20 + 10
+        self.damage = self.stage.stage_level * 5 + 10
+
 
     def update(self):
         pass
@@ -36,3 +40,10 @@ class Basic_Monster:
     def handle_collision(self, group, other):
         if group == 'character:monster':
             pass
+        elif group == 'attack:monster':
+            self.HP -= other.damage
+            if self.HP <= 0: # 사망 시 삭제
+                import game_world
+                game_world.remove_object(self)
+                self.character.Gold += 10 + (self.stage.stage_level * 10) # 골드 획득
+                self.character.EXP += 5 + (self.stage.stage_level * 5) # 경험치 획득

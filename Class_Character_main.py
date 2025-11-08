@@ -44,12 +44,6 @@ class Character:
         # 크기
         self.width = 200
         self.height = 200
-        # 히트 박스
-        self.hitbox_size = 50
-        self.hx1 = self.x - 50
-        self.hy1 = self.y + 50
-        self.hx2 = self.x + 50
-        self.hy2 = self.y - 50
         # animation sheet 크기
         self.sheet_width = 2856
         self.sheet_height = 1910
