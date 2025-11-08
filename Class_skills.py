@@ -8,7 +8,7 @@ class Skills:
         self.character = character
         self.attack_version = attack_version
         if Skills.image == None:
-            Skills.image = load_image('attack_effect_sheets.png')
+            Skills.image = load_image('./image_sheets/attack_effect_sheets.png')
 
         self.turning = 0.0
         self.skill_Activate_time = get_time()

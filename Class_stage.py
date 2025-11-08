@@ -4,8 +4,8 @@ from Class_camera import camera
 # 일반 스테이지 관련 클래스 및 함수 정의 (사냥터)
 class Stage:
     def __init__(self, character):
-        self.image = load_image('background_sheets.png')
-        self.store_image = load_image('store_sheet.png')
+        self.image = load_image('./image_sheets/background_sheets.png')
+        self.store_image = load_image('./image_sheets/store_sheet.png')
         self.width = 800
         self.height = 600
         self.w = 3084
@@ -17,7 +17,7 @@ class Stage:
         self.stage_level = 0 # 보스 스테이지는 3
         self.special_stage = False # 상점 진입 혹은 보스 스테이지 진입 시 True로 변경
 
-        self.portal_image = load_image('portal_sheet.png')
+        self.portal_image = load_image('./image_sheets/portal_sheet.png')
         self.portal_sx = 0
         self.portal_ex = 800
         self.portal_y = self.height // 2 - 100

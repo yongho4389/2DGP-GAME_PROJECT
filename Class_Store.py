@@ -4,8 +4,8 @@ class Store:
     def __init__(self, stage, character):
         self.character = character
         self.stage = stage
-        self.image = load_image('store_sheet.png')
-        self.element_image = load_image('store_element_sheet.png')
+        self.image = load_image('./image_sheets/store_sheet.png')
+        self.element_image = load_image('./image_sheets/store_element_sheet.png')
         # 폰트 불러오기
         self.font = load_font('C:\Windows\Fonts\malgun.ttf', 20)
 

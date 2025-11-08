@@ -7,8 +7,8 @@ import game_world
 class Character:
     def __init__(self):
         # 생성 이미지
-        self.image = load_image('character_motion_sheets.png')
-        self.UI_image = load_image('character_UI_sheet.png')
+        self.image = load_image('./image_sheets/character_motion_sheets.png')
+        self.UI_image = load_image('./image_sheets/character_UI_sheet.png')
         self.font = load_font('C:\Windows\Fonts\malgun.ttf', 20)
         # 애니메이션 관련 변수
         self.frame = 0 # 프레임 진행 현황
