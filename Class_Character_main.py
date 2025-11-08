@@ -227,8 +227,11 @@ class Character:
         if self.HP <= 0:
             pass
         # 캐릭터 레벨업
-        if self.EXP >= self.Max_EXP:
-            pass
+        if self.EXP >= self.Max_EXP and self.LV < 10:
+            self.LV += 1
+            self.Max_HP += 20 # 최대 체력 강화
+            self.Max_EXP += 20 # 다음 레벨업을 위한 경험치 최대치 증가
+            self.basic_damage += 5 # 기본 공격력 강화
         # 상태에 따른 동작 처리
         # 달리기
         if self.cur_state == 'Running':
