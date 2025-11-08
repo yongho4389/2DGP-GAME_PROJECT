@@ -223,7 +223,7 @@ class Character:
     # 캐릭터 상태 업데이트
     def update(self):
         self.frame_update()
-        # 캐릭터 사망
+        # 캐릭터 사망 (게임 처음부터 재시작)
         if self.HP <= 0:
             pass
         # 캐릭터 레벨업
