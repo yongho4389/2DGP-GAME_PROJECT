@@ -257,16 +257,16 @@ class Character:
         if self.cur_state == 'Attacking':
             # 기본 공격
             if self.attack.attack_version == 0 and int(self.frame) == 3:  # 프레임 3에 공격 수행
-                game_world.add_object(self.attack, 1)
+                game_world.add_object(self.attack, 2)
                 game_world.add_collision_pair('attack:monster', self.attack, None)
                 # 스킬1
             elif self.attack.attack_version == 1 and int(self.frame) == 5 and self.motion == 1:  # 프레임 5에 공격 수행
-                game_world.add_object(self.attack, 1)
+                game_world.add_object(self.attack, 2)
                 game_world.add_collision_pair('attack:monster', self.attack, None)
                 self.skill1_Attacking = True
             # 스킬2
             elif self.attack.attack_version == 2 and int(self.frame) == 1 and self.motion == 0:  # 프레임 1에 공격 수행
-                game_world.add_object(self.attack, 1)
+                game_world.add_object(self.attack, 2)
                 game_world.add_collision_pair('attack:monster', self.attack, None)
                 self.skill2_Attacking = True
     # UI 그리기

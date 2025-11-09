@@ -1,5 +1,6 @@
 from pico2d import *
 from Class_camera import camera
+import game_world
 
 # 일반 스테이지 관련 클래스 및 함수 정의 (사냥터)
 class Stage:
@@ -87,6 +88,8 @@ class Stage:
             return # 보스 스테이지에서는 포탈 무시
         # 좌측 끝 포탈
         if self.portal_sx >= self.character.get_bb()[0] and self.portal_sx <= self.character.get_bb()[2]:
+            for o in game_world.world[1]:
+                game_world.remove_object(o)
             if self.stage_level == 0 and not self.special_stage:
                 return # 0레벨 일반 스테이지에서 좌측 포탈은 무시
             # 상점 스테이지에서 이전으로 돌아가는 경우
@@ -104,6 +107,8 @@ class Stage:
                 self.character.x = self.width - 50
         # 우측 끝 포탈
         elif self.portal_ex >= self.character.get_bb()[0] and self.portal_ex <= self.character.get_bb()[2]:
+            for o in game_world.world[1]:
+                game_world.remove_object(o)
             # 일반 스테이지에서 다음으로 넘어가는 경우 스페셜 스테이지로 전환
             if not self.special_stage:
                 self.special_stage = True

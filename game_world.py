@@ -1,4 +1,4 @@
-world = [[], [], []] # layers for game objects
+world = [[], [], [], []] # 0: 배경, 1: 몬스터, 2: 캐릭터, 3: UI
 
 def add_object(o, depth):
     world[depth].append(o)

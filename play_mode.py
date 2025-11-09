@@ -28,17 +28,17 @@ def init():
 
     character = Character()
     character.start_stand() # 플레이어 초기 상태 설정
-    game_world.add_object(character, 1)
+    game_world.add_object(character, 2)
     game_world.add_collision_pair('character:monster', character, None) # 몬스터 직접 충돌
 
     stage = Stage(character)
     game_world.add_object(stage, 0)
 
     store = Store(stage, character)
-    game_world.add_object(store, 2)
+    game_world.add_object(store, 3)
 
     monster = Basic_Monster(600, 125, stage, character)
-    game_world.add_object(monster, 0)
+    game_world.add_object(monster, 1)
     game_world.add_collision_pair('character:monster', None, monster)  # 몬스터 직접 충돌
     game_world.add_collision_pair('attack:monster', None, monster)  # 플레이어 공격과 몬스터 충돌 시
 
