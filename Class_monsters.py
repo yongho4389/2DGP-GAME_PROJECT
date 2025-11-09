@@ -19,7 +19,7 @@ class Basic_Monster:
         self.width = 256
         self.height = 256
 
-        self.MAX_HP = self.stage.stage_level * 20 + 100 # 테스트를 위해 100을 더한 것. 실제로는 10만 더하기
+        self.MAX_HP = self.stage.stage_level * 20 + 50 # 테스트를 위해 50을 더한 것. 실제로는 10만 더하기
         self.HP = self.MAX_HP
         self.damage = self.stage.stage_level * 5 + 10
 

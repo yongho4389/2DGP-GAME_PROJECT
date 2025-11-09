@@ -86,7 +86,7 @@ class Stage:
         if self.stage_level == 3:
             return # 보스 스테이지에서는 포탈 무시
         # 좌측 끝 포탈
-        if self.portal_sx >= self.character.hx1 and self.portal_sx <= self.character.hx2:
+        if self.portal_sx >= self.character.get_bb()[0] and self.portal_sx <= self.character.get_bb()[2]:
             if self.stage_level == 0 and not self.special_stage:
                 return # 0레벨 일반 스테이지에서 좌측 포탈은 무시
             # 상점 스테이지에서 이전으로 돌아가는 경우
@@ -103,7 +103,7 @@ class Stage:
                 # 플레이어 위치 스페셜 스테이지의 우측 끝으로 보정
                 self.character.x = self.width - 50
         # 우측 끝 포탈
-        elif self.portal_ex >= self.character.hx1 and self.portal_ex <= self.character.hx2:
+        elif self.portal_ex >= self.character.get_bb()[0] and self.portal_ex <= self.character.get_bb()[2]:
             # 일반 스테이지에서 다음으로 넘어가는 경우 스페셜 스테이지로 전환
             if not self.special_stage:
                 self.special_stage = True
