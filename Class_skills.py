@@ -47,7 +47,7 @@ class Skills:
         self.character.setting_camera()
         skill1_scale = 0
         if self.attack_version == 1:
-            skill1_scale = 200
+            skill1_scale = 200 + self.range * 2
         else:
             skill1_scale = 0
         if self.adir == 1:
@@ -55,13 +55,13 @@ class Skills:
                                                   564 // 3, 188,
                                                   self.turning, '',
                                                   self.ax - camera.x, self.ay,
-                                                  100 + self.range, 100 + self.range + skill1_scale)
+                                                  100 + self.range + skill1_scale / 2, 100 + self.range + skill1_scale)
         else:
             self.image.clip_composite_draw(self.attack_version * (564 // 3), 0,
                                                   564 // 3, 188,
                                                   self.turning, 'h',
                                                   self.ax - camera.x, self.ay,
-                                                  100 + self.range, 100 + self.range + skill1_scale)
+                                                  100 + self.range + skill1_scale, 100 + self.range + skill1_scale)
         draw_rectangle(*self.get_screen_bb())
     # 스킬 지속 시간 처리
     def update(self):
@@ -99,7 +99,7 @@ class Skills:
             yb = self.range / 2
         elif self.attack_version == 1:
             xb = self.range * 2
-            yb = self.range * 3
+            yb = self.range * 2
         else:
             xb = self.range
             yb = self.range
