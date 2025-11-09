@@ -259,7 +259,7 @@ class Character:
             if self.attack.attack_version == 0 and int(self.frame) == 3:  # 프레임 3에 공격 수행
                 game_world.add_object(self.attack, 2)
                 game_world.add_collision_pair('attack:monster', self.attack, None)
-                # 스킬1
+            # 스킬1
             elif self.attack.attack_version == 1 and int(self.frame) == 5 and self.motion == 1:  # 프레임 5에 공격 수행
                 game_world.add_object(self.attack, 2)
                 game_world.add_collision_pair('attack:monster', self.attack, None)

@@ -1,6 +1,7 @@
 from pico2d import *
 from Class_camera import camera
 import game_world
+from Class_monsters import *
 
 # 일반 스테이지 관련 클래스 및 함수 정의 (사냥터)
 class Stage:
@@ -95,6 +96,7 @@ class Stage:
                 return # 0레벨 일반 스테이지에서 좌측 포탈은 무시
             # 상점 스테이지에서 이전으로 돌아가는 경우
             if self.special_stage:
+                self.setting_stage()
                 self.special_stage = False
                 # 스테이지 변경 후 카메라 범위 최신화
                 self.set_camera_stage_range()
@@ -115,6 +117,7 @@ class Stage:
                 self.special_stage = True
             # 상점 스테이지라면 다음 레벨로 진입
             else:
+                self.setting_stage()
                 self.stage_level += 1
                 self.special_stage = False
                 self.set_camera_stage_range()
@@ -127,3 +130,9 @@ class Stage:
 
     def update(self):
         pass
+
+    def setting_stage(self):
+        monster = Basic_Monster(600, 125, self, self.character)
+        game_world.add_object(monster, 1)
+        game_world.add_collision_pair('character:monster', None, monster)  # 몬스터 직접 충돌
+        game_world.add_collision_pair('attack:monster', None, monster)  # 플레이어 공격과 몬스터 충돌 시
