@@ -79,10 +79,10 @@ class Skills:
             if get_time() - self.skill_Activate_time >= 2.0:
                 self.character.skill2_Attacking = False
                 game_world.remove_object(self)
+            if get_time() - self.skill_reattack_time >= 0.5:  # 스킬2는 0.5초마다 공격 판정이 다시 생김
+                self.is_attack = True
+                self.skill_reattack_time = get_time()
             else:
-                if get_time() - self.skill_reattack_time >= 0.5: # 스킬2는 0.5초마다 공격 판정이 다시 생김
-                    self.is_attack = True
-                    self.skill_reattack_time = get_time()
                 self.ax = self.character.x
                 self.ay = self.character.y
                 self.turning += self.adir * game_framework.frame_time
@@ -113,6 +113,6 @@ class Skills:
                     self.character.basic_Attacking = False
                 elif self.attack_version == 1:
                     self.character.skill1_Attacking = False
-                if self in game_world.world[1]:
+                if self in game_world.world[2]:
                     # game_world.remove_object(self)
                     self.skill_Activate_time = 0 # 충돌 후 바로 삭제되도록 시간 초기화 (update에서 처리)
