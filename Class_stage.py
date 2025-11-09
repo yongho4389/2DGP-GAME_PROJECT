@@ -76,7 +76,8 @@ class Stage:
             self.portal_sx = camera.start_position + 50
             self.portal_ex = camera.end_position - 50
             # 화면은 어차피 항상 왼쪽이 0좌표다. 때문에 camera.x를 빼줘야 제대로된 위치에 포탈이 그려진다.
-            self.portal_image.clip_draw(0, 0, 128, 256, self.portal_sx - camera.x, self.portal_y, 100, 300)
+            if self.stage_level != 0 or self.special_stage: # 첫 스테이지에서는 왼쪽 포탈 없어지도록 하기
+                self.portal_image.clip_draw(0, 0, 128, 256, self.portal_sx - camera.x, self.portal_y, 100, 300)
             self.portal_image.clip_draw(0, 0, 128, 256, self.portal_ex - camera.x, self.portal_y, 100, 300)
         # 상점
         if self.special_stage and self.stage_level < 3:
