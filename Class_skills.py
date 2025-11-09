@@ -19,6 +19,7 @@ class Skills:
 
         self.turning = 0.0
         self.skill_Activate_time = get_time()
+        self.skill_reattack_time = get_time() # 재공격 타이밍 계산
         self.adir = self.character.dir
         self.is_attack = True # 공격 여부 결정 (필드에 남아있어도 몬스터 당 한 번만 공격하도록)
 
@@ -79,6 +80,9 @@ class Skills:
                 self.character.skill2_Attacking = False
                 game_world.remove_object(self)
             else:
+                if get_time() - self.skill_reattack_time >= 0.5: # 스킬2는 0.5초마다 공격 판정이 다시 생김
+                    self.is_attack = True
+                    self.skill_reattack_time = get_time()
                 self.ax = self.character.x
                 self.ay = self.character.y
                 self.turning += self.adir * game_framework.frame_time

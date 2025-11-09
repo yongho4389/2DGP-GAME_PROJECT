@@ -63,7 +63,7 @@ class Character:
         self.basic_range = 40  # 기본 공격 사거리
         self.skill1_damage = 30  # 스킬1 데미지
         self.skill1_range = 20  # 스킬1 사거리
-        self.skill2_damage = 25  # 스킬2 데미지
+        self.skill2_damage = 10  # 스킬2 데미지
         self.skill2_range = 200  # 스킬2 사거리
 
     # 프레임 증가 함수
