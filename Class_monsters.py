@@ -4,18 +4,16 @@ import game_world
 import game_framework
 
 PIXEL_PER_METER = (10.0 / 0.3) # 10 pixel 30 cm. 즉, 1 meter 당 몇 픽셀인지 계산. 10pixel을 0.3(m)으로 나누어 1미터 당 픽셀 수를 구함
-RUN_SPEED_KMPH = 20.0 # Km / Hour (여기서 현실적인 속도를 결정) (km/h)
+RUN_SPEED_KMPH = 5.0 # Km / Hour (여기서 현실적인 속도를 결정) (km/h)
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0) # Meter / Minute
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0) # Meter / Second
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER) # 초당 몇 픽셀을 이동할지 결졍 (PPS) (이것이 속도가 됨)
-JUMP_HEIGHT_PSS = RUN_SPEED_PPS # 점프 높이 (Pixel Per Second Speed)
-DASH_SPEED_PSS = RUN_SPEED_PPS * 4 # 대쉬 속도 (Pixel Per Second Speed)
 
 # 기본 잡몹
 class Basic_Monster:
     image = None
     UI_image = None
-    def __init__(self, x, y, stage, character):
+    def __init__(self, x, y, dir, stage, character):
         # 이미지 1번만 로드
         if Basic_Monster.image == None:
             Basic_Monster.image = load_image('./image_sheets/basic_monster_image.png')
@@ -27,21 +25,21 @@ class Basic_Monster:
         self.character = character
         self.width = 256
         self.height = 256
-        self.dir = 1
+        self.dir = dir
 
         self.MAX_HP = self.stage.stage_level * 20 + 50 # 테스트를 위해 50을 더한 것. 실제로는 10만 더하기
         self.HP = self.MAX_HP
         self.damage = self.stage.stage_level * 5 + 10
 
     def moving(self):
-        pass
+        self.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
 
     def update(self):
         self.moving()
         pass
 
     def draw(self):
-        if self.dir == 1:
+        if self.dir == -1:
             self.image.clip_composite_draw(self.stage.stage_level * self.width, 0,
                                        # 시트상 위치
                                        self.width, self.height,  # 시트상 크기
