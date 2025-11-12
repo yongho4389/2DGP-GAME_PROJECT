@@ -33,6 +33,8 @@ class Basic_Monster:
 
     def moving(self):
         self.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
+        if self.x < camera.start_position + 200 or self.x > camera.end_position - 200:
+            self.dir *= -1
 
     def update(self):
         self.moving()
