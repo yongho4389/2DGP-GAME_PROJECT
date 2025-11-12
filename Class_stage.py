@@ -93,11 +93,11 @@ class Stage:
         if self.portal_sx >= self.character.get_bb()[0] and self.portal_sx <= self.character.get_bb()[2]:
             for o in game_world.world[1]:
                 game_world.remove_object(o)
+            self.setting_stage()
             if self.stage_level == 0 and not self.special_stage:
                 return # 0레벨 일반 스테이지에서 좌측 포탈은 무시
             # 상점 스테이지에서 이전으로 돌아가는 경우
             if self.special_stage:
-                self.setting_stage()
                 self.special_stage = False
                 # 스테이지 변경 후 카메라 범위 최신화
                 self.set_camera_stage_range()
@@ -113,6 +113,7 @@ class Stage:
         elif self.portal_ex >= self.character.get_bb()[0] and self.portal_ex <= self.character.get_bb()[2]:
             for o in game_world.world[1]:
                 game_world.remove_object(o)
+            self.setting_stage()
             # 일반 스테이지에서 다음으로 넘어가는 경우 스페셜 스테이지로 전환
             if not self.special_stage:
                 self.special_stage = True
@@ -128,13 +129,15 @@ class Stage:
                 self.set_camera_stage_range()
             # 플레이어 위치 좌측 끝으로 보정
             self.character.x = camera.start_position + 50
+        if self.special_stage:
+            print('a')
+            for o in game_world.world[1]:
+                game_world.remove_object(o)
 
     def update(self):
         pass
 
     def setting_stage(self):
-        for o in game_world.world[1]:
-            game_world.remove_object(o)
         monsters = [Basic_Monster(random.randint(200, 2000), 125, random.choice((-1, 1)), self, self.character) for _ in
                     range(10)]
         game_world.add_objects(monsters, 1)
