@@ -1,6 +1,7 @@
 from pico2d import *
 from Class_camera import camera
 import game_world
+import random
 from Class_monsters import *
 
 # 일반 스테이지 관련 클래스 및 함수 정의 (사냥터)
@@ -132,7 +133,11 @@ class Stage:
         pass
 
     def setting_stage(self):
-        monster = Basic_Monster(600, 125, self, self.character)
-        game_world.add_object(monster, 1)
-        game_world.add_collision_pair('character:monster', None, monster)  # 몬스터 직접 충돌
-        game_world.add_collision_pair('attack:monster', None, monster)  # 플레이어 공격과 몬스터 충돌 시
+        for o in game_world.world[1]:
+            game_world.remove_object(o)
+        monsters = [Basic_Monster(random.randint(200, 2000), 125, random.choice((-1, 1)), self, self.character) for _ in
+                    range(10)]
+        game_world.add_objects(monsters, 1)
+        for monster in monsters:
+            game_world.add_collision_pair('character:monster', None, monster)  # 몬스터 직접 충돌
+            game_world.add_collision_pair('attack:monster', None, monster)  # 플레이어 공격과 몬스터 충돌 시
