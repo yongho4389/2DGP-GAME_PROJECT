@@ -38,7 +38,6 @@ class Basic_Monster:
 
     def update(self):
         self.moving()
-        pass
 
     def draw(self):
         if self.dir == -1:
