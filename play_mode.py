@@ -30,7 +30,7 @@ def init():
     character = Character()
     character.start_stand() # 플레이어 초기 상태 설정
     game_world.add_object(character, 2)
-    # game_world.add_collision_pair('character:monster', character, None) # 몬스터 직접 충돌
+    game_world.add_collision_pair('character:monster', character, None) # 몬스터 직접 충돌
 
     stage = Stage(character)
     game_world.add_object(stage, 0)

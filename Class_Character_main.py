@@ -37,6 +37,7 @@ class Character:
         self.skill1_Attacking = False
         self.skill2_Attacking = False
         self.attack = None
+        self.is_attacked = False
 
         # 위치
         self.x = 400
@@ -151,6 +152,7 @@ class Character:
         self.TIME_PER_ACTION = 0.5  # 한 동작을 수행하는데 걸리는 시간 (초)
         self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION  # 초당 몇 동작을 수행하는지
         self.end_motion = False
+        self.is_attacked = False
     # 방향 전환
     def change_direction_left(self):
         self.dir = -1 # 좌측
