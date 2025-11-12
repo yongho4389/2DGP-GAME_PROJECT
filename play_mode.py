@@ -38,10 +38,12 @@ def init():
     store = Store(stage, character)
     game_world.add_object(store, 3)
 
-    monster = Basic_Monster(random.randint(200, 2000), 125, random.choice((-1, 1)), stage, character)
-    game_world.add_object(monster, 1)
-    game_world.add_collision_pair('character:monster', None, monster)  # 몬스터 직접 충돌
-    game_world.add_collision_pair('attack:monster', None, monster)  # 플레이어 공격과 몬스터 충돌 시
+    # 일반 몹 기본 10마리 생성
+    monsters = [Basic_Monster(random.randint(200, 2000), 125, random.choice((-1, 1)), stage, character) for _ in range(10)]
+    game_world.add_objects(monsters, 1)
+    for monster in monsters:
+        game_world.add_collision_pair('character:monster', None, monster)  # 몬스터 직접 충돌
+        game_world.add_collision_pair('attack:monster', None, monster)  # 플레이어 공격과 몬스터 충돌 시
 
 def update():
     game_world.update()
