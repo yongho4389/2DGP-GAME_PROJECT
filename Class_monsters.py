@@ -78,6 +78,7 @@ class Basic_Monster:
         elif group == 'attack:monster' and other.is_attack:
             other.is_attack = False  # 공격 판정은 한 번만 되도록 하며, 몬스터에게 실제 변화가 일어났을 때 공격 판정이 적용되었음을 알림
             self.HP -= other.damage
+            self.dir *= -1 # 피격 시 방향 전환을 수행하여 도망가거나 플레이어에게 달려들도록 함
             # 피격 시 경직 추가 필요 (일반 몹이기 때문)
             if self.HP <= 0:  # 사망 시 삭제
                 game_world.remove_object(self)
