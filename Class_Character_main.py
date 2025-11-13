@@ -37,7 +37,6 @@ class Character:
         self.skill1_Attacking = False
         self.skill2_Attacking = False
         self.attack = None
-        self.is_attacked = False
 
         # 위치
         self.x = 400
@@ -99,6 +98,7 @@ class Character:
         self.TIME_PER_ACTION = 1  # 한 동작을 수행하는데 걸리는 시간 (초)
         self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION  # 초당 몇 동작을 수행하는지
         self.end_motion = False
+        self.is_attacked = True
     # 기본 공격 모션
     def start_basic_attack(self):
         self.frame = 0
@@ -152,7 +152,6 @@ class Character:
         self.TIME_PER_ACTION = 0.5  # 한 동작을 수행하는데 걸리는 시간 (초)
         self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION  # 초당 몇 동작을 수행하는지
         self.end_motion = False
-        self.is_attacked = False
     # 방향 전환
     def change_direction_left(self):
         self.dir = -1 # 좌측
@@ -325,5 +324,6 @@ class Character:
     def handle_collision(self, group, other):
         if group == 'character:monster' and not self.cur_state == 'Dashing':
             self.HP -= other.damage
+            self.cur_state = 'is_attacked'
             self.start_attacked()
-            self.x -= self.dir * 100  # 피격 시 바라보는 반대 방향으로 약간 밀려남
+            self.x -= self.dir * RUN_SPEED_PPS * game_framework.frame_time * 100  # 피격 시 캐릭터가 바라보는 반대 방향으로 약간 밀려남

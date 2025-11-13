@@ -2,7 +2,7 @@ from pico2d import *
 
 # 상태 변환 함수
 def change_state(character, pre_state, cur_state, new_state, Input):
-    if character.is_attacked: return # 피격 상태일 때는 조종 불가
+    if character.cur_state == 'is_attacked': return # 피격 상태일 때는 조종 불가
     # 달리기
     if new_state == 'Running':
         if cur_state == 'Running' or cur_state == 'Jumping': # 이미 달리고 있거나 점프 중이면 다음 키입력을 통한 서있기를 무시 (부드러운 방향 전환 처리)
