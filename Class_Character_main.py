@@ -239,6 +239,8 @@ class Character:
         if self.cur_state == 'Running':
             self.character_move()
             self.character_land()
+        if self.cur_state == 'is_attacked':
+            self.x -= self.dir * RUN_SPEED_PPS * game_framework.frame_time * 0.75  # 피격 시 캐릭터가 바라보는 반대 방향으로 약간 밀려남
         # 서기
         if self.cur_state == 'Standing':
             self.character_land()
@@ -326,4 +328,3 @@ class Character:
             self.HP -= other.damage
             self.cur_state = 'is_attacked'
             self.start_attacked()
-            self.x -= self.dir * RUN_SPEED_PPS * game_framework.frame_time * 100  # 피격 시 캐릭터가 바라보는 반대 방향으로 약간 밀려남
