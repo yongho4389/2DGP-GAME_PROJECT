@@ -231,6 +231,7 @@ class Character:
         if self.EXP >= self.Max_EXP and self.LV < 10:
             self.LV += 1
             self.Max_HP += 20 # 최대 체력 강화
+            self.HP = self.Max_HP # 체력 완전 회복
             self.EXP = 0 # 경험치 초기화
             self.Max_EXP += 20 # 다음 레벨업을 위한 경험치 최대치 증가
             self.basic_damage += 5 # 기본 공격력 강화
