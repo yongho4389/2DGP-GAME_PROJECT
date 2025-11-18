@@ -53,19 +53,15 @@ class Basic_Monster:
 
     def draw(self):
         if self.dir == -1:
-            self.image.clip_composite_draw(0, self.stage.stage_level * self.height,
+            direction = ''
+        else:
+            direction = 'h'
+        self.image.clip_composite_draw(0, self.stage.stage_level * self.height,
                                        # 시트상 위치
                                        self.width, self.height,  # 시트상 크기
-                                       self.rotate, '',
+                                       self.rotate, direction,
                                        self.x - camera.x, self.y,  # 월드 위치
                                        100, 100)
-        else:
-            self.image.clip_composite_draw(0, self.stage.stage_level * self.height,
-                                           # 시트상 위치
-                                           self.width, self.height,  # 시트상 크기
-                                           self.rotate, 'h',
-                                           self.x - camera.x, self.y,  # 월드 위치
-                                           100, 100)
         draw_rectangle(*self.get_screen_bb())
         
         # 체력바
