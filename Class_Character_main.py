@@ -39,7 +39,7 @@ class Character:
         self.attack = None
 
         # 위치
-        self.x = 400
+        self.x = 100
         self.y = 125
         # 크기
         self.width = 200
@@ -324,7 +324,7 @@ class Character:
         return self.x - xb, self.y - yb, self.x + xb, self.y + yb
 
     def handle_collision(self, group, other):
-        if group == 'character:monster' and not self.cur_state == 'Dashing':
+        if group == 'character:monster' and not self.cur_state == 'Dashing' and not self.cur_state == 'is_attacked':
             self.HP -= other.damage
             self.cur_state = 'is_attacked'
             self.start_attacked()
