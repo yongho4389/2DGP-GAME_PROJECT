@@ -35,7 +35,10 @@ def render():
 
 def clear():
     for layer in world:
-        layer.clear()
+        for o in layer[:]:
+            remove_object(o)
+    collision_pairs.clear()
+
 
 def collide(a, b):
     # 인자로 전달한 객체의 바운딩 박스를 구한다
