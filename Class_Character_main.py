@@ -44,6 +44,7 @@ class Character:
         # 크기
         self.width = 200
         self.height = 200
+        self.rotate = 0.0
         # animation sheet 크기
         self.sheet_width = 2856
         self.sheet_height = 1910
@@ -242,9 +243,11 @@ class Character:
             self.character_land()
         if self.cur_state == 'is_attacked':
             self.x -= self.dir * RUN_SPEED_PPS * game_framework.frame_time * 0.75  # 피격 시 캐릭터가 바라보는 반대 방향으로 약간 밀려남
+            self.rotate = 45.0 * self.dir
         # 서기
         if self.cur_state == 'Standing':
             self.character_land()
+            self.rotate = 0.0
         # 점프
         if self.cur_state == 'Jumping':
             self.character_jump()
@@ -295,19 +298,16 @@ class Character:
     def draw(self):
         self.setting_camera()
         frame_index = self.start_frame + int(self.frame) # start_frame과 frame을 활용하여 실제 시트에서 사용될 프레임 인덱스를 계산
-        # 우측 방향
         if self.dir == 1:
-            self.image.clip_draw(frame_index * (self.sheet_width // 8), (self.motion * self.sheet_height // 5), # 시트상 위치
-                                 self.sheet_width // 8, self.sheet_height // 5, # 시트상 크기
-                                 self.x - camera.x, self.y, # 월드 위치
-                                 self.width, self.height)
-        # 좌측 방향
+            direction = ''
         else:
-            self.image.clip_composite_draw(frame_index * (self.sheet_width // 8), (self.motion * self.sheet_height // 5), # 시트상 위치
-                                 self.sheet_width // 8, self.sheet_height // 5, # 시트상 크기
-                                 0, 'h',
-                                 self.x - camera.x, self.y, # 월드 위치
-                                 self.width, self.height)
+            direction = 'h'
+        self.image.clip_composite_draw(frame_index * (self.sheet_width // 8), (self.motion * self.sheet_height // 5),
+                                       # 시트상 위치
+                                       self.sheet_width // 8, self.sheet_height // 5,  # 시트상 크기
+                                       self.rotate, direction,
+                                       self.x - camera.x, self.y,  # 월드 위치
+                                       self.width, self.height)
         # 애니메이션 종료 체크
         self.end_motion_check(frame_index)
         self.draw_UI()
