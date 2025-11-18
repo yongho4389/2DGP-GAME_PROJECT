@@ -26,6 +26,9 @@ class Basic_Monster:
         self.width = 256
         self.height = 256
         self.dir = dir
+        self.rotate = 0.0
+        self.cur_state = 'Moving'
+        self.current_time = get_time()
 
         self.MAX_HP = self.stage.stage_level * 20 + 50 # 테스트를 위해 50을 더한 것. 실제로는 10만 더하기
         self.HP = self.MAX_HP
@@ -36,22 +39,31 @@ class Basic_Monster:
         if self.x < camera.start_position + 200 or self.x > camera.end_position - 200:
             self.dir *= -1
 
+    def Attacked(self):
+        self.rotate = 45.0 * self.dir
+        if get_time() - self.current_time > 0.5:
+            self.cur_state = 'Moving'
+            self.rotate = 0.0
+
     def update(self):
-        self.moving()
+        if (self.cur_state == 'Moving'):
+            self.moving()
+        elif (self.cur_state == 'Attacked'):
+            self.Attacked()
 
     def draw(self):
         if self.dir == -1:
             self.image.clip_composite_draw(0, self.stage.stage_level * self.height,
                                        # 시트상 위치
                                        self.width, self.height,  # 시트상 크기
-                                       0, '',
+                                       self.rotate, '',
                                        self.x - camera.x, self.y,  # 월드 위치
                                        100, 100)
         else:
             self.image.clip_composite_draw(0, self.stage.stage_level * self.height,
                                            # 시트상 위치
                                            self.width, self.height,  # 시트상 크기
-                                           0, 'h',
+                                           self.rotate, 'h',
                                            self.x - camera.x, self.y,  # 월드 위치
                                            100, 100)
         draw_rectangle(*self.get_screen_bb())
@@ -77,7 +89,12 @@ class Basic_Monster:
         elif group == 'attack:monster' and other.is_attack:
             other.is_attack = False  # 공격 판정은 한 번만 되도록 하며, 몬스터에게 실제 변화가 일어났을 때 공격 판정이 적용되었음을 알림
             self.HP -= other.damage
-            self.dir *= -1 # 피격 시 방향 전환을 수행하여 도망가거나 플레이어에게 달려들도록 함
+            # 피격 시 적이 플레이어에게 달려들도록 방향 변경
+            if other.adir == self.dir:
+                self.dir *= -1
+            # 피격 상태로의 변경
+            self.cur_state = 'Attacked'
+            self.current_time = get_time()
             # 피격 시 경직 추가 필요 (일반 몹이기 때문)
             if self.HP <= 0:  # 사망 시 삭제
                 game_world.remove_object(self)
