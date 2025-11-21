@@ -56,12 +56,10 @@ class Elite_Monster:
 
     def Attacked(self):
         self.motion = 0
-        self.end_frame = 1
-        self.rotate = 45.0 * self.dir
+        self.end_frame = 2
         if get_time() - self.current_time > 0.5: # 동작 종료 타이밍 별도 설정
             self.cur_state = 'Moving'
             self.frame = 0
-            self.rotate = 0.0
             self.end_motion = False
 
     def Attacking(self):
@@ -72,16 +70,10 @@ class Elite_Monster:
     def update(self):
         self.frame_update()
         if (self.cur_state == 'Moving'):
-            self.motion = 2
-            self.end_frame = 7
             self.moving()
         elif (self.cur_state == 'Attacked'):
-            self.motion = 0
-            self.end_frame = 2
             self.Attacked()
         elif (self.cur_state == 'Attacking'):
-            self.motion = 1
-            self.end_frame = 7
             self.Attacking()
 
     def end_motion_check(self, frame_index):
@@ -135,9 +127,9 @@ class Elite_Monster:
                 self.dir *= -1
             # 피격 상태로의 변경
             self.cur_state = 'Attacked'
+            self.frame = 0
             self.current_time = get_time()
-            # 피격 시 경직 추가 필요 (일반 몹이기 때문)
             if self.HP <= 0:  # 사망 시 삭제
                 game_world.remove_object(self)
-                self.character.Gold += 10 + (self.stage.stage_level * 10)  # 골드 획득
-                self.character.EXP += 5 + (self.stage.stage_level * 5)  # 경험치 획득
+                self.character.Gold += 100 + (self.stage.stage_level * 100)  # 골드 획득
+                self.character.EXP += 50 + (self.stage.stage_level * 50)  # 경험치 획득

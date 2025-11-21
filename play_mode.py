@@ -48,6 +48,8 @@ def init():
 
     elite_monster = Elite_Monster(1200, 125, random.choice((-1, 1)), stage, character)
     game_world.add_object(elite_monster, 1)
+    game_world.add_collision_pair('character:monster', None, elite_monster)  # 몬스터 직접 충돌
+    game_world.add_collision_pair('attack:monster', None, elite_monster)  # 플레이어 공격과 몬스터 충돌 시
 
 def update():
     game_world.update()
