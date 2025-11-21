@@ -166,8 +166,8 @@ class Elite_Monster:
 
     def handle_collision(self, group, other):
         if group == 'character:elite_monster':
-            # 플레이어가 공격 범위 안에 들어왔을 경우
-            if self.attacking_collision(other) and not self.cur_state == 'Attacking':
+            # 플레이어가 공격 범위 안에 들어왔을 경우 (몬스터가 피격 중에는 공격을 하지 않고, 공격 중인 경우 frame을 0으로 초기화하지 않음)
+            if self.attacking_collision(other) and not self.cur_state == 'Attacking' and not self.cur_state == 'Attacked':
                 self.cur_state = 'Attacking'
                 self.frame = 0
         elif group == 'attack:monster' and other.is_attack:
