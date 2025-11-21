@@ -329,3 +329,9 @@ class Character:
             self.HP -= other.damage
             self.cur_state = 'is_attacked'
             self.start_attacked()
+        elif group == 'character:elite_monster' and not self.cur_state == 'Dashing' and not self.cur_state == 'is_attacked':
+            # 엘리트 몹 몸통과 충돌한 경우
+            if other.body_collision(self):
+                self.HP -= other.damage
+                self.cur_state = 'is_attacked'
+                self.start_attacked()
