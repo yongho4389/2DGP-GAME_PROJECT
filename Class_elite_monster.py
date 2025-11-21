@@ -25,50 +25,88 @@ class Elite_Monster:
         self.y = y
         self.stage = stage
         self.character = character
-        self.width = 256
-        self.height = 256
+        self.width = 2184 // 7
+        self.height = 849 // 3
         self.dir = dir
         self.rotate = 0.0
         self.cur_state = 'Moving'
         self.current_time = get_time()
+        self.frame = 0
+        self.motion = 2
+        self.start_frame = 0
+        self.end_frame = 6
+        self.end_motion = False
+        self.TIME_PER_ACTION = 1  # 한 동작을 수행하는데 걸리는 시간 (초)
+        self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION  # 초당 몇 동작을 수행하는지
 
         self.MAX_HP = self.stage.stage_level * 100 + 100
         self.HP = self.MAX_HP
         self.damage = self.stage.stage_level * 20 + 20
+    
+    def frame_update(self):
+        frame_count = self.end_frame - self.start_frame + 1 # 얼마의 프레임으로 구성되는지 계산
+        self.frame = (self.frame + frame_count * self.ACTION_PER_TIME * game_framework.frame_time) % frame_count
 
     def moving(self):
+        self.motion = 2
+        self.end_frame = 6
         self.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
         if self.x < camera.start_position + 200 or self.x > camera.end_position - 200:
             self.dir *= -1
 
     def Attacked(self):
+        self.motion = 0
+        self.end_frame = 1
         self.rotate = 45.0 * self.dir
-        if get_time() - self.current_time > 0.5:
+        if get_time() - self.current_time > 0.5: # 동작 종료 타이밍 별도 설정
             self.cur_state = 'Moving'
+            self.frame = 0
             self.rotate = 0.0
+            self.end_motion = False
 
     def Attacking(self):
+        self.motion = 1
+        self.end_frame = 6
         pass
 
     def update(self):
+        self.frame_update()
         if (self.cur_state == 'Moving'):
+            self.motion = 2
+            self.end_frame = 7
             self.moving()
         elif (self.cur_state == 'Attacked'):
+            self.motion = 0
+            self.end_frame = 2
             self.Attacked()
         elif (self.cur_state == 'Attacking'):
+            self.motion = 1
+            self.end_frame = 7
             self.Attacking()
 
+    def end_motion_check(self, frame_index):
+        # 모션이 끝난 경우 다시 움직이는 동작으로 전환
+        if self.end_motion:
+            self.cur_state = 'Moving'
+            self.frame = 0
+            self.end_motion = False
+        # 모션이 끝났으면 플래그 활성화 (피격 시는 별도 처리)
+        elif frame_index >= self.end_frame and not self.motion == 0:
+            self.end_motion = True
+
     def draw(self):
+        frame_index = self.start_frame + int(self.frame)
         if self.dir == 1:
             direction = ''
         else:
             direction = 'h'
-        self.image.clip_composite_draw(0, self.stage.stage_level * self.height,
+        self.image.clip_composite_draw(frame_index * self.width, (self.motion * self.height),
                                        # 시트상 위치
                                        self.width, self.height,  # 시트상 크기
                                        self.rotate, direction,
                                        self.x - camera.x, self.y,  # 월드 위치
                                        100, 100)
+        self.end_motion_check(frame_index)
         draw_rectangle(*self.get_screen_bb())
 
         # 체력바
