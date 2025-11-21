@@ -3,6 +3,7 @@ from Class_camera import camera
 import game_world
 import random
 from Class_monsters import *
+from Class_elite_monster import Elite_Monster
 
 # 일반 스테이지 관련 클래스 및 함수 정의 (사냥터)
 class Stage:
@@ -137,9 +138,13 @@ class Stage:
     def setting_stage(self):
         if self.special_stage:
             return
-        monsters = [Basic_Monster(random.randint(200, 2000), 125, random.choice((-1, 1)), self, self.character) for _ in
-                    range(10)]
+        monsters = [Basic_Monster(random.randint(200, 2000), 125, random.choice((-1, 1)), self, self.character) for _ in range(10)]
         game_world.add_objects(monsters, 1)
         for monster in monsters:
             game_world.add_collision_pair('character:monster', None, monster)  # 몬스터 직접 충돌
             game_world.add_collision_pair('attack:monster', None, monster)  # 플레이어 공격과 몬스터 충돌 시
+
+        elite_monster = Elite_Monster(1200, 175, random.choice((-1, 1)), self, self.character)
+        game_world.add_object(elite_monster, 1)
+        game_world.add_collision_pair('character:elite_monster', None, elite_monster)  # 엘리트 몬스터와의 충돌
+        game_world.add_collision_pair('attack:monster', None, elite_monster)  # 플레이어 공격과 몬스터 충돌 시
