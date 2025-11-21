@@ -120,8 +120,8 @@ class Elite_Monster:
         return x1 - camera.x, y1, x2 - camera.x, y2
 
     def get_bb(self):
-        xb = self.width / 8
-        yb = self.height / 8
+        xb = self.width / 5
+        yb = self.height / 2.5
         return self.x - xb, self.y - yb, self.x + xb, self.y + yb
 
     def handle_collision(self, group, other):
