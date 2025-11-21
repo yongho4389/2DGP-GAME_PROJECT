@@ -67,7 +67,7 @@ class Elite_Monster:
         self.attacking_onoff = False
         self.motion = 1
         self.end_frame = 6
-        if (self.frame >= 5):
+        if (self.frame >= 4):
             self.attacking_onoff = True
 
     def update(self):
@@ -146,10 +146,12 @@ class Elite_Monster:
         if bottom_a > top_b: return False
         return True
 
-    def attacking_bb(self):  # 몬스터 공격 충돌 박스
-        xb = self.width / 4
-        yb = self.height / 4
-        return self.x - xb, self.y - yb, self.x + xb, self.y + yb
+    def attacking_bb(self): # 몬스터 공격 충돌 박스
+        xr = (self.width / 5 * self.dir) # x위치 보정
+        yr = -self.height / 5  # y위치 보정
+        xb = self.width / 5
+        yb = self.height / 5
+        return self.x - xb + xr, self.y - yb + yr, self.x + xb + xr, self.y + yb + yr
 
     def attacking_collision(self, other):
         # 인자로 전달한 객체의 바운딩 박스를 구한다
