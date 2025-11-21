@@ -47,14 +47,19 @@ class Elite_Monster:
             self.cur_state = 'Moving'
             self.rotate = 0.0
 
+    def Attacking(self):
+        pass
+
     def update(self):
         if (self.cur_state == 'Moving'):
             self.moving()
         elif (self.cur_state == 'Attacked'):
             self.Attacked()
+        elif (self.cur_state == 'Attacking'):
+            self.Attacking()
 
     def draw(self):
-        if self.dir == -1:
+        if self.dir == 1:
             direction = ''
         else:
             direction = 'h'
