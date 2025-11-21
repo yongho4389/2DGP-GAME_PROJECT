@@ -116,3 +116,15 @@ class Skills:
                 if self in game_world.world[2]:
                     # game_world.remove_object(self)
                     self.skill_Activate_time = 0 # 충돌 후 바로 삭제되도록 시간 초기화 (update에서 처리)
+        elif group == 'attack:elite_monster' and self.is_attack:
+            # 엘리트 몬스터와 충돌 시 몸통과 충돌 체크하도록 설정
+            if other.body_collision(self) and not other.cur_state == 'Attacked':
+                if self.attack_version == 0 or self.attack_version == 1:
+                    # 기본 공격과 스킬1은 충돌 시 바로 삭제
+                    if self.attack_version == 0:
+                        self.character.basic_Attacking = False
+                    elif self.attack_version == 1:
+                        self.character.skill1_Attacking = False
+                    if self in game_world.world[2]:
+                        # game_world.remove_object(self)
+                        self.skill_Activate_time = 0  # 충돌 후 바로 삭제되도록 시간 초기화 (update에서 처리)

@@ -170,17 +170,18 @@ class Elite_Monster:
             if self.attacking_collision(other) and not self.cur_state == 'Attacking' and not self.cur_state == 'Attacked':
                 self.cur_state = 'Attacking'
                 self.frame = 0
-        elif group == 'attack:monster' and other.is_attack:
-            other.is_attack = False  # 공격 판정은 한 번만 되도록 하며, 몬스터에게 실제 변화가 일어났을 때 공격 판정이 적용되었음을 알림
-            self.HP -= other.damage
-            # 피격 시 적이 플레이어에게 달려들도록 방향 변경
-            if other.adir == self.dir:
-                self.dir *= -1
-            # 피격 상태로의 변경
-            self.cur_state = 'Attacked'
-            self.frame = 0
-            self.current_time = get_time()
-            if self.HP <= 0:  # 사망 시 삭제
-                game_world.remove_object(self)
-                self.character.Gold += 100 + (self.stage.stage_level * 100)  # 골드 획득
-                self.character.EXP += 50 + (self.stage.stage_level * 50)  # 경험치 획득
+        elif group == 'attack:elite_monster' and other.is_attack:
+            if self.body_collision(other):
+                other.is_attack = False  # 공격 판정은 한 번만 되도록 하며, 몬스터에게 실제 변화가 일어났을 때 공격 판정이 적용되었음을 알림
+                self.HP -= other.damage
+                # 피격 시 적이 플레이어에게 달려들도록 방향 변경
+                if other.adir == self.dir:
+                    self.dir *= -1
+                # 피격 상태로의 변경
+                self.cur_state = 'Attacked'
+                self.frame = 0
+                self.current_time = get_time()
+                if self.HP <= 0:  # 사망 시 삭제
+                    game_world.remove_object(self)
+                    self.character.Gold += 100 + (self.stage.stage_level * 100)  # 골드 획득
+                    self.character.EXP += 50 + (self.stage.stage_level * 50)  # 경험치 획득

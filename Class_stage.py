@@ -147,4 +147,4 @@ class Stage:
         elite_monster = Elite_Monster(1200, 175, random.choice((-1, 1)), self, self.character)
         game_world.add_object(elite_monster, 1)
         game_world.add_collision_pair('character:elite_monster', None, elite_monster)  # 엘리트 몬스터와의 충돌
-        game_world.add_collision_pair('attack:monster', None, elite_monster)  # 플레이어 공격과 몬스터 충돌 시
+        game_world.add_collision_pair('attack:elite_monster', None, elite_monster)  # 플레이어 공격과 몬스터 충돌 시
