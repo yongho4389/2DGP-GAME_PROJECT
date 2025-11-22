@@ -4,6 +4,7 @@ import game_world
 import random
 from Class_monsters import *
 from Class_elite_monster import Elite_Monster
+from Class_boss_monster import Boss_Monster
 
 # 일반 스테이지 관련 클래스 및 함수 정의 (사냥터)
 class Stage:
@@ -18,8 +19,11 @@ class Stage:
         self.y = 400
         self.store_pos_x = self.width // 2 + 100
         self.store_pos_y = self.height // 2 - 75
-        self.stage_level = 0 # 보스 스테이지는 3
-        self.special_stage = False # 상점 진입 혹은 보스 스테이지 진입 시 True로 변경
+        # 기본값: level = 0, special = False
+        # self.stage_level = 0 # 보스 스테이지는 3
+        # self.special_stage = False # 상점 진입 혹은 보스 스테이지 진입 시 True로 변경
+        self.stage_level = 3  # 보스 스테이지는 3
+        self.special_stage = True  # 상점 진입 혹은 보스 스테이지 진입 시 True로 변경
 
         self.portal_image = load_image('./image_sheets/portal_sheet.png')
         self.portal_sx = 0
@@ -127,6 +131,7 @@ class Stage:
             if self.stage_level == 3:
                 self.special_stage = True
                 self.set_camera_stage_range()
+                self.set_boss_stage()
             # 플레이어 위치 좌측 끝으로 보정
             self.character.x = camera.start_position + 50
             if not self.special_stage:
@@ -148,3 +153,9 @@ class Stage:
         game_world.add_object(elite_monster, 1)
         game_world.add_collision_pair('character:elite_monster', None, elite_monster)  # 엘리트 몬스터와의 충돌
         game_world.add_collision_pair('attack:elite_monster', None, elite_monster)  # 플레이어 공격과 몬스터 충돌 시
+
+    def set_boss_stage(self):
+        boss = Boss_Monster(600, 125, 1, self, self.character)
+        game_world.add_object(boss, 1)
+        game_world.add_collision_pair('character:boss_monster', None, boss)
+        pass

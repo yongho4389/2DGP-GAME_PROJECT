@@ -5,6 +5,7 @@ from Class_stage import Stage
 from Class_Store import Store
 from Class_monsters import Basic_Monster
 from Class_elite_monster import Elite_Monster
+from Class_boss_monster import Boss_Monster
 from Class_character_controls import *
 import game_world
 import random
@@ -33,12 +34,18 @@ def init():
     game_world.add_object(character, 2)
     game_world.add_collision_pair('character:monster', character, None) # 몬스터 직접 충돌
     game_world.add_collision_pair('character:elite_monster', character, None)  # 엘리트 몹과의 충돌
+    game_world.add_collision_pair('character:boss_monster', character, None)  # 보스 몹과의 충돌
 
     stage = Stage(character)
     game_world.add_object(stage, 0)
 
     store = Store(stage, character)
     game_world.add_object(store, 3)
+
+    # 디버깅용 보스 몹 생성
+    boss = Boss_Monster(650, 175, 1, stage, character)
+    game_world.add_object(boss, 1)
+    game_world.add_collision_pair('character:boss_monster', None, boss)
 
     # 일반 몹 기본 10마리 생성
     # monsters = [Basic_Monster(random.randint(200, 2000), 125, random.choice((-1, 1)), stage, character) for _ in range(10)]
@@ -48,10 +55,10 @@ def init():
     #     game_world.add_collision_pair('attack:monster', None, monster)  # 플레이어 공격과 몬스터 충돌 시
 
     # 엘리트몹 생성 (기본 1마리)
-    elite_monster = Elite_Monster(1200, 175, random.choice((-1, 1)), stage, character)
-    game_world.add_object(elite_monster, 1)
-    game_world.add_collision_pair('character:elite_monster', None, elite_monster)  # 엘리트 몬스터와의 충돌
-    game_world.add_collision_pair('attack:elite_monster', None, elite_monster)  # 플레이어 공격과 몬스터 충돌 시
+    # elite_monster = Elite_Monster(1200, 175, random.choice((-1, 1)), stage, character)
+    # game_world.add_object(elite_monster, 1)
+    # game_world.add_collision_pair('character:elite_monster', None, elite_monster)  # 엘리트 몬스터와의 충돌
+    # game_world.add_collision_pair('attack:elite_monster', None, elite_monster)  # 플레이어 공격과 몬스터 충돌 시
 
 def update():
     game_world.update()
