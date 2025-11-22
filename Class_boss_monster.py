@@ -22,7 +22,7 @@ class Boss_Monster:
         self.height = 1416 // 3
         self.dir = dir
         self.rotate = 0.0
-        self.cur_state = 'Attack3'
+        self.cur_state = 'Attack2'
         self.current_time = get_time()
         self.frame = 0
         self.motion = 2
@@ -33,9 +33,11 @@ class Boss_Monster:
         self.TIME_PER_ACTION = 1  # 한 동작을 수행하는데 걸리는 시간 (초)
         self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION  # 초당 몇 동작을 수행하는지
 
-        self.MAX_HP = self.stage.stage_level * 100 + 100
+        self.MAX_HP = 1000
         self.HP = self.MAX_HP
-        self.damage = self.stage.stage_level * 20 + 20
+        self.damage = 50 # 몸통 충돌 데미지
+        self.attack1_damage = 25 # 에너지볼 데미지
+        self.attack2_damage = 50 # 폭발 데미지
 
     def frame_update(self):
         frame_count = self.end_frame - self.start_frame + 1  # 얼마의 프레임으로 구성되는지 계산
@@ -89,7 +91,7 @@ class Boss_Monster:
         draw_rectangle(*self.get_screen_bb3())
 
         # 체력바
-        hp_length = 400 * (self.HP / self.MAX_HP)  # HP바 길이가 출력되는 부분 100% 기준으로 계산됨. (최대 400)
+        hp_length = 1500 * (self.HP / self.MAX_HP)  # HP바 길이가 출력되는 부분 100% 기준으로 계산됨. (최대 1500의 길이)
         self.UI_image.clip_draw(2720 // 5, 0, 2720 // 5, 185, 400, 25, hp_length, 300)  # HP 바
 
     # 화면용 바운딩 박스
