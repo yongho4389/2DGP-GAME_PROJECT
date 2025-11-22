@@ -22,7 +22,7 @@ class Boss_Monster:
         self.height = 1416 // 3
         self.dir = dir
         self.rotate = 0.0
-        self.cur_state = 'Attack2'
+        self.cur_state = 'Attack1'
         self.current_time = get_time()
         self.frame = 0
         self.motion = 2
@@ -65,7 +65,7 @@ class Boss_Monster:
     def end_motion_check(self, frame_index):
         # 모션이 끝난 경우 다시 움직이는 동작으로 전환
         if self.end_motion:
-            # self.cur_state = 'Attack1'
+            self.cur_state = 'Attack1'
             self.frame = 0
             self.end_motion = False
             self.attacking_onoff = False

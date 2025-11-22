@@ -58,7 +58,7 @@ class Character:
 
         # 캐릭터 능력치
         self.Max_HP = 100  # 최대 체력
-        self.HP = 25  # 체력
+        self.HP = self.Max_HP  # 체력
         self.LV = 1     # 레벨
         self.basic_damage = 10  # 기본 공격 데미지
         self.basic_range = 40  # 기본 공격 사거리
