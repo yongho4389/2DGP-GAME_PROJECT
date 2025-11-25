@@ -2,6 +2,7 @@ from pico2d import *
 from Class_camera import camera
 import game_world
 import game_framework
+from behavior_tree import BehaviorTree, Action, Sequence, Condition, Selector
 
 # 기본 잡몹
 class Boss_Monster:
@@ -33,6 +34,8 @@ class Boss_Monster:
         self.TIME_PER_ACTION = 1  # 한 동작을 수행하는데 걸리는 시간 (초)
         self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION  # 초당 몇 동작을 수행하는지
 
+        self.build_behavior_tree()
+
         self.MAX_HP = 1000
         self.HP = self.MAX_HP
         self.damage = 50 # 몸통 충돌 데미지
@@ -61,6 +64,7 @@ class Boss_Monster:
             self.Attack2()
         elif (self.cur_state == 'Attack3'):
             self.Attack3()
+        self.bt.run()
 
     def end_motion_check(self, frame_index):
         # 모션이 끝난 경우 다시 움직이는 동작으로 전환
@@ -120,3 +124,15 @@ class Boss_Monster:
                 game_world.remove_object(self)
                 self.character.Gold += 100 + (self.stage.stage_level * 100)  # 골드 획득
                 self.character.EXP += 50 + (self.stage.stage_level * 50)  # 경험치 획득
+
+    def build_behavior_tree(self):
+        # a6 = Action('도망', self.run_away)
+        # c2 = Condition('좀비가 공이 더 많은가', self.compare_balls)
+        # c3 = Condition('플레이어가 공이 더 많은가', self.compare_balls2)
+        # chasing = Sequence('추적 시작', c2, a4)
+        # runaway = Sequence('도망 시작', c3, a6)
+        # fighting_zombie = Selector('fighting_zombie', chasing, runaway)
+        # fight = Sequence('fight', c1, fighting_zombie)
+        # root = Selector('ZOMBIE AI', fight, wander)
+        # self.bt = BehaviorTree(root)
+        pass
