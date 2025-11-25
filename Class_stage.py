@@ -79,12 +79,12 @@ class Stage:
                                      (i * (self.width - 20)) + self.x - camera.x, self.y // 4,
                                      self.width, 400)
         # 포탈
-        if self.stage_level != 3:
-            self.portal_sx = camera.start_position + 50
-            self.portal_ex = camera.end_position - 50
-            # 화면은 어차피 항상 왼쪽이 0좌표다. 때문에 camera.x를 빼줘야 제대로된 위치에 포탈이 그려진다.
-            if self.stage_level != 0 or self.special_stage: # 첫 스테이지에서는 왼쪽 포탈 없어지도록 하기
-                self.portal_image.clip_draw(0, 0, 128, 256, self.portal_sx - camera.x, self.portal_y, 100, 300)
+        self.portal_sx = camera.start_position + 50
+        self.portal_ex = camera.end_position - 50
+        # 화면은 어차피 항상 왼쪽이 0좌표다. 때문에 camera.x를 빼줘야 제대로된 위치에 포탈이 그려진다.
+        if self.stage_level != 0 or self.special_stage:  # 첫 스테이지에서는 왼쪽 포탈 없어지도록 하기
+            self.portal_image.clip_draw(0, 0, 128, 256, self.portal_sx - camera.x, self.portal_y, 100, 300)
+        if self.stage_level != 3:  # 보스 스테이지에서는 우측 포탈 없어지도록 하기
             self.portal_image.clip_draw(0, 0, 128, 256, self.portal_ex - camera.x, self.portal_y, 100, 300)
         # 상점
         if self.special_stage and self.stage_level < 3:
@@ -92,16 +92,21 @@ class Stage:
 
     # 포탈 이동 처리
     def taking_portal(self):
-        if self.stage_level == 3:
-            return # 보스 스테이지에서는 포탈 무시
         # 좌측 끝 포탈
         if self.portal_sx >= self.character.get_bb()[0] and self.portal_sx <= self.character.get_bb()[2]:
             for o in game_world.world[1][:]:
                 game_world.remove_object(o)
             if self.stage_level == 0 and not self.special_stage:
                 return # 0레벨 일반 스테이지에서 좌측 포탈은 무시
+            # 보스 스테이지에서 이전으로 돌아가는 경우
+            if self.special_stage and self.stage_level == 3:
+                self.stage_level -= 1
+                self.special_stage = True
+                self.set_camera_stage_range()
+                # 플레이어 위치 스페셜 스테이지의 우측 끝으로 보정
+                self.character.x = self.width - 50
             # 상점 스테이지에서 이전으로 돌아가는 경우
-            if self.special_stage:
+            elif self.special_stage:
                 self.special_stage = False
                 # 스테이지 변경 후 카메라 범위 최신화
                 self.set_camera_stage_range()
@@ -117,6 +122,8 @@ class Stage:
                 self.setting_stage()
         # 우측 끝 포탈
         elif self.portal_ex >= self.character.get_bb()[0] and self.portal_ex <= self.character.get_bb()[2]:
+            if self.stage_level == 3:
+                return  # 보스 스테이지에서 우측 포탈은 무시
             for o in game_world.world[1][:]:
                 game_world.remove_object(o)
             # 일반 스테이지에서 다음으로 넘어가는 경우 스페셜 스테이지로 전환
@@ -155,7 +162,7 @@ class Stage:
         game_world.add_collision_pair('attack:elite_monster', None, elite_monster)  # 플레이어 공격과 몬스터 충돌 시
 
     def set_boss_stage(self):
-        boss = Boss_Monster(600, 125, 1, self, self.character)
+        boss = Boss_Monster(600, 175, 1, self, self.character)
         game_world.add_object(boss, 1)
         game_world.add_collision_pair('character:boss_monster', None, boss)
         pass

@@ -64,7 +64,7 @@ class Boss_Monster:
             self.Attack2()
         elif (self.cur_state == 'Attack3'):
             self.Attack3()
-        self.bt.run()
+        # self.bt.run()
 
     def end_motion_check(self, frame_index):
         # 모션이 끝난 경우 다시 움직이는 동작으로 전환
