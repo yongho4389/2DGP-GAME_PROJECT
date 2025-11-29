@@ -42,18 +42,22 @@ class Boss_Monster:
         self.damage = 50 # 몸통 충돌 데미지
         self.attack1_damage = 25 # 에너지볼 데미지
         self.attack2_damage = 50 # 폭발 데미지
+        self.attack1_count = 0 # 에너지볼 공격 횟수 카운트
 
     def frame_update(self):
         frame_count = self.end_frame - self.start_frame + 1  # 얼마의 프레임으로 구성되는지 계산
         self.frame = (self.frame + frame_count * self.ACTION_PER_TIME * game_framework.frame_time) % frame_count
 
     def Attack1(self):
+        self.cur_state = 'Attack1'
         self.motion = 2
         pass
     def Attack2(self):
+        self.cur_state = 'Attack2'
         self.motion = 1
         pass
     def Attack3(self):
+        self.cur_state = 'Attack3'
         self.motion = 0
         pass
 
@@ -68,14 +72,14 @@ class Boss_Monster:
         else:
             return BehaviorTree.FAIL
 
+    def attack1_count_compare(self):
+        if self.attack1_count >= 5:
+            return BehaviorTree.SUCCESS
+        else:
+            return BehaviorTree.FAIL
+
     def update(self):
         self.frame_update()
-        # if (self.cur_state == 'Attack1'):
-        #     self.Attack1()
-        # elif (self.cur_state == 'Attack2'):
-        #     self.Attack2()
-        # elif (self.cur_state == 'Attack3'):
-        #     self.Attack3()
         self.bt.run()
 
     def end_motion_check(self, frame_index):
@@ -87,6 +91,8 @@ class Boss_Monster:
             self.attacking_onoff = False
         # 모션이 끝났으면 플래그 활성화
         elif frame_index >= self.end_frame:
+            if self.cur_state == 'Attack1' or self.cur_state == 'Attack2': # 공격 후 다시 0으로 바뀌려면 공격2에서도 count를 늘려줘야 함
+                self.attack1_count = (self.attack1_count + 1) % 6  # 에너지볼 공격 횟수 카운트 (5회 후 초기화)
             self.end_motion = True
 
     def draw(self):
@@ -138,16 +144,15 @@ class Boss_Monster:
                 self.character.EXP += 50 + (self.stage.stage_level * 50)  # 경험치 획득
 
     def build_behavior_tree(self):
-        # a6 = Action('도망', self.run_away)
-        # c2 = Condition('좀비가 공이 더 많은가', self.compare_balls)
-        # c3 = Condition('플레이어가 공이 더 많은가', self.compare_balls2)
-        # chasing = Sequence('추적 시작', c2, a4)
-        # runaway = Sequence('도망 시작', c3, a6)
-        # fighting_zombie = Selector('fighting_zombie', chasing, runaway)
-        # fight = Sequence('fight', c1, fighting_zombie)
-        # root = Selector('ZOMBIE AI', fight, wander)
+        action_attack1 = Action('a1', self.Attack1)
+        # 공격 2
+        action_attack2 = Action('a2', self.Attack2)
+        c_attack2 = Condition('a2_check', self.attack1_count_compare)
+        Attack2 = Sequence('Attack2', c_attack2, action_attack2)
+        # 공격 3
         action_attack3 = Action('a3', self.Attack3)
-        c_attack3 = Condition('a3_check', self.nearby, 5)
+        c_attack3 = Condition('a3_check', self.nearby, 7)
         root = Attack3 = Sequence('Attack3', c_attack3, action_attack3)
+        root = Boss_behavior = Selector('Boss_behavior', Attack3, Attack2, action_attack1)
         self.bt = BehaviorTree(root)
         pass
