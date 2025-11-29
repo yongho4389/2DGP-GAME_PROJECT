@@ -1,7 +1,9 @@
 import game_framework
 import clear_mode
+import gameover_mode
 
 game_clear = False
+game_over = False
 
 world = [[], [], [], []] # 0: 배경, 1: 몬스터, 2: 캐릭터, 3: UI
 
@@ -31,11 +33,17 @@ def remove_collision_object(o):
     pass
 
 def update():
+    global game_clear
+    global game_over
     for layer in world:
         for o in layer:
             o.update()
     if game_clear:
+        game_clear = False
         game_framework.change_mode(clear_mode)
+    if game_over:
+        game_over = False
+        game_framework.change_mode(gameover_mode)
 
 def render():
     for layer in world:

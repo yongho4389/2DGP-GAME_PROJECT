@@ -227,7 +227,7 @@ class Character:
         self.frame_update()
         # 캐릭터 사망 (게임 처음부터 재시작)
         if self.HP <= 0:
-            pass
+            game_world.game_over = True
         # 캐릭터 레벨업
         if self.EXP >= self.Max_EXP and self.LV < 10:
             self.LV += 1
