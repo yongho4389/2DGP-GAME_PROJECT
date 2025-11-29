@@ -4,7 +4,7 @@ import game_world
 import game_framework
 from game_world import PIXEL_PER_METER
 
-ENERGY_SPEED_KMPH = 2.0 # Km / Hour (여기서 현실적인 속도를 결정) (km/h)
+ENERGY_SPEED_KMPH = 10.0 # Km / Hour (여기서 현실적인 속도를 결정) (km/h)
 ENERGY_SPEED_MPM = (ENERGY_SPEED_KMPH * 1000.0 / 60.0) # Meter / Minute
 ENERGY_SPEED_MPS = (ENERGY_SPEED_MPM / 60.0) # Meter / Second
 ENERGY_SPEED_PPS = (ENERGY_SPEED_MPS * PIXEL_PER_METER) # 초당 몇 픽셀을 이동할지 결졍 (PPS) (이것이 속도가 됨)
@@ -18,7 +18,7 @@ class Boss_skills:
     def __init__(self, x, y, type, boss):
         # 이미지 1번만 로드
         if Boss_skills.image == None:
-            Boss_skills.image = load_image('./image_sheets/boss_effect_sheets.png')
+            Boss_skills.image = load_image('./image_sheets/boss_effect_sheet.png')
         self.skill_Activate_time = get_time()
         self.is_attack = True  # 공격 여부 결정 (필드에 남아있어도 몬스터 당 한 번만 공격하도록)
         self.ax = x
@@ -37,17 +37,16 @@ class Boss_skills:
             self.size = 25
         elif type == 2:
             self.damage = self.boss.energy_damage
-            self.turning = math.radians(270)
+            self.turning = 270
 
         # 공격 이펙트 그리기
 
     def draw(self):
-        if self.type == 0:
-            self.image.clip_composite_draw(self.type * self.width, 0,
-                                           self.width, self.height,
-                                           self.turning, '',
-                                           self.ax, self.ay,
-                                           self.size, self.size)
+        self.image.clip_composite_draw(self.type * self.width, 0,
+                                       self.width, self.height,
+                                       self.turning, '',
+                                       self.ax - camera.x, self.ay,
+                                       self.size, self.size)
         draw_rectangle(*self.get_screen_bb())
         # 스킬 지속 시간 처리
 
@@ -58,10 +57,10 @@ class Boss_skills:
             else:
                 self.ax -= ENERGY_SPEED_PPS * game_framework.frame_time # 좌측으로 이동
         if self.type == 1:
-            if get_time() - self.skill_Activate_time >= 3.0: # 3초 후 삭제
+            if get_time() - self.skill_Activate_time >= 2.0: # 3초 후 삭제
                 game_world.remove_object(self)
             else:
-                self.size += 5 * game_framework.frame_time  # 크기 증가
+                self.size += 50 * game_framework.frame_time  # 크기 증가
         elif self.type == 2:
             if get_time() - self.skill_Activate_time >= 5.0: # 5초 후 삭제
                 game_world.remove_object(self)
@@ -74,10 +73,12 @@ class Boss_skills:
         return x1 - camera.x, y1, x2 - camera.x, y2
 
     def get_bb(self):
-        if self.type == 0:
-            xb = 0
-            yb = 0
-            pass
+        if self.type == 0 or self.type == 2:
+            xb = 20
+            yb = 20
+        elif self.type == 1:
+            xb = self.size / 4
+            yb = self.size / 4
         return self.ax - xb, self.ay - yb, self.ax + xb, self.ay + yb
 
     def handle_collision(self, group, other):

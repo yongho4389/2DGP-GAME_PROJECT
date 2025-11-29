@@ -8,6 +8,7 @@ from Class_elite_monster import Elite_Monster
 from Class_boss_monster import Boss_Monster
 from Class_character_controls import *
 import game_world
+from Class_boss_skills import Boss_skills
 import random
 
 import game_framework

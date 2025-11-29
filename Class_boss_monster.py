@@ -5,6 +5,7 @@ import game_framework
 from Class_boss_skills import Boss_skills
 from game_world import PIXEL_PER_METER
 from behavior_tree import BehaviorTree, Action, Sequence, Condition, Selector
+from random import randint
 
 # 기본 잡몹
 class Boss_Monster:
@@ -50,21 +51,42 @@ class Boss_Monster:
         self.frame = (self.frame + frame_count * self.ACTION_PER_TIME * game_framework.frame_time) % frame_count
 
     def Attack1(self):
-        if self.cur_state != 'Attack1': self.frame = 0 # 다른 동작 수행 중일 경우
+        if self.cur_state != 'Attack1': # 다른 동작 수행 중이었을 경우
+            self.frame = 0
+            self.attacking_onoff = False
         self.cur_state = 'Attack1'
         self.motion = 2
-        # if self.frame >= 4
-        pass
     def Attack2(self):
-        if self.cur_state != 'Attack2': self.frame = 0 # 다른 동작 수행 중일 경우
+        if self.cur_state != 'Attack2':  # 다른 동작 수행 중이었을 경우
+            self.frame = 0
+            self.attacking_onoff = False
         self.cur_state = 'Attack2'
         self.motion = 1
-        pass
     def Attack3(self):
-        if self.cur_state != 'Attack3': self.frame = 0 # 다른 동작 수행 중일 경우
+        if self.cur_state != 'Attack3':  # 다른 동작 수행 중이었을 경우
+            self.frame = 0
+            self.attacking_onoff = False
         self.cur_state = 'Attack3'
         self.motion = 0
-        pass
+
+    def Attacking(self):
+        if self.frame >= 4 and not self.attacking_onoff:
+            # 에너지볼 발사
+            if self.cur_state == 'Attack1':
+                type, x, y = 0, self.x, randint(100, 200)
+                skill = Boss_skills(x, y, type, self)
+                game_world.add_object(skill, 1)
+            elif self.cur_state == 'Attack2':
+                type, x, y = 1, self.character.x, self.character.y
+                skill = Boss_skills(x, y, type, self)
+                game_world.add_object(skill, 1)
+            elif self.cur_state == 'Attack3':
+                for _ in range(3):
+                    skill = Boss_skills(randint(200, 600), 600, 2, self)
+                    game_world.add_object(skill, 1)
+            self.attacking_onoff = True
+            # game_world.add_collision_pair('attack:boss_monster', None, energy_ball)
+
 
     # 거리 비교 함수 (x1, y1)와 (x2, y2) 사이의 거리가 r 미터보다 작은지
     def distance_less_than(self, x1, y1, x2, y2, r):
@@ -86,6 +108,7 @@ class Boss_Monster:
     def update(self):
         self.frame_update()
         self.bt.run()
+        self.Attacking()
 
     def end_motion_check(self, frame_index):
         # 모션이 끝난 경우 다시 움직이는 동작으로 전환
