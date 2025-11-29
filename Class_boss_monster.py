@@ -2,6 +2,7 @@ from pico2d import *
 from Class_camera import camera
 import game_world
 import game_framework
+from Class_boss_skills import Boss_skills
 from game_world import PIXEL_PER_METER
 from behavior_tree import BehaviorTree, Action, Sequence, Condition, Selector
 
@@ -49,14 +50,18 @@ class Boss_Monster:
         self.frame = (self.frame + frame_count * self.ACTION_PER_TIME * game_framework.frame_time) % frame_count
 
     def Attack1(self):
+        if self.cur_state != 'Attack1': self.frame = 0 # 다른 동작 수행 중일 경우
         self.cur_state = 'Attack1'
         self.motion = 2
+        # if self.frame >= 4
         pass
     def Attack2(self):
+        if self.cur_state != 'Attack2': self.frame = 0 # 다른 동작 수행 중일 경우
         self.cur_state = 'Attack2'
         self.motion = 1
         pass
     def Attack3(self):
+        if self.cur_state != 'Attack3': self.frame = 0 # 다른 동작 수행 중일 경우
         self.cur_state = 'Attack3'
         self.motion = 0
         pass
