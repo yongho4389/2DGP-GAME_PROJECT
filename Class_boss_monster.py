@@ -6,6 +6,7 @@ from Class_boss_skills import Boss_skills
 from game_world import PIXEL_PER_METER
 from behavior_tree import BehaviorTree, Action, Sequence, Condition, Selector
 from random import randint
+import clear_mode
 
 # 기본 잡몹
 class Boss_Monster:
@@ -183,3 +184,4 @@ class Boss_Monster:
             self.current_time = get_time()
             if self.HP <= 0:
                 game_world.remove_object(self)
+                # game_framework.change_mode(clear_mode)
