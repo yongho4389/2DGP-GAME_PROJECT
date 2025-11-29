@@ -155,9 +155,9 @@ class Boss_Monster:
         return x1 - camera.x, y1, x2 - camera.x, y2
 
     def get_bb(self):  # 상호작용 전용 충돌 박스
-        xb = self.width / 5
-        yb = self.height / 4
-        return self.x - xb, self.y - yb, self.x + xb, self.y + yb
+        xb = self.width / 8
+        yb = self.height / 6
+        return self.x - xb, self.y - yb, self.x + xb * 2, self.y + yb
 
     def build_behavior_tree(self):
         action_attack1 = Action('a1', self.Attack1)

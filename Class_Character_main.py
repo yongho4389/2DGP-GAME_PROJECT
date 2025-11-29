@@ -343,3 +343,7 @@ class Character:
                 self.HP -= other.damage * 2  # 엘리트 몹 공격에 맞은 경우 데미지 2배
                 self.cur_state = 'is_attacked'
                 self.start_attacked()
+        elif group == 'character:boss_monster' and not self.cur_state == 'Dashing' and not self.cur_state == 'is_attacked':
+            self.HP -= other.damage
+            self.cur_state = 'is_attacked'
+            self.start_attacked()
