@@ -2,6 +2,7 @@ from pico2d import *
 from Class_camera import camera
 import game_world
 import game_framework
+from Class_Character_main import PIXEL_PER_METER
 from behavior_tree import BehaviorTree, Action, Sequence, Condition, Selector
 
 # 기본 잡몹
@@ -56,15 +57,26 @@ class Boss_Monster:
         self.motion = 0
         pass
 
+    # 거리 비교 함수 (x1, y1)와 (x2, y2) 사이의 거리가 r 미터보다 작은지
+    def distance_less_than(self, x1, y1, x2, y2, r):
+        distance2 = (x1 - x2) ** 2 + (y1 - y2) ** 2
+        return distance2 < (PIXEL_PER_METER * r) ** 2  # 게임 내에서 사용하는 미터 단위로 맞춤
+
+    def nearby(self, distance):
+        if self.distance_less_than(self.character.x, self.character.y, self.x, self.y, distance):
+            return BehaviorTree.SUCCESS
+        else:
+            return BehaviorTree.FAIL
+
     def update(self):
         self.frame_update()
-        if (self.cur_state == 'Attack1'):
-            self.Attack1()
-        elif (self.cur_state == 'Attack2'):
-            self.Attack2()
-        elif (self.cur_state == 'Attack3'):
-            self.Attack3()
-        # self.bt.run()
+        # if (self.cur_state == 'Attack1'):
+        #     self.Attack1()
+        # elif (self.cur_state == 'Attack2'):
+        #     self.Attack2()
+        # elif (self.cur_state == 'Attack3'):
+        #     self.Attack3()
+        self.bt.run()
 
     def end_motion_check(self, frame_index):
         # 모션이 끝난 경우 다시 움직이는 동작으로 전환
@@ -134,5 +146,8 @@ class Boss_Monster:
         # fighting_zombie = Selector('fighting_zombie', chasing, runaway)
         # fight = Sequence('fight', c1, fighting_zombie)
         # root = Selector('ZOMBIE AI', fight, wander)
-        # self.bt = BehaviorTree(root)
+        action_attack3 = Action('a3', self.Attack3)
+        c_attack3 = Condition('a3_check', self.nearby, 5)
+        root = Attack3 = Sequence('Attack3', c_attack3, action_attack3)
+        self.bt = BehaviorTree(root)
         pass
