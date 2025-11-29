@@ -1,5 +1,7 @@
 world = [[], [], [], []] # 0: 배경, 1: 몬스터, 2: 캐릭터, 3: UI
 
+PIXEL_PER_METER = (10.0 / 0.3) # 10 pixel 30 cm. 즉, 1 meter 당 몇 픽셀인지 계산. 10pixel을 0.3(m)으로 나누어 1미터 당 픽셀 수를 구함
+
 def add_object(o, depth):
     world[depth].append(o)
 

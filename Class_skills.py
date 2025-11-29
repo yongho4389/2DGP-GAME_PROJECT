@@ -2,8 +2,8 @@ from pico2d import *
 from Class_camera import camera
 import game_world
 import game_framework
+from game_world import PIXEL_PER_METER
 
-PIXEL_PER_METER = (10.0 / 0.3) # 10 pixel 30 cm. 즉, 1 meter 당 몇 픽셀인지 계산. 10pixel을 0.3(m)으로 나누어 1미터 당 픽셀 수를 구함
 SKILL1_SPEED_KMPH = 2.0 # Km / Hour (여기서 현실적인 속도를 결정) (km/h)
 SKILL1_SPEED_MPM = (SKILL1_SPEED_KMPH * 1000.0 / 60.0) # Meter / Minute
 SKILL1_SPEED_MPS = (SKILL1_SPEED_MPM / 60.0) # Meter / Second

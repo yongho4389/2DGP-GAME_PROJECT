@@ -2,7 +2,7 @@ from pico2d import *
 from Class_camera import camera
 import game_world
 import game_framework
-from Class_Character_main import PIXEL_PER_METER
+from game_world import PIXEL_PER_METER
 from behavior_tree import BehaviorTree, Action, Sequence, Condition, Selector
 
 # 기본 잡몹
@@ -40,8 +40,8 @@ class Boss_Monster:
         self.MAX_HP = 1000
         self.HP = self.MAX_HP
         self.damage = 50 # 몸통 충돌 데미지
-        self.attack1_damage = 25 # 에너지볼 데미지
-        self.attack2_damage = 50 # 폭발 데미지
+        self.energy_damage = 25 # 에너지볼 데미지
+        self.bomb_damage = 50 # 폭발 데미지
         self.attack1_count = 0 # 에너지볼 공격 횟수 카운트
 
     def frame_update(self):
