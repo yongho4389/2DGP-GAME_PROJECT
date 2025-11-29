@@ -84,7 +84,7 @@ class Boss_skills:
         return self.ax - xb, self.ay - yb, self.ax + xb, self.ay + yb
 
     def handle_collision(self, group, other):
-        if group == 'character:boss_attack':
+        if group == 'character:boss_attack' and other.cur_state != 'Dashing':
             if self.type == 1 and get_time() - self.skill_Activate_time <=1.8:
                 return
             elif self.type == 1 and get_time() - self.skill_Activate_time >=1.8:
