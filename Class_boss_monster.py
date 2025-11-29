@@ -76,16 +76,20 @@ class Boss_Monster:
                 type, x, y = 0, self.x, randint(100, 200)
                 skill = Boss_skills(x, y, type, self)
                 game_world.add_object(skill, 1)
+                game_world.add_collision_pair('character:boss_attack', None, skill)
+                game_world.add_collision_pair('player_attack:boss_attack', None, skill)
             elif self.cur_state == 'Attack2':
                 type, x, y = 1, self.character.x, self.character.y
                 skill = Boss_skills(x, y, type, self)
                 game_world.add_object(skill, 1)
+                game_world.add_collision_pair('character:boss_attack', None, skill)
             elif self.cur_state == 'Attack3':
                 for _ in range(3):
                     skill = Boss_skills(randint(200, 600), 600, 2, self)
                     game_world.add_object(skill, 1)
+                    game_world.add_collision_pair('character:boss_attack', None, skill)
+                    game_world.add_collision_pair('player_attack:boss_attack', None, skill)
             self.attacking_onoff = True
-            # game_world.add_collision_pair('attack:boss_monster', None, energy_ball)
 
 
     # 거리 비교 함수 (x1, y1)와 (x2, y2) 사이의 거리가 r 미터보다 작은지
@@ -109,6 +113,8 @@ class Boss_Monster:
         self.frame_update()
         self.bt.run()
         self.Attacking()
+        if get_time() - self.current_time >= 0.25:
+            self.rotate = 0.0  # 피격 모션 초기화
 
     def end_motion_check(self, frame_index):
         # 모션이 끝난 경우 다시 움직이는 동작으로 전환
@@ -153,24 +159,6 @@ class Boss_Monster:
         yb = self.height / 4
         return self.x - xb, self.y - yb, self.x + xb, self.y + yb
 
-    def handle_collision(self, group, other):
-        if group == 'character:boss_monster':
-            pass
-        elif group == 'attack:boss_monster' and other.is_attack:
-            other.is_attack = False  # 공격 판정은 한 번만 되도록 하며, 몬스터에게 실제 변화가 일어났을 때 공격 판정이 적용되었음을 알림
-            self.HP -= other.damage
-            # 피격 시 적이 플레이어에게 달려들도록 방향 변경
-            if other.adir == self.dir:
-                self.dir *= -1
-            # 피격 상태로의 변경
-            self.cur_state = 'Attacked'
-            self.frame = 0
-            self.current_time = get_time()
-            if self.HP <= 0:  # 사망 시 삭제
-                game_world.remove_object(self)
-                self.character.Gold += 100 + (self.stage.stage_level * 100)  # 골드 획득
-                self.character.EXP += 50 + (self.stage.stage_level * 50)  # 경험치 획득
-
     def build_behavior_tree(self):
         action_attack1 = Action('a1', self.Attack1)
         # 공격 2
@@ -184,3 +172,12 @@ class Boss_Monster:
         root = Boss_behavior = Selector('Boss_behavior', Attack3, Attack2, action_attack1)
         self.bt = BehaviorTree(root)
         pass
+
+    def handle_collision(self, group, other):
+        if group == 'character:boss_monster':
+            pass
+        elif group == 'attack:monster' and other.is_attack:
+            other.is_attack = False  # 공격 판정은 한 번만 되도록 하며, 몬스터에게 실제 변화가 일어났을 때 공격 판정이 적용되었음을 알림
+            self.HP -= other.damage
+            self.rotate = math.radians(-30)  # 피격 모션
+            self.current_time = get_time()

@@ -165,4 +165,5 @@ class Stage:
         boss = Boss_Monster(600, 175, 1, self, self.character)
         game_world.add_object(boss, 1)
         game_world.add_collision_pair('character:boss_monster', None, boss)
+        game_world.add_collision_pair('attack:monster', None, boss)
         pass

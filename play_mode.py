@@ -36,6 +36,7 @@ def init():
     game_world.add_collision_pair('character:monster', character, None) # 몬스터 직접 충돌
     game_world.add_collision_pair('character:elite_monster', character, None)  # 엘리트 몹과의 충돌
     game_world.add_collision_pair('character:boss_monster', character, None)  # 보스 몹과의 충돌
+    game_world.add_collision_pair('character:boss_attack', character, None)  # 보스 몹 공격과의 충돌
 
     stage = Stage(character)
     game_world.add_object(stage, 0)
@@ -47,6 +48,7 @@ def init():
     boss = Boss_Monster(650, 175, 1, stage, character)
     game_world.add_object(boss, 1)
     game_world.add_collision_pair('character:boss_monster', None, boss)
+    game_world.add_collision_pair('attack:monster', None, boss)
 
     # 일반 몹 기본 10마리 생성
     # monsters = [Basic_Monster(random.randint(200, 2000), 125, random.choice((-1, 1)), stage, character) for _ in range(10)]
