@@ -349,6 +349,7 @@ class Character:
             self.cur_state = 'is_attacked'
             self.start_attacked()
         elif group == 'character:boss_attack' and not self.cur_state == 'Dashing' and not self.cur_state == 'is_attacked':
+            if not other.is_attack: return
             other.is_attack = False
             self.HP -= other.damage
             self.dir = 1 # 항상 왼쪽으로 밀려나도록 설정

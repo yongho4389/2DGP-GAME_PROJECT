@@ -36,6 +36,7 @@ class Boss_skills:
         elif type == 1:
             self.damage = self.boss.bomb_damage
             self.size = 25
+            self.is_attack = False  # 공격 여부 결정 (필드에 남아있어도 몬스터 당 한 번만 공격하도록)
         elif type == 2:
             self.damage = self.boss.energy_damage
             self.turning = math.radians(90)
@@ -58,7 +59,7 @@ class Boss_skills:
             else:
                 self.ax -= ENERGY_SPEED_PPS * game_framework.frame_time # 좌측으로 이동
         if self.type == 1:
-            if get_time() - self.skill_Activate_time >= 2.0: # 3초 후 삭제
+            if get_time() - self.skill_Activate_time >= 2.0: # 2초 후 삭제
                 game_world.remove_object(self)
             else:
                 self.size += 75 * game_framework.frame_time  # 크기 증가
@@ -84,9 +85,14 @@ class Boss_skills:
 
     def handle_collision(self, group, other):
         if group == 'character:boss_attack':
-            self.skill_Activate_time = 0  # 충돌 후 바로 삭제되도록 시간 초기화 (update에서 처리)
+            if self.type == 1 and get_time() - self.skill_Activate_time <=1.8:
+                return
+            elif self.type == 1 and get_time() - self.skill_Activate_time >=1.8:
+                self.is_attack = True
+            else: self.skill_Activate_time = 0  # 충돌 후 바로 삭제되도록 시간 초기화 (update에서 처리)
         elif group == 'player_attack:boss_attack':
-            self.skill_Activate_time = 0  # 충돌 후 바로 삭제되도록 시간 초기화 (update에서 처리)
+            if self.type != 1: # 폭발 공격이 아닌 경우
+                self.skill_Activate_time = 0  # 충돌 후 바로 삭제되도록 시간 초기화 (update에서 처리)
 
             
 
