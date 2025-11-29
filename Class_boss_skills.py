@@ -3,8 +3,9 @@ from Class_camera import camera
 import game_world
 import game_framework
 from game_world import PIXEL_PER_METER
+import math
 
-ENERGY_SPEED_KMPH = 10.0 # Km / Hour (여기서 현실적인 속도를 결정) (km/h)
+ENERGY_SPEED_KMPH = 30.0 # Km / Hour (여기서 현실적인 속도를 결정) (km/h)
 ENERGY_SPEED_MPM = (ENERGY_SPEED_KMPH * 1000.0 / 60.0) # Meter / Minute
 ENERGY_SPEED_MPS = (ENERGY_SPEED_MPM / 60.0) # Meter / Second
 ENERGY_SPEED_PPS = (ENERGY_SPEED_MPS * PIXEL_PER_METER) # 초당 몇 픽셀을 이동할지 결졍 (PPS) (이것이 속도가 됨)
@@ -37,7 +38,7 @@ class Boss_skills:
             self.size = 25
         elif type == 2:
             self.damage = self.boss.energy_damage
-            self.turning = 270
+            self.turning = math.radians(90)
 
         # 공격 이펙트 그리기
 
@@ -60,7 +61,7 @@ class Boss_skills:
             if get_time() - self.skill_Activate_time >= 2.0: # 3초 후 삭제
                 game_world.remove_object(self)
             else:
-                self.size += 50 * game_framework.frame_time  # 크기 증가
+                self.size += 75 * game_framework.frame_time  # 크기 증가
         elif self.type == 2:
             if get_time() - self.skill_Activate_time >= 5.0: # 5초 후 삭제
                 game_world.remove_object(self)
@@ -74,8 +75,8 @@ class Boss_skills:
 
     def get_bb(self):
         if self.type == 0 or self.type == 2:
-            xb = 20
-            yb = 20
+            xb = 10
+            yb = 10
         elif self.type == 1:
             xb = self.size / 4
             yb = self.size / 4
