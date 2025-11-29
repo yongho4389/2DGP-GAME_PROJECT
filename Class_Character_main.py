@@ -279,6 +279,7 @@ class Character:
                 game_world.add_object(self.attack, 2)
                 game_world.add_collision_pair('attack:monster', self.attack, None)
                 game_world.add_collision_pair('attack:elite_monster', self.attack, None)
+                game_world.add_collision_pair('player_attack:boss_attack', self.attack, None) # 보스 공격을 skill2로만 막을 수 있음
                 self.skill2_Attacking = True
     # UI 그리기
     def draw_UI(self):
@@ -344,6 +345,11 @@ class Character:
                 self.cur_state = 'is_attacked'
                 self.start_attacked()
         elif group == 'character:boss_monster' and not self.cur_state == 'Dashing' and not self.cur_state == 'is_attacked':
+            self.HP -= other.damage
+            self.cur_state = 'is_attacked'
+            self.start_attacked()
+        elif group == 'character:boss_attack' and not self.cur_state == 'Dashing' and not self.cur_state == 'is_attacked':
+            other.is_attack = False
             self.HP -= other.damage
             self.cur_state = 'is_attacked'
             self.start_attacked()

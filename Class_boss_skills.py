@@ -83,6 +83,10 @@ class Boss_skills:
         return self.ax - xb, self.ay - yb, self.ax + xb, self.ay + yb
 
     def handle_collision(self, group, other):
-        if group == 'attack:monster' and self.is_attack:
+        if group == 'character:boss_attack':
             self.skill_Activate_time = 0  # 충돌 후 바로 삭제되도록 시간 초기화 (update에서 처리)
+        elif group == 'player_attack:boss_attack':
+            self.skill_Activate_time = 0  # 충돌 후 바로 삭제되도록 시간 초기화 (update에서 처리)
+
+            
 
