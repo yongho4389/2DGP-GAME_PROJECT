@@ -91,8 +91,8 @@ class Boss_skills:
                 self.is_attack = True
             else: self.skill_Activate_time = 0  # 충돌 후 바로 삭제되도록 시간 초기화 (update에서 처리)
         elif group == 'player_attack:boss_attack':
-            if self.type != 1: # 폭발 공격이 아닌 경우
-                self.skill_Activate_time = 0  # 충돌 후 바로 삭제되도록 시간 초기화 (update에서 처리)
+            self.skill_Activate_time = 0  # 충돌 후 바로 삭제되도록 시간 초기화 (update에서 처리)
+
 
             
 
