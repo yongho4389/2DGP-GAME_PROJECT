@@ -42,7 +42,7 @@ class Elite_Monster:
 
         self.MAX_HP = self.stage.stage_level * 100 + 100
         self.HP = self.MAX_HP
-        self.damage = self.stage.stage_level * 20 + 20
+        self.damage = self.stage.stage_level * 5 + 20
     
     def frame_update(self):
         frame_count = self.end_frame - self.start_frame + 1 # 얼마의 프레임으로 구성되는지 계산
