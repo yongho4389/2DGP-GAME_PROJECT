@@ -103,9 +103,9 @@ class Elite_Monster:
                                        self.x - camera.x, self.y,  # 월드 위치
                                        500, 500)
         self.end_motion_check(frame_index)
-        draw_rectangle(*self.get_screen_bb())
-        draw_rectangle(*self.get_screen_bb2())
-        draw_rectangle(*self.get_screen_bb3())
+        # draw_rectangle(*self.get_screen_bb())
+        # draw_rectangle(*self.get_screen_bb2())
+        # draw_rectangle(*self.get_screen_bb3())
 
         # 체력바
         hp_length = 400 * (self.HP / self.MAX_HP)  # HP바 길이가 출력되는 부분 100% 기준으로 계산됨. (최대 400)

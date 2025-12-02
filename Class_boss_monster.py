@@ -144,7 +144,7 @@ class Boss_Monster:
                                        self.x - camera.x, self.y,  # 월드 위치
                                        300, 300)
         self.end_motion_check(frame_index)
-        draw_rectangle(*self.get_screen_bb())
+        # draw_rectangle(*self.get_screen_bb())
 
         # 체력바
         hp_length = 1500 * (self.HP / self.MAX_HP)  # HP바 길이가 출력되는 부분 100% 기준으로 계산됨. (최대 1500의 길이)

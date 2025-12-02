@@ -62,7 +62,7 @@ class Skills:
                                                   self.turning, 'h',
                                                   self.ax - camera.x, self.ay,
                                                   100 + self.range + skill1_scale, 100 + self.range + skill1_scale)
-        draw_rectangle(*self.get_screen_bb())
+        # draw_rectangle(*self.get_screen_bb())
     # 스킬 지속 시간 처리
     def update(self):
         if self.attack_version == 0:

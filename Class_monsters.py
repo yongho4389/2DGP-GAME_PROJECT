@@ -62,7 +62,7 @@ class Basic_Monster:
                                        self.rotate, direction,
                                        self.x - camera.x, self.y,  # 월드 위치
                                        100, 100)
-        draw_rectangle(*self.get_screen_bb())
+        # draw_rectangle(*self.get_screen_bb())
         
         # 체력바
         hp_length = 400 * (self.HP / self.MAX_HP)  # HP바 길이가 출력되는 부분 100% 기준으로 계산됨. (최대 400)

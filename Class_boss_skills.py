@@ -49,9 +49,9 @@ class Boss_skills:
                                        self.turning, '',
                                        self.ax - camera.x, self.ay,
                                        self.size, self.size)
-        draw_rectangle(*self.get_screen_bb())
-        # 스킬 지속 시간 처리
+        # draw_rectangle(*self.get_screen_bb())
 
+    # 스킬 지속 시간 처리
     def update(self):
         if self.type == 0:
             if get_time() - self.skill_Activate_time >= 5.0: # 5초 후 삭제

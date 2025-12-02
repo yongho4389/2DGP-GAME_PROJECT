@@ -315,7 +315,7 @@ class Character:
         # 애니메이션 종료 체크
         self.end_motion_check(frame_index)
         self.draw_UI()
-        draw_rectangle(*self.get_screen_bb())
+        # draw_rectangle(*self.get_screen_bb())
 
     # 화면용 바운딩 박스
     def get_screen_bb(self):
