@@ -13,12 +13,16 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER) # 초당 몇 픽셀을 이동�
 class Basic_Monster:
     image = None
     UI_image = None
+    Attacked_sound = None
     def __init__(self, x, y, dir, stage, character):
         # 이미지 1번만 로드
         if Basic_Monster.image == None:
             Basic_Monster.image = load_image('./image_sheets/basic_monster_image.png')
         if Basic_Monster.UI_image == None:
             Basic_Monster.UI_image = load_image('./image_sheets/character_UI_sheet.png')
+        if Basic_Monster.Attacked_sound == None:
+            Basic_Monster.Attacked_sound = load_wav('./sounds/monster_attacked_sound.wav')
+            Basic_Monster.Attacked_sound.set_volume(32)
         self.x = x
         self.y = y
         self.stage = stage
@@ -91,6 +95,7 @@ class Basic_Monster:
             # 피격 상태로의 변경
             self.cur_state = 'Attacked'
             self.current_time = get_time()
+            self.Attacked_sound.play()
             # 피격 시 경직 추가 필요 (일반 몹이기 때문)
             if self.HP <= 0:  # 사망 시 삭제
                 game_world.remove_object(self)
