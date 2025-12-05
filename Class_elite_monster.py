@@ -14,6 +14,8 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)  # 초당 몇 픽셀을 이동
 class Elite_Monster:
     image = None
     UI_image = None
+    Attack_sound = None
+    Attacked_sound = None
 
     def __init__(self, x, y, dir, stage, character):
         # 이미지 1번만 로드
@@ -21,6 +23,12 @@ class Elite_Monster:
             Elite_Monster.image = load_image('./image_sheets/elite_monster_sheet.png')
         if Elite_Monster.UI_image == None:
             Elite_Monster.UI_image = load_image('./image_sheets/character_UI_sheet.png')
+        if Elite_Monster.Attack_sound == None:
+            Elite_Monster.Attack_sound = load_wav('./sounds/elite_monster_attack_sound.wav')
+            Elite_Monster.Attack_sound.set_volume(32)
+        if Elite_Monster.Attacked_sound == None:
+            Elite_Monster.Attacked_sound = load_wav('./sounds/monster_attacked_sound.wav')
+            Elite_Monster.Attacked_sound.set_volume(32)
         self.x = x
         self.y = y
         self.stage = stage
@@ -69,6 +77,7 @@ class Elite_Monster:
         self.end_frame = 6
         if (self.frame >= 4):
             self.attacking_onoff = True
+            self.Attack_sound.play()
 
     def update(self):
         self.frame_update()
@@ -181,6 +190,7 @@ class Elite_Monster:
                 self.cur_state = 'Attacked'
                 self.frame = 0
                 self.current_time = get_time()
+                self.Attacked_sound.play()
                 if self.HP <= 0:  # 사망 시 삭제
                     game_world.remove_object(self)
                     self.character.Gold += 100 + (self.stage.stage_level * 100)  # 골드 획득
