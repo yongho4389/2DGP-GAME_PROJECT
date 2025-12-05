@@ -6,6 +6,10 @@ from Class_monsters import *
 from Class_elite_monster import Elite_Monster
 from Class_boss_monster import Boss_Monster
 
+# 캐릭터 키 150cm
+# 전투 스테이지 약 300m
+# 상점 스테이지 및 보스 스테이지 약 100m
+
 # 일반 스테이지 관련 클래스 및 함수 정의 (사냥터)
 class Stage:
     def __init__(self, character):
