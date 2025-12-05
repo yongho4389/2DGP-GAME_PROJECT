@@ -19,6 +19,10 @@ class Character:
         self.image = load_image('./image_sheets/character_motion_sheets.png')
         self.UI_image = load_image('./image_sheets/character_UI_sheet.png')
         self.font = load_font('C:\Windows\Fonts\malgun.ttf', 20)
+        self.Attack_sound = load_wav('./sounds/character_attack_sound.wav')
+        self.attacked_sound = load_wav('./sounds/character_attacked_sound.wav')
+        self.dash_sound = load_wav('./sounds/character_dash_sound.wav')
+        self.move_sound = load_wav('./sounds/character_movement_sound.wav')
         # 애니메이션 관련 변수
         self.frame = 0 # 프레임 진행 현황
         self.start_frame = 3 # 프레임 시작 인덱스
@@ -81,6 +85,7 @@ class Character:
         self.TIME_PER_ACTION = 1  # 한 동작을 수행하는데 걸리는 시간 (초)
         self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION  # 초당 몇 동작을 수행하는지
         self.end_motion = False
+        self.move_sound.play()
     # 점프 및 착지 모션
     def start_jump_and_down(self):
         self.frame = 0
@@ -90,6 +95,7 @@ class Character:
         self.TIME_PER_ACTION = 1  # 한 동작을 수행하는데 걸리는 시간 (초)
         self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION  # 초당 몇 동작을 수행하는지
         self.end_motion = False
+        self.dash_sound.play()
     # 피격 모션
     def start_attacked(self):
         self.frame = 0
@@ -100,6 +106,7 @@ class Character:
         self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION  # 초당 몇 동작을 수행하는지
         self.end_motion = False
         self.is_attacked = True
+        self.attacked_sound.play()
     # 기본 공격 모션
     def start_basic_attack(self):
         self.frame = 0
@@ -133,6 +140,7 @@ class Character:
         self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION  # 초당 몇 동작을 수행하는지
         self.end_motion = False
         self.dash_start_time = get_time()
+        self.dash_sound.play()
     # 스킬2 공격 모션
     def start_skill2_attack(self):
         self.frame = 0
@@ -169,6 +177,9 @@ class Character:
     def character_move(self):
         self.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
         self.out_of_position()
+        if self.frame < 1:
+            # self.move_sound.play()
+            pass
     # 점프
     def character_jump(self):
         if int(self.frame) < 2:
@@ -268,12 +279,14 @@ class Character:
                 game_world.add_object(self.attack, 2)
                 game_world.add_collision_pair('attack:monster', self.attack, None)
                 game_world.add_collision_pair('attack:elite_monster', self.attack, None)
+                self.Attack_sound.play()
             # 스킬1
             elif self.attack.attack_version == 1 and int(self.frame) == 5 and self.motion == 1:  # 프레임 5에 공격 수행
                 game_world.add_object(self.attack, 2)
                 game_world.add_collision_pair('attack:monster', self.attack, None)
                 game_world.add_collision_pair('attack:elite_monster', self.attack, None)
                 self.skill1_Attacking = True
+                self.Attack_sound.play()
             # 스킬2
             elif self.attack.attack_version == 2 and int(self.frame) == 1 and self.motion == 0:  # 프레임 1에 공격 수행
                 game_world.add_object(self.attack, 2)
@@ -281,6 +294,7 @@ class Character:
                 game_world.add_collision_pair('attack:elite_monster', self.attack, None)
                 game_world.add_collision_pair('player_attack:boss_attack', self.attack, None) # 보스 공격을 skill2로만 막을 수 있음
                 self.skill2_Attacking = True
+                self.Attack_sound.play()
     # UI 그리기
     def draw_UI(self):
         w = 2720 // 5  # 544

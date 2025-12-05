@@ -16,7 +16,6 @@ class Skills:
         self.attack_version = attack_version
         if Skills.image == None:
             Skills.image = load_image('./image_sheets/attack_effect_sheets.png')
-
         self.turning = 0.0
         self.skill_Activate_time = get_time()
         self.skill_reattack_time = get_time() # 재공격 타이밍 계산
@@ -61,7 +60,7 @@ class Skills:
                                                   564 // 3, 188,
                                                   self.turning, 'h',
                                                   self.ax - camera.x, self.ay,
-                                                  100 + self.range + skill1_scale, 100 + self.range + skill1_scale)
+                                                  100 + self.range + skill1_scale / 2, 100 + self.range + skill1_scale)
         # draw_rectangle(*self.get_screen_bb())
     # 스킬 지속 시간 처리
     def update(self):
