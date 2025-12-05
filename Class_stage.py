@@ -11,6 +11,9 @@ class Stage:
     def __init__(self, character):
         self.image = load_image('./image_sheets/background_sheets.png')
         self.store_image = load_image('./image_sheets/store_sheet.png')
+        self.background_music = load_music('./sounds/background_music.mp3')
+        self.background_music.set_volume(128)
+        self.background_music.repeat_play()
         self.width = 800
         self.height = 600
         self.w = 3084
