@@ -15,11 +15,15 @@ ENERGY_SPEED_PPS = (ENERGY_SPEED_MPS * PIXEL_PER_METER) # 초당 몇 픽셀을 �
 class Boss_skills:
     image = None
     UI_image = None
+    Bomb_sound = None
 
     def __init__(self, x, y, type, boss):
         # 이미지 1번만 로드
         if Boss_skills.image == None:
             Boss_skills.image = load_image('./image_sheets/boss_effect_sheet.png')
+        if Boss_skills.Bomb_sound == None:
+            Boss_skills.Bomb_sound = load_wav('./sounds/boss_bomb_attack_sound.wav')
+            Boss_skills.Bomb_sound.set_volume(32)
         self.skill_Activate_time = get_time()
         self.is_attack = True  # 공격 여부 결정 (필드에 남아있어도 몬스터 당 한 번만 공격하도록)
         self.ax = x
@@ -60,6 +64,7 @@ class Boss_skills:
                 self.ax -= ENERGY_SPEED_PPS * game_framework.frame_time # 좌측으로 이동
         if self.type == 1:
             if get_time() - self.skill_Activate_time >= 2.0: # 2초 후 삭제
+                self.Bomb_sound.play()
                 game_world.remove_object(self)
             else:
                 self.size += 75 * game_framework.frame_time  # 크기 증가

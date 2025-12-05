@@ -13,6 +13,8 @@ import math
 class Boss_Monster:
     image = None
     UI_image = None
+    Attacked_sound = None
+    Energy_sound = None
 
     def __init__(self, x, y, dir, stage, character):
         # 이미지 1번만 로드
@@ -20,6 +22,12 @@ class Boss_Monster:
             Boss_Monster.image = load_image('./image_sheets/boss_monster_sheets.png')
         if Boss_Monster.UI_image == None:
             Boss_Monster.UI_image = load_image('./image_sheets/character_UI_sheet.png')
+        if Boss_Monster.Attacked_sound == None:
+            Boss_Monster.Attacked_sound = load_wav('./sounds/monster_attacked_sound.wav')
+            Boss_Monster.Attacked_sound.set_volume(32)
+        if Boss_Monster.Energy_sound == None:
+            Boss_Monster.Energy_sound = load_wav('./sounds/boss_energy_attack_sound.wav')
+            Boss_Monster.Energy_sound.set_volume(32)
         self.x = x
         self.y = y
         self.stage = stage
@@ -80,6 +88,7 @@ class Boss_Monster:
                 game_world.add_object(skill, 1)
                 game_world.add_collision_pair('character:boss_attack', None, skill)
                 game_world.add_collision_pair('player_attack:boss_attack', None, skill)
+                self.Energy_sound.play()
             elif self.cur_state == 'Attack2':
                 type, x, y = 1, self.character.x, self.character.y
                 skill = Boss_skills(x, y, type, self)
@@ -91,6 +100,7 @@ class Boss_Monster:
                     game_world.add_object(skill, 1)
                     game_world.add_collision_pair('character:boss_attack', None, skill)
                     game_world.add_collision_pair('player_attack:boss_attack', None, skill)
+                self.Energy_sound.play()
             self.attacking_onoff = True
 
 
@@ -183,6 +193,7 @@ class Boss_Monster:
             self.HP -= other.damage
             self.rotate = math.radians(-30)  # 피격 모션
             self.current_time = get_time()
+            self.Attacked_sound.play()
             if self.HP <= 0:
                 game_world.remove_object(self)
                 game_world.game_clear = True

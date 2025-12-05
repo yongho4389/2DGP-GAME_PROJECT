@@ -20,8 +20,8 @@ class Stage:
         self.store_pos_x = self.width // 2 + 100
         self.store_pos_y = self.height // 2 - 75
         # 기본값: level = 0, special = False
-        self.stage_level = 0 # 보스 스테이지는 3
-        self.special_stage = False # 상점 진입 혹은 보스 스테이지 진입 시 True로 변경
+        self.stage_level = 2 # 보스 스테이지는 3
+        self.special_stage = True # 상점 진입 혹은 보스 스테이지 진입 시 True로 변경
         # self.stage_level = 3  # 보스 스테이지는 3
         # self.special_stage = True  # 상점 진입 혹은 보스 스테이지 진입 시 True로 변경
 
