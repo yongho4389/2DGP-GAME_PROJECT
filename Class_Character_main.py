@@ -20,9 +20,13 @@ class Character:
         self.UI_image = load_image('./image_sheets/character_UI_sheet.png')
         self.font = load_font('C:\Windows\Fonts\malgun.ttf', 20)
         self.Attack_sound = load_wav('./sounds/character_attack_sound.wav')
+        self.Attack_sound.set_volume(32)
         self.attacked_sound = load_wav('./sounds/character_attacked_sound.wav')
+        self.attacked_sound.set_volume(32)
         self.dash_sound = load_wav('./sounds/character_dash_sound.wav')
+        self.dash_sound.set_volume(32)
         self.move_sound = load_wav('./sounds/character_movement_sound.wav')
+        self.move_sound.set_volume(64)
         # 애니메이션 관련 변수
         self.frame = 0 # 프레임 진행 현황
         self.start_frame = 3 # 프레임 시작 인덱스
